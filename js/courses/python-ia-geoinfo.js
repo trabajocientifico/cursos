@@ -13,10 +13,15 @@ const COURSE_DATA = {
           title: "GeoPandas y Sistemas de Coordenadas",
           type: "video",
           duration: "45 min",
-          videoId: "VIDEO_ID_PLACEHOLDER",
+          videoId: "W4xLiyNfzgA",
           description: "Carga y visualiza archivos Shapefile y GeoJSON.",
           reading: "**Introducción a GeoIA**\n\nLa información geográfica es fundamental para la toma de decisiones. GeoPandas extiende las capacidades de Pandas para manejar geometrías.",
-          resources: []
+          resources: [
+            { title: "Código Python", url: "https://github.com/trabajocientifico/curso-bibliometrix-rstudio/blob/main/sesion1.ipynb", type: "link" },
+            { title: "Enlace de capas", url: "https://www.dane.gov.co/files/geoportal-provisional/", type: "link" },
+            { title: "Capa Shape utilizada", url: "https://drive.google.com/file/d/1MJi3rb03Zni2WttCn_t3R_w5ghdF3W5v/view?usp=sharing", type: "download" },
+            { title: "Presentación Sesión 1", url: "presentaciones/python ia geoinformacion/sesion1.html", type: "link" }
+          ]
         }
       ],
       quiz: { id: "q1", title: "Quiz: GIS Base", passingScore: 70, questions: [] }

@@ -13,10 +13,15 @@ const COURSE_DATA = {
           title: "Entorno R y Bibliometrix",
           type: "video",
           duration: "45 min",
-          videoId: "VIDEO_ID_PLACEHOLDER",
+          videoId: "1npDXc_JPz8",
           description: "Instala los paquetes necesarios para tu investigación.",
           reading: "**Cienciometría Profesional**\n\nBibliometrix es la herramienta líder para mapeo científico. Aprenderás a importar datos de Scopus y Web of Science.",
-          resources: []
+          resources: [
+            { title: "Código concatenar WOS - Scopus", url: "https://drive.google.com/file/d/1lxFYyBYlbV3SRtSEEOczaezN-SDqMkm5/view?usp=sharing", type: "download" },
+            { title: "Código Bibliometrix", url: "https://drive.google.com/file/d/1ivw_RninVqMrQgOxxgnu4OwxnOn9SkMA/view?usp=sharing", type: "download" },
+            { title: "Resultados", url: "https://drive.google.com/drive/folders/1legwDNJdAUG96HNBdluWaSJPBWirojuA?usp=sharing", type: "download" },
+            { title: "Presentación Sesión 1", url: "https://drive.google.com/file/d/1M6fgceKOsWpEQzUQVka-f7zZdDoawVJY/view?usp=sharing", type: "download" }
+          ]
         }
       ],
       quiz: { id: "q1", title: "Quiz: Bases", passingScore: 70, questions: [] }
