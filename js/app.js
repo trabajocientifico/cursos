@@ -314,23 +314,15 @@ const App = {
   },
 
   isModuleUnlocked(moduleIndex) {
-    if (moduleIndex === 0) return true;
-    const prevModule = COURSE_DATA.modules[moduleIndex - 1];
-    const allLessonsDone = prevModule.lessons.every(l => this.isLessonCompleted(l.id));
-    const quizDone = this.isQuizCompleted(prevModule.quiz.id);
-    return allLessonsDone && quizDone;
+    return true;
   },
 
   isLessonUnlocked(moduleIndex, lessonIndex) {
-    if (!this.isModuleUnlocked(moduleIndex)) return false;
-    if (lessonIndex === 0) return true;
-    const prevLesson = COURSE_DATA.modules[moduleIndex].lessons[lessonIndex - 1];
-    return this.isLessonCompleted(prevLesson.id);
+    return true;
   },
 
   isQuizUnlocked(moduleIndex) {
-    const mod = COURSE_DATA.modules[moduleIndex];
-    return mod.lessons.every(l => this.isLessonCompleted(l.id));
+    return true;
   },
 
   getModuleProgress(moduleIndex) {
