@@ -34,6 +34,8 @@ const App = {
   },
 
   STORAGE_KEY: 'tc_progress_' + (new URLSearchParams(window.location.search).get('curso') || 'excel-vida'),
+  COURSE_ID: new URLSearchParams(window.location.search).get('curso') || 'excel-vida',
+  APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbxyxBvuAFLo_y_i2xhGdlHgBtV2z7vLC2AqrNnu3f1N-nMXs8EHcYpwCCioOL7P5Fj1xg/exec',
 
   // XP Levels table
   LEVELS: [
@@ -137,6 +139,31 @@ const App = {
       localStorage.setItem(this.STORAGE_KEY, JSON.stringify(toSave));
     } catch (e) {
       console.warn('Could not save state');
+    }
+  },
+
+  sendProgress(evento, detalle, puntaje) {
+    try {
+      const data = {
+        tipo: 'avance',
+        nombre: this.state.username || localStorage.getItem('tc_user_name') || '',
+        correo: localStorage.getItem('tc_user_email') || '',
+        curso: COURSE_DATA.title || this.COURSE_ID,
+        evento: evento,
+        detalle: detalle,
+        puntaje: puntaje !== undefined ? puntaje : '',
+        xpTotal: this.state.xp,
+        progreso: this.getGlobalProgress(),
+        fecha: new Date().toLocaleString('es-CO', { timeZone: 'America/Bogota' })
+      };
+      fetch(this.APPS_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      }).catch(err => console.warn('No se pudo enviar avance:', err));
+    } catch (e) {
+      console.warn('Error enviando avance:', e);
     }
   },
 
@@ -247,17 +274,6 @@ const App = {
     });
     document.getElementById('cert-download').addEventListener('click', () => this.downloadCertificate());
 
-    // Focus Mode
-    document.getElementById('btn-focus-mode').addEventListener('click', () => this.startFocusMode());
-    document.getElementById('focus-exit').addEventListener('click', () => this.stopFocusMode());
-    document.getElementById('focus-sound-toggle').addEventListener('click', () => this.toggleAmbientSound());
-    document.getElementById('focus-another').addEventListener('click', () => {
-      document.getElementById('focus-complete-modal').classList.add('hidden');
-      this.startFocusMode();
-    });
-    document.getElementById('focus-done').addEventListener('click', () => {
-      document.getElementById('focus-complete-modal').classList.add('hidden');
-    });
 
     // Memory game close
     document.getElementById('memory-close').addEventListener('click', () => {
@@ -383,6 +399,9 @@ const App = {
       this.saveState();
       this.checkAchievements();
 
+      // Enviar avance a Google Sheets
+      this.sendProgress('Lección completada', `${mod.title} — ${lesson.title}`);
+
       // Motivational message (30% chance)
       this.showMotivationalMessage();
 
@@ -437,6 +456,9 @@ const App = {
       // Check achievements after XP is awarded
       setTimeout(() => this.checkAchievements({ perfectQuiz: score === 100 }), 400);
 
+      // Enviar avance a Google Sheets
+      this.sendProgress('Quiz aprobado', `${mod.title} — ${mod.quiz.title}`, score);
+
       // Motivational message + milestone
       this.showMotivationalMessage();
       this.checkMilestone50();
@@ -447,6 +469,7 @@ const App = {
 
     // Check if course is complete
     if (this.isCourseDone()) {
+      this.sendProgress('Curso completado', COURSE_DATA.title, this.getGlobalProgress());
       setTimeout(() => {
         if (typeof Confetti !== 'undefined') {
           Confetti.courseComplete();
