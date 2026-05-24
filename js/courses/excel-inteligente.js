@@ -4,7 +4,7 @@ const COURSE_DATA = {
   modules: [
     {
       id: "mod-1",
-      title: "Módulo 1: Excel + IA en Acción",
+      title: "Clase 1: Excel + IA en Acción",
       description: "Conecta Excel con asistentes de IA y automatiza tus hojas de cálculo.",
       icon: "📊",
       lessons: [
@@ -91,7 +91,7 @@ const COURSE_DATA = {
     },
     {
       id: "mod-2",
-      title: "Módulo 2: Fórmulas y Funciones Avanzadas",
+      title: "Clase 2: Fórmulas y Funciones Avanzadas",
       description: "Domina las funciones más potentes para análisis profesional.",
       icon: "🧮",
       lessons: [
@@ -176,7 +176,7 @@ const COURSE_DATA = {
     },
     {
       id: "mod-3",
-      title: "Módulo 3: Dashboards y Automatización",
+      title: "Clase 3: Dashboards y Automatización",
       description: "Construye reportes interactivos y automatiza tareas repetitivas.",
       icon: "📈",
       lessons: [

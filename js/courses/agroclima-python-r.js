@@ -4,7 +4,7 @@ const COURSE_DATA = {
   modules: [
     {
       id: "mod-1",
-      title: "Módulo 1: Datos AgroClimáticos",
+      title: "Clase 1: Datos AgroClimáticos",
       description: "Adquiere y prepara series de datos climáticos para tu zona de estudio.",
       icon: "🌦️",
       lessons: [
@@ -91,7 +91,7 @@ const COURSE_DATA = {
     },
     {
       id: "mod-2",
-      title: "Módulo 2: Análisis con Python",
+      title: "Clase 2: Análisis con Python",
       description: "Procesa series de tiempo y construye índices climáticos en Python.",
       icon: "🐍",
       lessons: [
@@ -176,7 +176,7 @@ const COURSE_DATA = {
     },
     {
       id: "mod-3",
-      title: "Módulo 3: Visualización con RStudio",
+      title: "Clase 3: Visualización con RStudio",
       description: "Construye visualizaciones y reportes reproducibles en R.",
       icon: "📈",
       lessons: [

@@ -15,7 +15,7 @@ const QuizEngine = {
     this.answers = {};
     this.submitted = false;
 
-    document.getElementById('quiz-badge').textContent = `Módulo ${moduleIndex + 1}`;
+    document.getElementById('quiz-badge').textContent = `${(typeof App !== 'undefined' && App.UNIT_LABEL) ? App.UNIT_LABEL : 'Módulo'} ${moduleIndex + 1}`;
     document.getElementById('quiz-title').textContent = this.currentQuiz.title;
 
     const body = document.getElementById('quiz-body');

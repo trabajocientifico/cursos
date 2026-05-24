@@ -35,6 +35,8 @@ const App = {
 
   STORAGE_KEY: 'tc_progress_' + (new URLSearchParams(window.location.search).get('curso') || 'excel-vida'),
   COURSE_ID: new URLSearchParams(window.location.search).get('curso') || 'excel-vida',
+  IS_FREE_COURSE: /curso-gratis\.html/i.test(window.location.pathname),
+  get UNIT_LABEL() { return this.IS_FREE_COURSE ? 'Clase' : 'Módulo'; },
   APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbxyxBvuAFLo_y_i2xhGdlHgBtV2z7vLC2AqrNnu3f1N-nMXs8EHcYpwCCioOL7P5Fj1xg/exec',
 
   // XP Levels table
@@ -443,7 +445,7 @@ const App = {
       // Check if entire module just got completed
       const moduleProgress = this.getModuleProgress(moduleIndex);
       if (moduleProgress === 100) {
-        setTimeout(() => this.awardXP(150, 'Módulo completado — Bonus'), 800);
+        setTimeout(() => this.awardXP(150, `${this.UNIT_LABEL} completada — Bonus`), 800);
         if (typeof Confetti !== 'undefined') {
           Confetti.moduleComplete();
         }
@@ -678,7 +680,7 @@ const App = {
             ${!unlocked ? '<div class="skill-node-lock">🔒</div>' : ''}
           </div>
           <div class="skill-node-info">
-            <div class="skill-node-number">Módulo ${mi + 1}</div>
+            <div class="skill-node-number">${this.UNIT_LABEL} ${mi + 1}</div>
             <div class="skill-node-title">${mod.title}</div>
             <div class="skill-node-status">${statusText}</div>
           </div>
@@ -818,7 +820,7 @@ const App = {
     const lesson = mod.lessons[lessonIndex];
 
     // Badge & title
-    document.getElementById('lesson-badge').textContent = `Módulo ${moduleIndex + 1} — Lección ${lessonIndex + 1}`;
+    document.getElementById('lesson-badge').textContent = `${this.UNIT_LABEL} ${moduleIndex + 1} — Lección ${lessonIndex + 1}`;
     document.getElementById('lesson-title').textContent = lesson.title;
     document.getElementById('lesson-duration').innerHTML = `
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>

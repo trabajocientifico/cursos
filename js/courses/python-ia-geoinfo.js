@@ -4,7 +4,7 @@ const COURSE_DATA = {
   modules: [
     {
       id: "mod-1",
-      title: "Módulo 1: Datos Espaciales",
+      title: "Clase 1: Datos Espaciales",
       description: "Introducción a la manipulación de cartografía digital con Python.",
       icon: "🌍",
       lessons: [
@@ -94,7 +94,7 @@ const COURSE_DATA = {
     },
     {
       id: "mod-2",
-      title: "Módulo 2: IA para Geoprocesamiento",
+      title: "Clase 2: IA para Geoprocesamiento",
       description: "Detección de patrones en imágenes satelitales.",
       icon: "🤖",
       lessons: [
@@ -179,7 +179,7 @@ const COURSE_DATA = {
     },
     {
       id: "mod-3",
-      title: "Módulo 3: Mapas Interactivos",
+      title: "Clase 3: Mapas Interactivos",
       description: "Visualización avanzada de resultados.",
       icon: "🛰️",
       lessons: [
