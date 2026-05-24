@@ -4,87 +4,139 @@ const COURSE_DATA = {
   modules: [
     {
       id: "mod-1",
-      title: "Clase 1: Datos AgroClimáticos",
-      description: "Adquiere y prepara series de datos climáticos para tu zona de estudio.",
+      title: "Clase 1: AgroClima en la nube con Python y R Studio",
+      description: "Configura entornos en la nube (Google Colab y Posit Cloud), procesa shapefiles y extrae déficit hídrico de TerraClimate.",
       icon: "🌦️",
       lessons: [
         {
           id: "les-1-1",
-          title: "Introducción a AgroClima con Python y R",
+          title: "Entornos en la nube, Shapefiles y TerraClimate",
           type: "video",
           duration: "60 min",
           videoId: "YUV5qFReZXE",
-          description: "Conoce las fuentes de datos climáticos y prepara tu entorno en Python y RStudio.",
-          reading: "**Conceptos Fundamentales**\n\n1. **Datos AgroClimáticos:** Series temporales de variables como precipitación, temperatura, humedad, radiación solar y viento, vinculadas a una ubicación geográfica. Se usan para entender el comportamiento del clima sobre cultivos y ecosistemas.\n\n2. **Fuentes oficiales (IDEAM, NASA POWER, ERA5, CHIRPS):** Repositorios públicos que ofrecen datos climáticos históricos y actuales. IDEAM (Colombia) provee estaciones meteorológicas; NASA POWER, ERA5 y CHIRPS proveen datos satelitales/reanálisis a escala global.\n\n3. **Python vs RStudio:** Python (con pandas, xarray, geopandas) es excelente para procesar grandes volúmenes y automatizar; RStudio (con tidyverse, raster, terra) destaca para análisis estadístico y visualización exploratoria. Ambos son complementarios en agroclimatología.",
+          description: "Aprende a montar tu entorno de trabajo en Google Colab y Posit Cloud, y a extraer déficit hídrico de TerraClimate sobre tu área de estudio.",
+          reading: "**Conceptos Fundamentales — Clase 1**\n\n1. **Entornos en la nube:** Para iniciar sin instalar nada localmente se usan dos plataformas: **Google Colab** (para Python) y **Posit Cloud** (para R Studio). Ambas ejecutan código en servidores remotos y solo requieren un navegador.\n\n2. **Acceso a Google Colab:** Solo se necesita un **correo de Gmail**. Desde Google Drive se crea una carpeta para el proyecto y se conecta la aplicación de Google Colaboratory para crear el primer notebook.\n\n3. **IA integrada — Gemini en Colab:** Google Colab incluye por defecto a **Gemini**, que permite generar, transformar o explicar el código línea por línea, e incluso crear rutinas gráficas con instrucciones en lenguaje natural.\n\n4. **Shapefile como punto de partida:** El **archivo Shapefile (capa de polígonos)** define el área de interés. Sobre él se recortan las imágenes satelitales para procesar la información climática solo en la zona requerida.\n\n5. **Carpeta `input` obligatoria:** Para que los scripts del repositorio funcionen, el usuario debe crear una carpeta llamada exactamente `input` y subir allí los componentes del Shapefile descomprimidos.\n\n6. **Columna identificadora de polígonos:** Antes de correr el código, hay que conocer el **nombre exacto de la columna de atributos** que identifica cada polígono (por ejemplo `nombre`). El script lo pedirá para clasificar y separar resultados por polígono.\n\n7. **TerraClimate y variable `def`:** La fuente **TerraClimate** entrega datos climáticos históricos globales. La clase descarga automáticamente la variable **`def` (déficit hídrico)**, calculada a partir de un balance de agua.\n\n8. **Resolución espacial 4×4 km:** Los datos de TerraClimate vienen en cuadrículas de **4 × 4 km**, suficiente resolución para análisis zonales.\n\n9. **Salidas del script en carpeta `output`:** Al finalizar, el script deposita automáticamente: **(a)** un mapa espacial del área, **(b)** un gráfico de barras con la tendencia mensual, y **(c)** un archivo Excel con métricas y valores exportables por polígono.\n\n10. **Déficit hídrico = 0 ≠ error:** Cuando un mes muestra déficit hídrico cero no es una falla de medición: corresponde a meses de **superávit hídrico**, donde las lluvias son tan altas (hasta el 75% del volumen anual) que no hay déficit.",
           resources: [
-            { title: "Video YouTube", url: "https://www.youtube.com/watch?v=YUV5qFReZXE&t=3s", type: "link" }
+            { title: "Repositorio GitHub — Curso AgroClima con RStudio y Python", url: "https://github.com/trabajocientifico/curso-agroclima-rstudio-python", type: "link" },
+            { title: "Presentación de la clase (web)", url: "https://trabajocientifico.github.io/curso-agroclima-rstudio-python/", type: "link" },
+            { title: "Grabación de la Clase 1 (YouTube)", url: "https://www.youtube.com/watch?v=YUV5qFReZXE&t=1539s", type: "link" }
           ]
         }
       ],
       quiz: {
         id: "q1",
-        title: "Quiz: Datos AgroClimáticos",
+        title: "Quiz Clase 1: AgroClima en la nube",
         passingScore: 70,
         questions: [
           {
-            question: "¿Qué son los datos agroclimáticos?",
-            options: ["Datos económicos del agro", "Series de variables climáticas usadas para entender su impacto en cultivos y ecosistemas", "Mapas de cultivos", "Precios del mercado agrícola"],
+            question: "¿Cuáles son los entornos en la nube recomendados en la clase para iniciar el trabajo con Python y R Studio, respectivamente, sin necesidad de instalaciones locales?",
+            options: [
+              "Anaconda y Jupyter Notebook",
+              "Google Colab y Posit Cloud",
+              "AWS y Azure Machine Learning",
+              "Spyder y R-Brain"
+            ],
             correct: 1,
-            explanation: "Los datos agroclimáticos combinan variables del clima (precipitación, temperatura, etc.) con su efecto sobre la agricultura."
+            explanation: "El instructor recomienda Google Colab como la mejor opción para Python y Posit Cloud como la principal alternativa en la nube para trabajar con la interfaz de R Studio."
           },
           {
-            question: "¿Qué institución es la fuente oficial de datos meteorológicos en Colombia?",
-            options: ["DANE", "IDEAM", "IGAC", "ICA"],
-            correct: 1,
-            explanation: "El IDEAM (Instituto de Hidrología, Meteorología y Estudios Ambientales) administra la red oficial de estaciones meteorológicas en Colombia."
+            question: "¿Qué requisito inicial es necesario para acceder y crear un proyecto rápidamente en Google Colab?",
+            options: [
+              "Pagar una suscripción mensual en Google Workspace",
+              "Instalar el entorno local de Python en el computador",
+              "Tener un correo electrónico de Gmail",
+              "Configurar una API de GitHub"
+            ],
+            correct: 2,
+            explanation: "Para usar Google Colab se requiere una cuenta de Gmail, acceder a Google Drive, crear una carpeta para el proyecto y conectar desde allí la aplicación de Google Colaboratory."
           },
           {
-            question: "¿Qué es NASA POWER?",
-            options: ["Una nave espacial", "Un servicio gratuito de NASA con datos climáticos por coordenadas a escala global", "Un software pago", "Un satélite militar"],
+            question: "¿Qué modelo de Inteligencia Artificial menciona el instructor que está integrado por defecto en Google Colab para generar, transformar o explicar el código?",
+            options: [
+              "ChatGPT",
+              "Gemini",
+              "Claude",
+              "Copilot"
+            ],
             correct: 1,
-            explanation: "NASA POWER ofrece datos meteorológicos diarios y mensuales de reanálisis para cualquier coordenada del planeta."
+            explanation: "Google Colab incluye a Gemini integrado, que permite explicar funciones línea por línea o generar rutinas gráficas con instrucciones en lenguaje natural."
           },
           {
-            question: "¿Qué variable climática mide la cantidad de agua caída por unidad de tiempo?",
-            options: ["Temperatura", "Precipitación", "Velocidad del viento", "Presión"],
-            correct: 1,
-            explanation: "La precipitación cuantifica el agua (líquida o sólida) que cae sobre una superficie, generalmente en milímetros."
+            question: "En el análisis espacial presentado, ¿qué tipo de archivo es considerado el punto de partida fundamental para determinar el área de interés y procesar la información climática?",
+            options: [
+              "Archivo Excel (.xlsx)",
+              "Imagen satelital en formato Raster (.tif)",
+              "Archivo Shapefile (archivo de polígonos)",
+              "Base de datos de estaciones meteorológicas (.sql)"
+            ],
+            correct: 2,
+            explanation: "El Shapefile (capa de polígonos) es el punto de arranque: define el área para recortar la información de las imágenes satelitales sobre la zona requerida."
           },
           {
-            question: "¿Qué biblioteca de Python es ideal para series de tiempo?",
-            options: ["NumPy únicamente", "pandas", "OpenCV", "PyGame"],
-            correct: 1,
-            explanation: "pandas ofrece estructuras (Series, DataFrame) y funciones especializadas en datos indexados por tiempo."
+            question: "¿Qué variable climática específica se descarga y se investiga utilizando los datos de la fuente TerraClimate en el ejercicio con R Studio?",
+            options: [
+              "Temperatura máxima (tmax)",
+              "Velocidad media del viento (vs)",
+              "Déficit hídrico (def)",
+              "Evapotranspiración real estimada (aet)"
+            ],
+            correct: 2,
+            explanation: "El script descarga automáticamente la variable 'def', que corresponde al déficit hídrico calculado a partir de un balance de agua."
           },
           {
-            question: "¿Qué paquete de R agrupa herramientas para manipulación de datos como dplyr y ggplot2?",
-            options: ["base R", "tidyverse", "raster", "shiny"],
+            question: "¿Cuál es la resolución espacial de los datos de déficit hídrico extraídos de la plataforma TerraClimate mencionados en la sesión?",
+            options: [
+              "1 x 1 km",
+              "4 x 4 km",
+              "5 x 5 km",
+              "10 x 10 km"
+            ],
             correct: 1,
-            explanation: "tidyverse es un conjunto de paquetes de R con una filosofía coherente para manipular y visualizar datos."
+            explanation: "La información global terrestre de TerraClimate tiene una resolución espacial de cuadrículas de 4 × 4 km."
           },
           {
-            question: "¿Qué formato es común para datos climáticos multidimensionales (tiempo, lat, lon)?",
-            options: [".docx", ".NetCDF (.nc)", ".pptx", ".jpg"],
-            correct: 1,
-            explanation: "NetCDF (.nc) es el formato estándar para series multidimensionales en ciencias atmosféricas y oceánicas."
+            question: "¿Cómo debe llamarse obligatoriamente la carpeta de trabajo en donde se deben almacenar los componentes del Shapefile para que el código de R Studio los encuentre?",
+            options: [
+              "datos_espaciales",
+              "shape_files",
+              "output",
+              "input"
+            ],
+            correct: 3,
+            explanation: "Es obligatorio crear una carpeta llamada exactamente 'input' para subir y descomprimir allí todos los archivos de la capa de polígonos."
           },
           {
-            question: "¿Qué biblioteca de Python lee archivos NetCDF de forma eficiente?",
-            options: ["xarray", "tkinter", "flask", "requests"],
-            correct: 0,
-            explanation: "xarray maneja arrays etiquetados N-dimensionales, perfecto para datos climáticos en NetCDF."
+            question: "Antes de ejecutar el código en R Studio, ¿qué información clave sobre el Shapefile debe conocer el usuario para garantizar que se generen los resultados para todos los sectores?",
+            options: [
+              "El peso total de la capa cartográfica.",
+              "El nombre exacto de la columna que contiene la identificación de los polígonos.",
+              "El nivel base de humedad de la zona delimitada.",
+              "El conteo total de píxeles superpuestos en el mapa."
+            ],
+            correct: 1,
+            explanation: "Es imprescindible conocer el nombre exacto de la columna de atributos del Shapefile (por ejemplo 'nombre'), porque el script la usa para clasificar y diferenciar la información de cada polígono."
           },
           {
-            question: "¿Qué es CHIRPS?",
-            options: ["Una app de chat", "Un dataset satelital de precipitación con cobertura cuasi-global", "Un editor de imágenes", "Un sistema operativo"],
-            correct: 1,
-            explanation: "CHIRPS combina observaciones in situ y satelitales para generar series largas de precipitación a alta resolución."
+            question: "Una vez concluido el procesamiento de datos del déficit hídrico, ¿qué tres productos deposita automáticamente el script en la carpeta de salida \"output\"?",
+            options: [
+              "Un panel interactivo HTML, un reporte en Word y una capa vectorial.",
+              "Un archivo raster continuo, un reporte SQL y un diagrama 3D.",
+              "Un gráfico de barras, un mapa zonal y un archivo de Excel.",
+              "Un diagrama de cajas, un archivo KML de Google Earth y un documento PDF."
+            ],
+            correct: 2,
+            explanation: "El sistema produce un mapa espacial del área, un gráfico de barras con la tendencia mensual y un Excel con las métricas y valores exportables para cada polígono."
           },
           {
-            question: "¿Qué primer paso se recomienda al recibir un dataset agroclimático?",
-            options: ["Borrarlo", "Inspeccionar fechas, valores faltantes y unidades antes de cualquier análisis", "Convertirlo a PDF", "Imprimirlo"],
-            correct: 1,
-            explanation: "El control de calidad inicial (huecos, outliers, unidades) evita errores en todo el análisis posterior."
+            question: "De acuerdo con las aclaraciones entregadas a la clase, ¿por qué los análisis del área de estudio arrojan que el déficit hídrico es igual a cero durante algunos meses seguidos?",
+            options: [
+              "Porque la capa analizada no se sobrepone del todo con la órbita del satélite.",
+              "Porque se asume que no hay evapotranspiración medible en esos meses del año.",
+              "Porque en ciertas estaciones los datos fallan debido al bloqueo de las nubes a los sensores ópticos.",
+              "Porque corresponden a meses de altísima precipitación, los cuales generan un superávit de agua total."
+            ],
+            correct: 3,
+            explanation: "Los meses con déficit hídrico cero no son un error de medición: corresponden a épocas en que las lluvias son tan altas (hasta el 75% del volumen anual) que generan un estado absoluto de superávit hídrico."
           }
         ]
       }

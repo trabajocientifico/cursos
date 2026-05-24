@@ -1227,3 +1227,284 @@ body {
     font-size: 1.7rem;
   }
 }
+
+/* ============================================
+   HERO CTAs — YouTube, WhatsApp, Sitio Principal
+   ============================================ */
+.hero-ctas {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px;
+  margin: 8px auto 48px;
+  max-width: 920px;
+  animation: fadeInUp 0.6s ease 0.25s both;
+}
+
+.hero-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 22px;
+  border-radius: 16px;
+  text-decoration: none;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  position: relative;
+  overflow: hidden;
+  min-width: 200px;
+}
+
+.hero-cta::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--cta-glow, transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.hero-cta:hover {
+  transform: translateY(-3px);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.hero-cta:hover::before {
+  opacity: 1;
+}
+
+.hero-cta-icon {
+  font-size: 1.6rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-cta-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 1.2;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-cta-text strong {
+  font-size: 0.98rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.hero-cta-text small {
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin-top: 2px;
+}
+
+/* Primary - gradient cyan/purple */
+.hero-cta--primary {
+  --cta-glow: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(123, 47, 247, 0.2));
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.15), rgba(123, 47, 247, 0.15));
+  border-color: rgba(0, 212, 255, 0.35);
+}
+.hero-cta--primary .hero-cta-icon {
+  background: linear-gradient(135deg, #00d4ff, #7b2ff7);
+  box-shadow: 0 8px 24px rgba(0, 212, 255, 0.35);
+}
+.hero-cta--primary:hover {
+  box-shadow: 0 12px 32px rgba(0, 212, 255, 0.3);
+}
+
+/* YouTube - red */
+.hero-cta--yt {
+  --cta-glow: linear-gradient(135deg, rgba(255, 0, 0, 0.15), rgba(255, 60, 60, 0.05));
+  border-color: rgba(255, 0, 0, 0.3);
+}
+.hero-cta--yt .hero-cta-icon {
+  background: linear-gradient(135deg, #ff0000, #cc0000);
+  color: #fff;
+  box-shadow: 0 8px 24px rgba(255, 0, 0, 0.3);
+}
+.hero-cta--yt:hover {
+  border-color: rgba(255, 0, 0, 0.6);
+  box-shadow: 0 12px 32px rgba(255, 0, 0, 0.28);
+}
+
+/* WhatsApp - green */
+.hero-cta--wa {
+  --cta-glow: linear-gradient(135deg, rgba(37, 211, 102, 0.15), rgba(18, 140, 70, 0.05));
+  border-color: rgba(37, 211, 102, 0.3);
+}
+.hero-cta--wa .hero-cta-icon {
+  background: linear-gradient(135deg, #25d366, #128c46);
+  color: #fff;
+  box-shadow: 0 8px 24px rgba(37, 211, 102, 0.28);
+}
+.hero-cta--wa:hover {
+  border-color: rgba(37, 211, 102, 0.6);
+  box-shadow: 0 12px 32px rgba(37, 211, 102, 0.28);
+}
+
+/* Site - subtle gradient */
+.hero-cta--site {
+  --cta-glow: linear-gradient(135deg, rgba(0, 212, 255, 0.12), rgba(123, 47, 247, 0.08));
+  border-color: rgba(255, 255, 255, 0.15);
+}
+.hero-cta--site .hero-cta-icon {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+.hero-cta--site:hover {
+  border-color: rgba(0, 212, 255, 0.4);
+  box-shadow: 0 12px 32px rgba(0, 212, 255, 0.15);
+}
+
+@media (max-width: 600px) {
+  .hero-ctas { gap: 10px; padding: 0 12px; }
+  .hero-cta { min-width: 0; flex: 1 1 calc(50% - 5px); padding: 12px 14px; gap: 10px; }
+  .hero-cta-icon { width: 38px; height: 38px; font-size: 1.3rem; }
+  .hero-cta-text strong { font-size: 0.85rem; }
+  .hero-cta-text small { font-size: 0.7rem; }
+}
+
+/* ============================================
+   NAV SOCIALS — YouTube + WhatsApp icon buttons
+   ============================================ */
+.nav-socials {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-right: 4px;
+}
+
+.nav-social {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border);
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.nav-social svg { transition: transform 0.25s ease; }
+
+.nav-social:hover {
+  transform: translateY(-2px);
+  color: #fff;
+}
+
+.nav-social:hover svg { transform: scale(1.1); }
+
+.nav-social--yt:hover {
+  background: rgba(255, 0, 0, 0.15);
+  border-color: rgba(255, 0, 0, 0.5);
+  box-shadow: 0 6px 18px rgba(255, 0, 0, 0.28);
+  color: #ff4d4d;
+}
+
+.nav-social--wa:hover {
+  background: rgba(37, 211, 102, 0.15);
+  border-color: rgba(37, 211, 102, 0.5);
+  box-shadow: 0 6px 18px rgba(37, 211, 102, 0.28);
+  color: #25d366;
+}
+
+.nav-socials--mobile {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .nav-socials--mobile {
+    display: inline-flex;
+    gap: 6px;
+  }
+  .nav-socials--mobile .nav-social {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+/* ============================================
+   FOOTER CTAs — Reforzar enlaces sociales
+   ============================================ */
+.portal-footer {
+  padding: 48px 24px 32px;
+}
+
+.footer-cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.footer-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 20px;
+  border-radius: 999px;
+  color: #fff;
+  text-decoration: none;
+  font-size: 0.88rem;
+  font-weight: 600;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.03);
+  transition: var(--transition);
+}
+
+.footer-cta svg { transition: transform 0.25s ease; }
+
+.footer-cta:hover {
+  transform: translateY(-2px);
+}
+
+.footer-cta--yt:hover {
+  border-color: rgba(255, 0, 0, 0.55);
+  background: rgba(255, 0, 0, 0.08);
+  box-shadow: 0 8px 22px rgba(255, 0, 0, 0.22);
+  color: #ff4d4d;
+}
+
+.footer-cta--wa:hover {
+  border-color: rgba(37, 211, 102, 0.55);
+  background: rgba(37, 211, 102, 0.08);
+  box-shadow: 0 8px 22px rgba(37, 211, 102, 0.22);
+  color: #25d366;
+}
+
+.footer-cta--site {
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(123, 47, 247, 0.1));
+  border-color: rgba(0, 212, 255, 0.3);
+}
+
+.footer-cta--site:hover {
+  border-color: rgba(0, 212, 255, 0.55);
+  box-shadow: 0 8px 22px rgba(0, 212, 255, 0.22);
+  color: #00d4ff;
+}
+
+.footer-cta--site:hover svg { transform: translateX(-3px); }
+
+.footer-copy {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  margin: 0;
+}
