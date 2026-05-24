@@ -4,260 +4,263 @@ const COURSE_DATA = {
   modules: [
     {
       id: "mod-1",
-      title: "Clase 1: Datos Espaciales",
-      description: "Introducción a la manipulación de cartografía digital con Python.",
+      title: "Clase 1: Datos espaciales con Python y Geopandas",
+      description: "Vectores, ráster y operaciones espaciales (clip y dissolve) con apoyo de IA.",
       icon: "🌍",
       lessons: [
         {
           id: "les-1-1",
-          title: "GeoPandas y Sistemas de Coordenadas",
+          title: "Vectores, Raster, Geopandas y operaciones espaciales",
           type: "video",
-          duration: "45 min",
+          duration: "60 min",
           videoId: "W4xLiyNfzgA",
-          description: "Carga y visualiza archivos Shapefile y GeoJSON.",
-          reading: "**Conceptos Fundamentales**\n\n1. **GeoPandas:** Biblioteca de Python que extiende Pandas para manejar datos geoespaciales. Permite leer, manipular y visualizar archivos Shapefile, GeoJSON y GeoPackage, integrando geometrías (puntos, líneas, polígonos) con tablas de atributos.\n\n2. **Sistema de coordenadas de referencia (CRS):** Marco matemático que define cómo se proyectan las coordenadas geográficas (latitud/longitud) sobre un plano. EPSG:4326 usa coordenadas geográficas (WGS84) y EPSG:3857 es la proyección Mercator usada en mapas web.\n\n3. **Shapefile:** Formato estándar de datos vectoriales desarrollado por ESRI que almacena la geometría y los atributos de entidades geográficas. Se compone de al menos tres archivos (.shp, .shx, .dbf) y es el formato más utilizado en Sistemas de Información Geográfica (SIG).",
+          description: "Diferencias entre vectores y raster, carga de Shapefiles con Geopandas y operaciones clip y dissolve.",
+          reading: "**Conceptos Fundamentales — Clase 1**\n\n1. **Vectores:** Archivos que representan el mundo espacialmente a través de **polígonos, puntos o líneas**. Conocidos como archivos *shape* (extensión **`.shp`**). Un shapefile NO es un archivo único: es una colección (`.shp`, `.shx`, `.dbf`, `.prj`, etc.) que debe permanecer junta en la misma carpeta.\n\n2. **Raster:** Archivos formados por **toda una manta de píxeles conectados** que representan una variable continua en el espacio (precipitación, temperatura, NDVI, imágenes satelitales). Su extensión característica es **`.tif`**.\n\n3. **Google Colab:** Entorno de Google que facilita entrar al mundo de Python porque **evita instalaciones locales** y trae **muchas librerías preinstaladas**. En Colab se distinguen visualmente las celdas: la **celda de código** muestra un **ícono de \"play\"** que permite ejecutarla; la celda de texto no lo tiene.\n\n4. **Geopandas:** Librería principal para procesamiento geoespacial en Python. Se importa con `import geopandas as gpd` y permite leer, manipular y visualizar capas vectoriales.\n\n5. **Cargar un shapefile:** Para que Python pueda llamar y visualizar una capa vectorial tradicional, se debe cargar el archivo que termina en **`.shp`** (el resto de archivos auxiliares deben estar en la misma carpeta).\n\n6. **Exploración de datos:** `.head()` aplicado a un GeoDataFrame (por ejemplo `departamentos.head()`) muestra el encabezado o las **primeras 5 filas** del marco de datos geográfico.\n\n7. **Operaciones espaciales clave (con apoyo de IA):**\n   - **Clip (corte espacial):** Filtra geometrías que se encuentran dentro de un área dada. Ejemplo: filtrar las estaciones del IDEAM que pertenecen únicamente al departamento del Meta.\n   - **Dissolve (disolver / fusionar):** Combina varios polígonos en uno solo. Ejemplo: fusionar Arauca, Vichada, Meta y Casanare para crear el polígono \"Orinoquía\".",
           resources: [
-            { title: "Código Python", url: "https://github.com/trabajocientifico/curso-bibliometrix-rstudio/blob/main/sesion1.ipynb", type: "link" },
-            { title: "Enlace de capas", url: "https://www.dane.gov.co/files/geoportal-provisional/", type: "link" },
-            { title: "Capa Shape utilizada", url: "https://drive.google.com/file/d/1MJi3rb03Zni2WttCn_t3R_w5ghdF3W5v/view?usp=sharing", type: "download" },
-            { title: "Presentación Sesión 1", url: "presentaciones/python ia geoinformacion/sesion1.html", type: "link" }
+            { title: "Repositorio GitHub — curso Python + IA en GeoInformación", url: "https://github.com/trabajocientifico/curso-python-IA-geoinformacion", type: "link" },
+            { title: "Presentación de la clase (web)", url: "https://trabajocientifico.github.io/curso-python-IA-geoinformacion/", type: "link" },
+            { title: "Enlace de capas (DANE)", url: "https://www.dane.gov.co/files/geoportal-provisional/", type: "link" },
+            { title: "Capa Shape utilizada", url: "https://drive.google.com/file/d/1MJi3rb03Zni2WttCn_t3R_w5ghdF3W5v/view?usp=sharing", type: "download" }
           ]
         }
       ],
       quiz: {
         id: "q1",
-        title: "Quiz: Datos Espaciales con Python",
+        title: "Quiz Clase 1: Vectores, Raster y Geopandas",
         passingScore: 70,
         questions: [
           {
-            question: "¿Qué es GeoPandas?",
-            options: ["Un sistema operativo para mapas", "Una extensión de Pandas para datos geoespaciales", "Un lenguaje de programación", "Una base de datos geográfica"],
-            correct: 1,
-            explanation: "GeoPandas extiende Pandas agregando soporte para geometrías espaciales, permitiendo manipular datos geográficos como DataFrames."
-          },
-          {
-            question: "¿Qué archivos mínimos componen un Shapefile?",
-            options: [".shp solamente", ".shp, .shx y .dbf", ".shp y .csv", ".geojson y .shp"],
-            correct: 1,
-            explanation: "Un Shapefile requiere al menos tres archivos: .shp (geometría), .shx (índice espacial) y .dbf (atributos)."
-          },
-          {
-            question: "¿Qué función de GeoPandas se usa para leer un Shapefile?",
-            options: ["pd.read_csv()", "gpd.read_file()", "open()", "gpd.load_shape()"],
-            correct: 1,
-            explanation: "gpd.read_file() es la función principal para cargar archivos Shapefile, GeoJSON y otros formatos vectoriales."
-          },
-          {
-            question: "¿Qué significa EPSG:4326?",
-            options: ["Una proyección Mercator", "El sistema de coordenadas geográficas WGS84", "Un formato de archivo", "Un tipo de geometría"],
-            correct: 1,
-            explanation: "EPSG:4326 corresponde al sistema WGS84 que usa coordenadas de latitud y longitud en grados decimales."
-          },
-          {
-            question: "¿Qué tipo de geometrías pueden representarse en datos vectoriales?",
-            options: ["Solo puntos", "Solo polígonos", "Puntos, líneas y polígonos", "Solo píxeles"],
+            question: "¿Qué tipo de archivos se conocen como \"vectores\" en el contexto de la geoinformación?",
+            options: [
+              "Archivos que muestran imágenes formadas por píxeles continuos.",
+              "Archivos que representan variables climáticas invisibles.",
+              "Archivos que representan el mundo espacialmente a través de polígonos, puntos o líneas, conocidos como archivos shape (.shp).",
+              "Documentos de texto con código Python."
+            ],
             correct: 2,
-            explanation: "Los datos vectoriales representan entidades geográficas como puntos (ciudades), líneas (ríos, carreteras) y polígonos (municipios, departamentos)."
+            explanation: "Los vectores representan el mundo espacial mediante polígonos, puntos o líneas en archivos shape (.shp)."
           },
           {
-            question: "¿Qué método de GeoPandas permite visualizar rápidamente un mapa?",
-            options: [".describe()", ".plot()", ".print()", ".show_map()"],
-            correct: 1,
-            explanation: "El método .plot() genera una visualización rápida del GeoDataFrame usando Matplotlib como backend."
+            question: "A diferencia de los vectores, ¿cómo se estructuran los archivos Raster?",
+            options: [
+              "Por geometrías exactas que delimitan fronteras.",
+              "Por conjuntos de datos tabulares sin coordenadas.",
+              "Por toda una manta de píxeles conectados que representan una variable continua en el espacio, como la precipitación o la temperatura.",
+              "A través de algoritmos de inteligencia artificial exclusivamente."
+            ],
+            correct: 2,
+            explanation: "Los raster son una manta de píxeles conectados que representan variables continuas como precipitación o temperatura."
           },
           {
-            question: "¿Qué es un GeoDataFrame?",
-            options: ["Una imagen satelital", "Un DataFrame de Pandas con una columna de geometría", "Un archivo de texto", "Una base de datos SQL"],
+            question: "¿Qué extensión de archivo es característica de los archivos Raster según la clase?",
+            options: [".shp", ".tif", ".csv", ".jpg"],
             correct: 1,
-            explanation: "Un GeoDataFrame es un DataFrame que incluye una columna 'geometry' con las formas espaciales de cada registro."
+            explanation: "La extensión característica de los archivos raster es .tif."
           },
           {
-            question: "¿Para qué sirve reproyectar un CRS con .to_crs()?",
-            options: ["Para cambiar el color del mapa", "Para transformar las coordenadas a otro sistema de referencia", "Para eliminar geometrías", "Para agregar nuevas columnas"],
+            question: "¿Cuál es una de las principales ventajas de usar Google Colab para procesar geoinformación con Python?",
+            options: [
+              "Que es un software licenciado comercial muy económico.",
+              "Que facilita entrar al tema de Python porque evita instalaciones locales; muchas librerías ya vienen preinstaladas en su entorno.",
+              "Que no requiere conectarse a Google Drive en ningún momento.",
+              "Que funciona exclusivamente sin internet."
+            ],
             correct: 1,
-            explanation: "Reproyectar con .to_crs() transforma las coordenadas de un sistema a otro, necesario cuando se combinan capas con diferentes CRS."
+            explanation: "Colab evita instalaciones locales y trae muchas librerías preinstaladas."
           },
           {
-            question: "¿Qué diferencia hay entre datos vectoriales y datos ráster?",
-            options: ["No hay diferencia", "Vectoriales usan geometrías (puntos, líneas, polígonos); ráster usan píxeles/celdas", "Vectoriales son 3D y ráster son 2D", "Vectoriales son más pesados siempre"],
-            correct: 1,
-            explanation: "Los datos vectoriales representan entidades con geometrías discretas, mientras los ráster dividen el espacio en una grilla regular de píxeles con valores."
+            question: "¿Qué librería se importa en Python utilizando comúnmente el alias gpd para realizar procesamiento geoespacial?",
+            options: ["Cloud Code", "Pandas", "Geopandas", "Gemini"],
+            correct: 2,
+            explanation: "Geopandas se importa habitualmente con el alias gpd."
           },
           {
-            question: "¿Qué institución colombiana provee capas geográficas oficiales como las del DANE?",
-            options: ["NASA", "DANE e IGAC", "Google Maps", "OpenStreetMap"],
+            question: "Para que un entorno en Python pueda llamar, trabajar y visualizar una capa espacial tradicional, ¿cuál de los archivos específicos de la colección geométrica se debe cargar mediante la ruta?",
+            options: [
+              "El archivo .prj",
+              "El archivo raster",
+              "El archivo que termina en .shp (archivo shape)",
+              "La carpeta comprimida .zip"
+            ],
+            correct: 2,
+            explanation: "Se debe cargar el archivo .shp (con sus archivos auxiliares en la misma carpeta)."
+          },
+          {
+            question: "¿Qué comando se utiliza en el código (aplicado a la variable departamentos) para visualizar el encabezado o las primeras 5 filas de un marco de datos geográfico?",
+            options: [".plot()", ".columns", ".head()", ".print()"],
+            correct: 2,
+            explanation: "El método .head() muestra por defecto las primeras 5 filas del GeoDataFrame."
+          },
+          {
+            question: "¿Cómo se diferencia visualmente una celda de código ejecutable de una celda de texto en Google Colab?",
+            options: [
+              "La celda de texto tiene un marco rojo.",
+              "La celda de código presenta un icono de \"play\" o ejecución, indicando que el código puede correrse.",
+              "Las celdas de código solo aparecen en la parte inferior.",
+              "No hay diferencia visual, Python las detecta automáticamente."
+            ],
             correct: 1,
-            explanation: "El DANE (datos estadísticos) y el IGAC (Instituto Geográfico Agustín Codazzi) son las fuentes oficiales de cartografía en Colombia."
+            explanation: "La celda de código muestra un ícono de \"play\" que permite ejecutarla."
+          },
+          {
+            question: "Al utilizar puntos de estaciones meteorológicas del IDEAM sobre el departamento del Meta, ¿qué tipo de procedimiento espacial específico se pide a la IA que realice para filtrar las estaciones que solo pertenecen a ese departamento?",
+            options: [
+              "Un buffer o área de influencia.",
+              "Un clip o corte espacial.",
+              "Un dissolve o fusión.",
+              "Una proyección de coordenadas."
+            ],
+            correct: 1,
+            explanation: "Para filtrar entidades dentro de un área se usa un clip (corte espacial)."
+          },
+          {
+            question: "¿Qué herramienta o proceso se utiliza para fusionar los polígonos de los departamentos de Arauca, Vichada, Meta y Casanare y convertirlos en un solo polígono llamado \"Orinoquía\"?",
+            options: [
+              "Rasterizar",
+              "Disolver (dissolve)",
+              "Cortar (clip)",
+              "Extraer píxeles"
+            ],
+            correct: 1,
+            explanation: "El proceso para fusionar varios polígonos en uno solo es dissolve (disolver)."
           }
         ]
       }
     },
     {
       id: "mod-2",
-      title: "Clase 2: IA para Geoprocesamiento",
-      description: "Detección de patrones en imágenes satelitales.",
-      icon: "🤖",
+      title: "Clase 2: Tipos de datos, Shapefiles y exportación con Geopandas",
+      description: "Fundamentos de Python aplicados al SIG: tipos de datos, listas, comentarios y exportación de capas.",
+      icon: "🛰️",
       lessons: [
         {
           id: "les-2-1",
-          title: "Visión Artificial en Mapas",
+          title: "Python aplicado al SIG: tipos, listas, comentarios y exportación",
           type: "video",
           duration: "60 min",
           videoId: "mfDLgaaD44Y",
-          description: "Modelos de clasificación de cobertura vegetal.",
-          reading: "**Conceptos Fundamentales**\n\n1. **Clasificación supervisada:** Técnica de Machine Learning donde se entrena un modelo con muestras etiquetadas (clases conocidas como agua, vegetación, suelo urbano) para que clasifique automáticamente el resto de píxeles de una imagen satelital según patrones espectrales aprendidos.\n\n2. **Geoprocesamiento con Python:** Conjunto de operaciones espaciales automatizadas (buffer, intersección, unión, dissolve, clip) que se ejecutan programáticamente sobre capas geográficas, permitiendo análisis reproducibles y escalables a grandes volúmenes de datos.\n\n3. **Análisis espacial con IA:** Aplicación de algoritmos de inteligencia artificial (Random Forest, SVM, redes neuronales) sobre datos georreferenciados para detectar patrones, predecir fenómenos y automatizar tareas como la detección de cambios en cobertura del suelo.",
-          resources: []
+          description: "Tipos de datos, listas, comentarios, manejo de shapefiles y exportación con .to_file().",
+          reading: "**Conceptos Fundamentales — Clase 2**\n\n1. **Acceso a Google Colab:** Lo único que se necesita \"sí o sí\" para trabajar con Colab es **una cuenta de correo Gmail** (o anclada a los servidores de Google).\n\n2. **Tipos de datos en Python:**\n   - **Float (decimal):** valores con punto decimal, por ejemplo `4.1420`.\n   - **Int:** números enteros.\n   - **String:** cadenas de texto entre comillas.\n   - **Booleano:** `True` / `False`.\n\n3. **Tipos de geometría vectorial:**\n   - **Vector punto:** estaciones, ciudades, eventos.\n   - **Vector línea:** ríos, vías, redes (lo más adecuado para representar el flujo o curso de un río).\n   - **Polígono:** departamentos, municipios, lotes.\n   - **Raster:** imágenes continuas como una **imagen satelital**.\n\n4. **Listas en Python:** Los elementos se acceden por **índice empezando en 0** (el primer elemento es el índice `0`).\n\n5. **Comentarios:** Una línea que empieza con el símbolo **`#` (numeral)** se considera comentario y no se ejecuta como código.\n\n6. **Shapefiles desde un .zip:** Un Shapefile es **una colección de varios archivos** (`.shp`, `.shx`, `.prj`, `.dbf`, etc.) que deben estar **agrupados en la misma carpeta** después de extraer el `.zip` para poder leerlos correctamente.\n\n7. **Visualización con Geopandas:** Para graficar el mapa de una capa cargada se usa el método **`.plot()`**.\n\n8. **Inspección rápida:** El atributo **`.shape`** devuelve un resumen con el número total de **filas y columnas** del marco de datos, sin listar toda la información.\n\n9. **Exportar capa procesada:** Para guardar una nueva capa (por ejemplo el filtro del departamento del Meta) se usa **`.to_file(\"ruta/archivo.shp\")`**, indicando dentro del paréntesis la ruta y el nombre terminado en `.shp`.",
+          resources: [
+            { title: "Repositorio GitHub — curso Python + IA en GeoInformación", url: "https://github.com/trabajocientifico/curso-python-IA-geoinformacion", type: "link" },
+            { title: "Presentación de la clase (web)", url: "https://trabajocientifico.github.io/curso-python-IA-geoinformacion/", type: "link" }
+          ]
         }
       ],
       quiz: {
         id: "q2",
-        title: "Quiz: IA y Geoprocesamiento",
+        title: "Quiz Clase 2: Python, Shapefiles y exportación",
         passingScore: 70,
         questions: [
           {
-            question: "¿Qué es la clasificación supervisada en el contexto geoespacial?",
-            options: ["Ordenar archivos en carpetas", "Entrenar un modelo con muestras etiquetadas para clasificar píxeles", "Supervisar manualmente cada píxel", "Descargar imágenes satelitales"],
-            correct: 1,
-            explanation: "La clasificación supervisada usa datos de entrenamiento etiquetados para que el modelo aprenda a clasificar automáticamente el resto de la imagen."
+            question: "¿Qué es lo único que se necesita \"sí o sí\" para tener acceso y trabajar con el entorno de programación Google Colab?",
+            options: [
+              "Conocimientos avanzados en R Studio.",
+              "Pagar una licencia comercial.",
+              "Tener acceso a un correo electrónico de Gmail o anclado a sus servidores.",
+              "Descargar e instalar un software de 10 GB."
+            ],
+            correct: 2,
+            explanation: "Solo se necesita una cuenta de Gmail (o anclada a servidores de Google) para usar Colab."
           },
           {
-            question: "¿Qué algoritmo de Machine Learning es comúnmente usado para clasificación de cobertura vegetal?",
-            options: ["Regresión lineal simple", "Random Forest", "K-means únicamente", "Análisis de texto"],
-            correct: 1,
-            explanation: "Random Forest es uno de los algoritmos más usados en clasificación de cobertura por su robustez y capacidad de manejar múltiples variables espectrales."
+            question: "¿Qué tipo de dato numérico asigna Python a un valor decimal como 4.1420?",
+            options: [
+              "Entero (int)",
+              "Cadena de texto (string)",
+              "Booleano (bool)",
+              "Decimal (float)"
+            ],
+            correct: 3,
+            explanation: "Los valores con punto decimal son de tipo float en Python."
           },
           {
-            question: "¿Qué es un buffer en geoprocesamiento?",
-            options: ["Una zona de memoria temporal", "Un área de influencia alrededor de una geometría a una distancia dada", "Un tipo de archivo", "Un filtro de imagen"],
-            correct: 1,
-            explanation: "Un buffer genera un polígono que representa el área dentro de una distancia específica alrededor de un punto, línea o polígono."
+            question: "Dentro de un Sistema de Información Geográfica, ¿qué tipo de figura geométrica vectorial representa mejor el flujo o curso de un río?",
+            options: [
+              "Vector punto",
+              "Raster",
+              "Polígono",
+              "Vector línea"
+            ],
+            correct: 3,
+            explanation: "Un río se representa mejor como una geometría tipo línea."
           },
           {
-            question: "¿Qué operación espacial combina dos capas manteniendo solo el área donde se superponen?",
-            options: ["Union", "Intersección (intersection)", "Buffer", "Dissolve"],
+            question: "Si creas una lista en Python con los nombres de varios departamentos, ¿cuál es el número de índice que se le asigna al primer elemento de esa lista?",
+            options: [
+              "1",
+              "0 (cero)",
+              "-1",
+              "Depende de la longitud de la lista."
+            ],
             correct: 1,
-            explanation: "La intersección devuelve únicamente las geometrías y atributos del área donde ambas capas se solapan."
+            explanation: "En Python las listas se indexan empezando en 0."
           },
           {
-            question: "¿Qué biblioteca de Python se usa para trabajar con datos ráster?",
-            options: ["GeoPandas", "Rasterio", "Matplotlib", "NumPy únicamente"],
+            question: "En el contexto de los tipos de datos espaciales, ¿cómo se clasifica una imagen satelital?",
+            options: [
+              "Como un archivo de texto plano",
+              "Como un Raster",
+              "Como un Vector tipo polígono",
+              "Como un dato tabular"
+            ],
             correct: 1,
-            explanation: "Rasterio es la biblioteca principal en Python para leer, escribir y manipular datos ráster como imágenes satelitales."
+            explanation: "Una imagen satelital es un dato tipo raster."
           },
           {
-            question: "¿Qué son las bandas espectrales en una imagen satelital?",
-            options: ["Los bordes de la imagen", "Capas que capturan la reflectancia en diferentes longitudes de onda", "Los colores RGB solamente", "Las coordenadas del satélite"],
-            correct: 1,
-            explanation: "Las bandas espectrales capturan energía en diferentes rangos del espectro electromagnético (visible, infrarrojo, etc.), cada una revelando información distinta."
+            question: "¿Qué símbolo gramatical se utiliza en Python para indicar que una línea es un comentario y evitar que el sistema la ejecute como código?",
+            options: [
+              "Un asterisco (*)",
+              "Una barra diagonal (/)",
+              "Un símbolo de numeral (#)",
+              "Un signo de exclamación (!)"
+            ],
+            correct: 2,
+            explanation: "El símbolo # marca el inicio de un comentario en Python."
           },
           {
-            question: "¿Qué hace la operación dissolve en GeoPandas?",
-            options: ["Elimina todos los datos", "Fusiona geometrías que comparten un atributo común", "Divide polígonos en partes", "Cambia el sistema de coordenadas"],
+            question: "¿Qué particularidad tienen los archivos \"Shapefile\" (.shp) cuando se extraen de un archivo comprimido (.zip) para poder leerlos correctamente?",
+            options: [
+              "Se convierten inmediatamente en un formato raster.",
+              "Son una colección de varios archivos (como .shx, .prj, etc.) que deben estar agrupados en la misma carpeta para funcionar.",
+              "Se pueden leer subiendo únicamente el archivo .shp e ignorando los demás.",
+              "Requieren una clave de encriptación proporcionada por Google."
+            ],
             correct: 1,
-            explanation: "Dissolve agrupa y fusiona geometrías basándose en un campo compartido, por ejemplo unir municipios para formar departamentos."
+            explanation: "Un Shapefile es una colección de archivos que deben permanecer juntos en la misma carpeta."
           },
           {
-            question: "¿Qué ventaja ofrece automatizar geoprocesamiento con Python frente a hacerlo manualmente en un SIG?",
-            options: ["Los resultados son menos precisos", "Reproducibilidad, escalabilidad y automatización de flujos repetitivos", "Solo funciona con datos pequeños", "No tiene ninguna ventaja"],
+            question: "Una vez que se ha cargado una base de datos espacial utilizando Geopandas, ¿qué método o comando se utiliza para graficar visualmente el mapa de los polígonos?",
+            options: [
+              ".show_map()",
+              ".plot()",
+              ".print()",
+              ".view()"
+            ],
             correct: 1,
-            explanation: "Python permite crear scripts reproducibles que procesan grandes volúmenes de datos, se pueden reutilizar y documentar."
+            explanation: "El método .plot() genera la visualización del GeoDataFrame."
           },
           {
-            question: "¿Qué es un índice de vegetación (NDVI)?",
-            options: ["Una lista de plantas", "Una ratio entre bandas infrarroja y roja que mide la salud vegetal", "Un tipo de archivo GIS", "Una coordenada geográfica"],
-            correct: 1,
-            explanation: "El NDVI (Normalized Difference Vegetation Index) usa la reflectancia infrarroja y roja para cuantificar la densidad y salud de la vegetación."
+            question: "¿Qué comando rápido se usa para que Python muestre exclusivamente el resumen del número total de filas y columnas de un marco de datos sin listar toda la información?",
+            options: [
+              ".columns",
+              ".size",
+              ".head",
+              ".shape"
+            ],
+            correct: 3,
+            explanation: "El atributo .shape devuelve una tupla con (filas, columnas)."
           },
           {
-            question: "¿Qué es la matriz de confusión en clasificación geoespacial?",
-            options: ["Una tabla de coordenadas", "Una tabla que compara las clases predichas vs las reales para evaluar precisión", "Un tipo de proyección", "Un error del sistema"],
-            correct: 1,
-            explanation: "La matriz de confusión muestra aciertos y errores del modelo por cada clase, permitiendo calcular precisión, recall y exactitud global."
-          }
-        ]
-      }
-    },
-    {
-      id: "mod-3",
-      title: "Clase 3: Mapas Interactivos",
-      description: "Visualización avanzada de resultados.",
-      icon: "🛰️",
-      lessons: [
-        {
-          id: "les-3-1",
-          title: "Cartografía Web con Folium",
-          type: "video",
-          duration: "45 min",
-          videoId: "VIDEO_ID_PLACEHOLDER",
-          description: "Crea mapas que tus usuarios puedan explorar.",
-          reading: "**Conceptos Fundamentales**\n\n1. **Folium:** Biblioteca de Python que genera mapas web interactivos basados en Leaflet.js. Permite crear mapas con marcadores, capas temáticas (coropletas), popups informativos y controles de zoom, exportables como archivos HTML independientes.\n\n2. **Mapa coroplético (Choropleth):** Tipo de mapa temático donde las áreas geográficas se colorean en proporción a un valor estadístico (población, ingreso, temperatura). Es la técnica más utilizada para representar datos cuantitativos sobre divisiones administrativas.\n\n3. **Tiles (capas base):** Imágenes de fondo que proporcionan el contexto geográfico del mapa (calles, satélite, terreno). Folium permite usar proveedores como OpenStreetMap, CartoDB y Stamen, cada uno con estilos visuales diferentes.",
-          resources: []
-        }
-      ],
-      quiz: {
-        id: "q3",
-        title: "Quiz: Mapas Interactivos",
-        passingScore: 70,
-        questions: [
-          {
-            question: "¿Qué es Folium en Python?",
-            options: ["Un paquete de estadística", "Una biblioteca para crear mapas web interactivos basados en Leaflet.js", "Un editor de imágenes", "Un framework de backend"],
-            correct: 1,
-            explanation: "Folium genera mapas interactivos en HTML usando Leaflet.js como motor de renderizado en el navegador."
-          },
-          {
-            question: "¿Qué es un mapa coroplético?",
-            options: ["Un mapa con puntos de calor", "Un mapa donde las áreas se colorean según un valor estadístico", "Un mapa topográfico", "Un mapa de rutas"],
-            correct: 1,
-            explanation: "Los mapas coropléticos usan colores graduados para representar valores cuantitativos sobre áreas geográficas definidas."
-          },
-          {
-            question: "¿Cómo se crea un mapa base en Folium?",
-            options: ["folium.plot()", "folium.Map(location=[lat, lon])", "folium.create()", "folium.show()"],
-            correct: 1,
-            explanation: "folium.Map() crea un mapa centrado en las coordenadas especificadas con location=[latitud, longitud]."
-          },
-          {
-            question: "¿Qué son los tiles en un mapa web?",
-            options: ["Los datos del usuario", "Las imágenes de fondo que dan contexto geográfico (calles, satélite, etc.)", "Los marcadores", "Las coordenadas"],
-            correct: 1,
-            explanation: "Los tiles son mosaicos de imágenes que forman el fondo del mapa, proporcionados por servicios como OpenStreetMap o CartoDB."
-          },
-          {
-            question: "¿Cómo se agrega un marcador en Folium?",
-            options: ["folium.Point()", "folium.Marker([lat, lon]).add_to(mapa)", "folium.add_pin()", "mapa.marker()"],
-            correct: 1,
-            explanation: "folium.Marker() crea un marcador en las coordenadas indicadas y .add_to() lo vincula al objeto mapa."
-          },
-          {
-            question: "¿Qué formato usa Folium para generar mapas coropléticos?",
-            options: ["CSV solamente", "GeoJSON combinado con datos tabulares", "Shapefile directamente", "Imágenes PNG"],
-            correct: 1,
-            explanation: "Folium usa archivos GeoJSON para las geometrías y los combina con DataFrames de Pandas para los valores a representar."
-          },
-          {
-            question: "¿Cómo se guarda un mapa de Folium como archivo?",
-            options: ["mapa.save('mapa.html')", "mapa.export('mapa.png')", "mapa.write('mapa.pdf')", "mapa.download()"],
-            correct: 0,
-            explanation: "El método .save() exporta el mapa como un archivo HTML independiente que se puede abrir en cualquier navegador."
-          },
-          {
-            question: "¿Qué es un popup en Folium?",
-            options: ["Una ventana de error", "Una ventana informativa que aparece al hacer clic en un elemento del mapa", "Un tipo de tile", "Una capa de calor"],
-            correct: 1,
-            explanation: "Los popups son ventanas emergentes vinculadas a marcadores o áreas que muestran información detallada al interactuar."
-          },
-          {
-            question: "¿Qué ventaja tienen los mapas interactivos sobre los mapas estáticos?",
-            options: ["Son más pequeños en tamaño", "Permiten zoom, paneo, popups y exploración dinámica de los datos", "Son más rápidos de crear", "No necesitan datos geográficos"],
-            correct: 1,
-            explanation: "Los mapas interactivos permiten al usuario explorar datos a diferentes escalas y obtener información específica al interactuar con los elementos."
-          },
-          {
-            question: "¿Qué biblioteca de JavaScript utiliza Folium internamente para renderizar los mapas?",
-            options: ["D3.js", "Leaflet.js", "Google Maps API", "Mapbox GL"],
-            correct: 1,
-            explanation: "Folium es un wrapper de Python sobre Leaflet.js, la biblioteca de JavaScript más popular para mapas web interactivos de código abierto."
+            question: "Al finalizar el procesamiento de una capa vectorial (como el filtro del departamento del Meta), ¿qué función se emplea para exportar y guardar esa nueva información en un archivo dentro de nuestra carpeta conectada?",
+            options: [
+              ".save_as()",
+              ".export_shape()",
+              ".to_file() indicando dentro del paréntesis la ruta y el nombre deseado terminado en .shp",
+              ".download()"
+            ],
+            correct: 2,
+            explanation: "El método .to_file('ruta/archivo.shp') exporta el GeoDataFrame a un nuevo shapefile."
           }
         ]
       }

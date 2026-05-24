@@ -90,29 +90,7 @@
       margin-top: 0.5rem;
       display: none;
     }
-    .section-divider {
-      margin: 4rem 0 2rem;
-      padding-bottom: 1rem;
-      border-bottom: 1px solid #333;
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-    .section-divider h2 {
-      margin: 0;
-      font-size: 1.5rem;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      color: #00d4ff;
-    }
-    .badge-free {
-      background: #00d4ff20;
-      color: #00d4ff;
-      padding: 4px 12px;
-      border-radius: 20px;
-      font-size: 0.7rem;
-      font-weight: bold;
-    }
+    /* Section divider: deja que portal.css lo controle */
 
     /* Estilos Sección Instructor */
     .instructor-section {
@@ -246,13 +224,22 @@
     <a href="#" class="nav-brand">
       <img src="imagenes/logo.png" alt="Trabajo Científico" class="nav-logo" style="width:40px;height:40px;object-fit:contain;border-radius:8px;">
       <div class="nav-title">Trabajo<span>Científico</span></div>
+      <span class="nav-brand-tag">Cursos</span>
     </a>
     <div class="nav-links">
+      <a href="https://trabajocientifico.org/" class="nav-back" title="Volver al sitio principal">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+        <span>trabajocientifico.org</span>
+      </a>
       <a href="#cursos" class="nav-link">Cursos</a>
       <a href="#features" class="nav-link">Plataforma</a>
       <a href="#instructor" class="nav-link">Instructor</a>
       <a href="#cursos" class="nav-cta">Comenzar ahora</a>
     </div>
+    <a href="https://trabajocientifico.org/" class="nav-back nav-back--mobile" title="Volver al sitio principal" aria-label="Volver a trabajocientifico.org">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+      <span>.org</span>
+    </a>
   </nav>
 
   <!-- Hero -->
@@ -289,8 +276,12 @@
     
     <!-- CURSOS GRATUITOS -->
     <div class="section-divider reveal">
-      <h2>Cursos Introductorios</h2>
-      <span class="badge-free">ACCESO GRATUITO</span>
+      <div class="section-divider-text">
+        <span class="section-eyebrow">Empieza hoy</span>
+        <h2>Cursos <span class="gradient-text">Introductorios</span></h2>
+        <p class="section-subtitle">Aprende los fundamentos con contenido en abierto, video, recursos y quizzes interactivos.</p>
+      </div>
+      <span class="badge-free">🆓 Acceso Gratuito</span>
     </div>
 
     <div class="courses-grid">
@@ -399,8 +390,13 @@
     </div>
 
     <!-- CURSOS PROFESIONALES -->
-    <div class="section-divider reveal" style="margin-top: 6rem;">
-      <h2>Cursos Profesionales</h2>
+    <div class="section-divider reveal section-divider--pro">
+      <div class="section-divider-text">
+        <span class="section-eyebrow">Da el siguiente paso</span>
+        <h2>Cursos <span class="gradient-text">Profesionales</span></h2>
+        <p class="section-subtitle">Programas avanzados con proyectos aplicados, certificación y mentoría.</p>
+      </div>
+      <span class="badge-pro">⭐ Avanzado</span>
     </div>
 
     <div class="courses-grid">
@@ -610,6 +606,10 @@
 
   <!-- Footer -->
   <footer class="portal-footer">
+    <a href="https://trabajocientifico.org/" class="footer-back">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+      Volver al sitio principal — trabajocientifico.org
+    </a>
     <p>Trabajo Científico &copy; 2026 - Alta Especialización en Datos e IA</p>
   </footer>
 
