@@ -140,6 +140,34 @@ const COURSE_DATA = {
           }
         ]
       }
+    },
+    {
+      id: "mod-2",
+      title: "Clase 2: Fundamentos de Programación en Python y pandas para manipulación de datos",
+      description: "Fundamentos de Python y manipulación de datos con pandas.",
+      icon: "🐼",
+      lessons: [
+        {
+          id: "les-2-1",
+          title: "Fundamentos de Python y manipulación de datos con pandas",
+          type: "video",
+          duration: "60 min",
+          videoId: "FGk0K2Ub4Io",
+          description: "Fundamentos de programación en Python y uso de pandas para la manipulación de datos.",
+          reading: "**Clase 2 — Fundamentos de Programación en Python y pandas para manipulación de datos**\n\nContenido pendiente de publicación.",
+          resources: [
+            { title: "Repositorio GitHub — Curso Python + IA en Ciencia de Datos", url: "https://github.com/trabajocientifico/curso-python-ia-ciencia-datos", type: "link" },
+            { title: "Presentación de la clase (web)", url: "https://trabajocientifico.github.io/curso-python-ia-ciencia-datos/", type: "link" },
+            { title: "Grabación de la Clase 2 (YouTube)", url: "https://www.youtube.com/watch?v=FGk0K2Ub4Io", type: "link" }
+          ]
+        }
+      ],
+      quiz: {
+        id: "q2",
+        title: "Quiz Clase 2 (próximamente)",
+        passingScore: 70,
+        questions: []
+      }
     }
   ]
 };
