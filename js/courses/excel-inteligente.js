@@ -1,6 +1,7 @@
 const COURSE_DATA = {
   title: "Excel Inteligente",
   subtitle: "Domina las funciones avanzadas de Excel potenciadas con Inteligencia Artificial",
+  hours: 9,
   modules: [
     {
       id: "mod-1",

@@ -1,6 +1,7 @@
 const COURSE_DATA = {
   title: "Excel para la Vida",
   subtitle: "Domina Excel desde lo basico hasta lo avanzado para potenciar tu productividad diaria",
+  hours: 12,
   modules: [
     {
       id: "mod-1",

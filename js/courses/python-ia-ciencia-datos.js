@@ -1,6 +1,7 @@
 const COURSE_DATA = {
   title: "Python + IA en Ciencia de Datos",
   subtitle: "Domina la programación científica de datos potenciada por Inteligencia Artificial",
+  hours: 9,
   modules: [
     {
       id: "mod-1",

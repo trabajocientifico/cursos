@@ -1022,122 +1022,274 @@ const App = {
   renderCertificate() {
     const canvas = document.getElementById('cert-canvas');
     const ctx = canvas.getContext('2d');
-    const w = canvas.width;
-    const h = canvas.height;
+    const draw = () => this._drawCertificate(ctx, canvas.width, canvas.height);
 
-    // Background
-    ctx.fillStyle = '#0b0d17';
+    if (this._certLogo && this._certLogo.complete && this._certLogo.naturalWidth > 0) {
+      draw();
+      return;
+    }
+    const img = new Image();
+    img.onload = () => { this._certLogo = img; draw(); };
+    img.onerror = () => { this._certLogo = null; draw(); };
+    img.src = 'imagenes/logo.png';
+  },
+
+  _drawCertificate(ctx, w, h) {
+    const FONT = "'Segoe UI', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif";
+
+    ctx.clearRect(0, 0, w, h);
+
+    // ---- Background gradient ----
+    const bg = ctx.createLinearGradient(0, 0, 0, h);
+    bg.addColorStop(0, '#0a0d1a');
+    bg.addColorStop(1, '#0e1226');
+    ctx.fillStyle = bg;
     ctx.fillRect(0, 0, w, h);
 
-    // Border gradient
-    const borderGrad = ctx.createLinearGradient(0, 0, w, h);
-    borderGrad.addColorStop(0, '#00d4ff');
-    borderGrad.addColorStop(1, '#7b2ff7');
-    ctx.strokeStyle = borderGrad;
-    ctx.lineWidth = 4;
-    ctx.strokeRect(30, 30, w - 60, h - 60);
-
-    // Inner border
-    ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+    // ---- Subtle tech grid ----
+    ctx.strokeStyle = 'rgba(0, 212, 255, 0.03)';
     ctx.lineWidth = 1;
-    ctx.strokeRect(45, 45, w - 90, h - 90);
+    for (let x = 50; x < w; x += 50) {
+      ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+    }
+    for (let y = 50; y < h; y += 50) {
+      ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+    }
 
-    // Corner decorations
-    const cornerSize = 30;
-    ctx.strokeStyle = borderGrad;
-    ctx.lineWidth = 2;
-    // Top-left
-    ctx.beginPath(); ctx.moveTo(50, 80); ctx.lineTo(50, 50); ctx.lineTo(80, 50); ctx.stroke();
-    // Top-right
-    ctx.beginPath(); ctx.moveTo(w - 80, 50); ctx.lineTo(w - 50, 50); ctx.lineTo(w - 50, 80); ctx.stroke();
-    // Bottom-left
-    ctx.beginPath(); ctx.moveTo(50, h - 80); ctx.lineTo(50, h - 50); ctx.lineTo(80, h - 50); ctx.stroke();
-    // Bottom-right
-    ctx.beginPath(); ctx.moveTo(w - 80, h - 50); ctx.lineTo(w - 50, h - 50); ctx.lineTo(w - 50, h - 80); ctx.stroke();
+    // ---- Soft corner glows ----
+    const glow1 = ctx.createRadialGradient(0, 0, 0, 0, 0, 480);
+    glow1.addColorStop(0, 'rgba(0, 212, 255, 0.14)');
+    glow1.addColorStop(1, 'rgba(0, 212, 255, 0)');
+    ctx.fillStyle = glow1; ctx.fillRect(0, 0, 600, 600);
+    const glow2 = ctx.createRadialGradient(w, h, 0, w, h, 480);
+    glow2.addColorStop(0, 'rgba(123, 47, 247, 0.14)');
+    glow2.addColorStop(1, 'rgba(123, 47, 247, 0)');
+    ctx.fillStyle = glow2; ctx.fillRect(w - 600, h - 600, 600, 600);
 
-    // Logo
+    // ---- Gradient pen ----
+    const accent = ctx.createLinearGradient(0, 0, w, h);
+    accent.addColorStop(0, '#00d4ff');
+    accent.addColorStop(1, '#7b2ff7');
+
+    // ---- Outer frame ----
+    ctx.strokeStyle = accent;
+    ctx.lineWidth = 1.5;
+    ctx.strokeRect(40, 40, w - 80, h - 80);
+
+    // ---- Tech corner brackets ----
+    const br = 30;
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = accent;
+    ctx.beginPath(); ctx.moveTo(40, 40 + br); ctx.lineTo(40, 40); ctx.lineTo(40 + br, 40); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(w - 40 - br, 40); ctx.lineTo(w - 40, 40); ctx.lineTo(w - 40, 40 + br); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(40, h - 40 - br); ctx.lineTo(40, h - 40); ctx.lineTo(40 + br, h - 40); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(w - 40 - br, h - 40); ctx.lineTo(w - 40, h - 40); ctx.lineTo(w - 40, h - 40 - br); ctx.stroke();
+
+    // ---- Header: logo + brand ----
+    ctx.textBaseline = 'middle';
+    const brandY = 105;
+    const brandText = 'TRABAJO CIENTÍFICO';
+    ctx.font = 'bold 22px ' + FONT;
+    const brandW = ctx.measureText(brandText).width;
+    const logoSize = 52;
+    const gap = 16;
+    const hasLogo = !!this._certLogo;
+    const groupW = (hasLogo ? logoSize + gap : 0) + brandW;
+    const groupX = (w - groupW) / 2;
+
+    if (hasLogo) {
+      ctx.drawImage(this._certLogo, groupX, brandY - logoSize / 2, logoSize, logoSize);
+    }
+    ctx.fillStyle = '#ffffff';
+    ctx.textAlign = 'left';
+    ctx.fillText(brandText, groupX + (hasLogo ? logoSize + gap : 0), brandY);
+
     ctx.fillStyle = '#8b8fa3';
-    ctx.font = '16px -apple-system, BlinkMacSystemFont, sans-serif';
+    ctx.font = '11px ' + FONT;
     ctx.textAlign = 'center';
-    ctx.fillText('Trabajo Científico', w / 2, 110);
+    ctx.fillText('P L A T A F O R M A   D E   F O R M A C I Ó N   C I E N T Í F I C A', w / 2, brandY + 30);
 
-    // Title
-    ctx.fillStyle = '#e4e4e7';
-    ctx.font = '14px -apple-system, BlinkMacSystemFont, sans-serif';
-    ctx.textAlign = 'center';
-    ctx.letterSpacing = '4px';
-    ctx.fillText('CERTIFICADO DE FINALIZACIÓN', w / 2, 180);
-
-    // Line
-    const lineGrad = ctx.createLinearGradient(w / 2 - 100, 0, w / 2 + 100, 0);
+    // ---- Divider ----
+    ctx.textBaseline = 'alphabetic';
+    const dY = 195;
+    const lineGrad = ctx.createLinearGradient(w / 2 - 280, 0, w / 2 + 280, 0);
     lineGrad.addColorStop(0, 'transparent');
     lineGrad.addColorStop(0.5, '#00d4ff');
     lineGrad.addColorStop(1, 'transparent');
     ctx.strokeStyle = lineGrad;
     ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.moveTo(w / 2 - 150, 200);
-    ctx.lineTo(w / 2 + 150, 200);
-    ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(w / 2 - 280, dY); ctx.lineTo(w / 2 + 280, dY); ctx.stroke();
+    ctx.save();
+    ctx.translate(w / 2, dY);
+    ctx.rotate(Math.PI / 4);
+    ctx.fillStyle = accent;
+    ctx.fillRect(-4, -4, 8, 8);
+    ctx.restore();
 
-    // "Se certifica que"
+    // ---- "CERTIFICADO DE FORMACIÓN" ----
+    ctx.fillStyle = '#e4e4e7';
+    ctx.font = '14px ' + FONT;
+    ctx.textAlign = 'center';
+    ctx.fillText('C E R T I F I C A D O    D E    F O R M A C I Ó N', w / 2, 232);
+
+    // ---- "OTORGADO A" ----
     ctx.fillStyle = '#8b8fa3';
-    ctx.font = '18px -apple-system, BlinkMacSystemFont, sans-serif';
-    ctx.fillText('Se certifica que', w / 2, 260);
+    ctx.font = '13px ' + FONT;
+    ctx.fillText('O T O R G A D O   A', w / 2, 298);
 
-    // Name
-    const nameGrad = ctx.createLinearGradient(w / 2 - 150, 0, w / 2 + 150, 0);
+    // ---- Recipient name (big, gradient) ----
+    const name = (this.state.username || '').trim() || 'Estudiante';
+    const nameGrad = ctx.createLinearGradient(w / 2 - 260, 0, w / 2 + 260, 0);
     nameGrad.addColorStop(0, '#00d4ff');
     nameGrad.addColorStop(1, '#7b2ff7');
+
+    let nameSize = 52;
+    ctx.font = 'bold ' + nameSize + 'px ' + FONT;
+    while (ctx.measureText(name).width > w - 260 && nameSize > 30) {
+      nameSize -= 2;
+      ctx.font = 'bold ' + nameSize + 'px ' + FONT;
+    }
+    const nameY = 360;
     ctx.fillStyle = nameGrad;
-    ctx.font = 'bold 42px -apple-system, BlinkMacSystemFont, sans-serif';
-    ctx.fillText(this.state.username, w / 2, 330);
+    ctx.fillText(name, w / 2, nameY);
 
-    // "ha completado satisfactoriamente"
-    ctx.fillStyle = '#8b8fa3';
-    ctx.font = '18px -apple-system, BlinkMacSystemFont, sans-serif';
-    ctx.fillText('ha completado satisfactoriamente el curso', w / 2, 400);
-
-    // Course name
-    ctx.fillStyle = '#e4e4e7';
-    ctx.font = 'bold 28px -apple-system, BlinkMacSystemFont, sans-serif';
-    ctx.fillText(COURSE_DATA.title, w / 2, 460);
-
-    // Description
-    ctx.fillStyle = '#555a70';
-    ctx.font = '14px -apple-system, BlinkMacSystemFont, sans-serif';
-    ctx.fillText('Incluyendo: Python, Análisis de Datos, Visualización y Machine Learning', w / 2, 500);
-
-    // Date
-    const now = new Date();
-    const dateStr = now.toLocaleDateString('es-ES', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric'
-    });
-
-    // Bottom section
-    ctx.fillStyle = '#8b8fa3';
-    ctx.font = '14px -apple-system, BlinkMacSystemFont, sans-serif';
-
-    // Date
-    ctx.fillText('Fecha de emisión', w / 2, 620);
-    ctx.fillStyle = '#e4e4e7';
-    ctx.font = '16px -apple-system, BlinkMacSystemFont, sans-serif';
-    ctx.fillText(dateStr, w / 2, 650);
-
-    // Bottom line
-    ctx.strokeStyle = lineGrad;
+    const nameW = ctx.measureText(name).width;
+    ctx.strokeStyle = nameGrad;
+    ctx.lineWidth = 2;
     ctx.beginPath();
-    ctx.moveTo(w / 2 - 150, 690);
-    ctx.lineTo(w / 2 + 150, 690);
+    ctx.moveTo(w / 2 - nameW / 2 - 30, nameY + 14);
+    ctx.lineTo(w / 2 + nameW / 2 + 30, nameY + 14);
     ctx.stroke();
 
-    // ID
-    ctx.fillStyle = '#555a70';
-    ctx.font = '11px -apple-system, BlinkMacSystemFont, sans-serif';
-    const certId = `CERT-${Date.now().toString(36).toUpperCase()}`;
-    ctx.fillText(`ID: ${certId}`, w / 2, 720);
+    // ---- "por completar..." ----
+    ctx.fillStyle = '#a0a4b8';
+    ctx.font = 'italic 18px ' + FONT;
+    ctx.fillText('por completar satisfactoriamente el curso', w / 2, 432);
+
+    // ---- COURSE TITLE (big, wrapped) ----
+    const courseTitle = (typeof COURSE_DATA !== 'undefined' && COURSE_DATA.title) ? COURSE_DATA.title : 'Curso';
+    let titleSize = 42;
+    ctx.font = 'bold ' + titleSize + 'px ' + FONT;
+    while (ctx.measureText(courseTitle).width > w - 240 && titleSize > 28) {
+      titleSize -= 2;
+      ctx.font = 'bold ' + titleSize + 'px ' + FONT;
+    }
+    ctx.fillStyle = '#ffffff';
+    this._drawCenteredWrapped(ctx, courseTitle, w / 2, 495, w - 220, titleSize + 8);
+
+    // ---- Hours badge ----
+    const hours = (typeof COURSE_DATA !== 'undefined' && COURSE_DATA.hours) ? COURSE_DATA.hours : 9;
+    const badgeText = hours + ' horas de formación';
+    ctx.font = '600 16px ' + FONT;
+    const badgeTextW = ctx.measureText(badgeText).width;
+    const badgeW = badgeTextW + 70;
+    const badgeH = 36;
+    const badgeY = 590;
+    const badgeX = (w - badgeW) / 2;
+    ctx.fillStyle = 'rgba(0, 212, 255, 0.10)';
+    ctx.strokeStyle = '#00d4ff';
+    ctx.lineWidth = 1;
+    this._roundRect(ctx, badgeX, badgeY - badgeH / 2, badgeW, badgeH, badgeH / 2);
+    ctx.fill();
+    ctx.stroke();
+    // Clock icon
+    ctx.strokeStyle = '#00d4ff';
+    ctx.lineWidth = 1.6;
+    ctx.beginPath();
+    ctx.arc(badgeX + 22, badgeY, 8, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(badgeX + 22, badgeY); ctx.lineTo(badgeX + 22, badgeY - 5);
+    ctx.moveTo(badgeX + 22, badgeY); ctx.lineTo(badgeX + 26, badgeY);
+    ctx.stroke();
+    // Badge text
+    ctx.fillStyle = '#00d4ff';
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(badgeText, badgeX + 40, badgeY + 1);
+    ctx.textBaseline = 'alphabetic';
+
+    // ---- Bottom: signature & date ----
+    const sigY = 700;
+    const leftCx = 240, rightCx = w - 240;
+    ctx.strokeStyle = 'rgba(255,255,255,0.18)';
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(leftCx - 120, sigY); ctx.lineTo(leftCx + 120, sigY); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(rightCx - 120, sigY); ctx.lineTo(rightCx + 120, sigY); ctx.stroke();
+
+    // Stylized signature (gradient script) above the line
+    ctx.fillStyle = nameGrad;
+    ctx.font = 'italic bold 28px "Segoe Script", "Brush Script MT", cursive';
+    ctx.textAlign = 'center';
+    ctx.fillText('Oscar I. Vargas', leftCx, sigY - 8);
+
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 14px ' + FONT;
+    ctx.fillText('Oscar Ivan Vargas Pineda', leftCx, sigY + 22);
+    ctx.fillStyle = '#8b8fa3';
+    ctx.font = '11px ' + FONT;
+    ctx.fillText('CEO  ·  Trabajo Científico', leftCx, sigY + 40);
+
+    const now = new Date();
+    const dateStr = now.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 14px ' + FONT;
+    ctx.fillText(dateStr, rightCx, sigY + 22);
+    ctx.fillStyle = '#8b8fa3';
+    ctx.font = '11px ' + FONT;
+    ctx.fillText('FECHA DE EMISIÓN', rightCx, sigY + 40);
+
+    // ---- Cert ID ----
+    ctx.fillStyle = 'rgba(255,255,255,0.32)';
+    ctx.font = '10px ' + FONT;
+    ctx.fillText('ID: ' + this._getCertId(), w / 2, h - 60);
+  },
+
+  _getCertId() {
+    const name = (this.state.username || 'user').trim();
+    const course = (typeof COURSE_DATA !== 'undefined' && COURSE_DATA.title) ? COURSE_DATA.title : 'course';
+    const str = name + '|' + course;
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      hash = ((hash << 5) - hash) + str.charCodeAt(i);
+      hash |= 0;
+    }
+    return 'TC-' + Math.abs(hash).toString(36).toUpperCase().padStart(8, '0');
+  },
+
+  _roundRect(ctx, x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.lineTo(x + w - r, y);
+    ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+    ctx.lineTo(x + w, y + h - r);
+    ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+    ctx.lineTo(x + r, y + h);
+    ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+    ctx.lineTo(x, y + r);
+    ctx.quadraticCurveTo(x, y, x + r, y);
+    ctx.closePath();
+  },
+
+  _drawCenteredWrapped(ctx, text, cx, cy, maxWidth, lineHeight) {
+    const words = text.split(' ');
+    const lines = [];
+    let line = '';
+    for (let i = 0; i < words.length; i++) {
+      const test = line ? line + ' ' + words[i] : words[i];
+      if (ctx.measureText(test).width > maxWidth && line) {
+        lines.push(line);
+        line = words[i];
+      } else {
+        line = test;
+      }
+    }
+    if (line) lines.push(line);
+
+    const startY = cy - ((lines.length - 1) * lineHeight) / 2;
+    ctx.textAlign = 'center';
+    lines.forEach((l, i) => ctx.fillText(l, cx, startY + i * lineHeight));
   },
 
   downloadCertificate() {

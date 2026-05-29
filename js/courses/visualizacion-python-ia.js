@@ -1,6 +1,7 @@
 const COURSE_DATA = {
   title: "Visualización Gráfica con Python + IA",
   subtitle: "Crea visualizaciones científicas potentes y dashboards inteligentes con Python e IA",
+  hours: 9,
   modules: [
     {
       id: "mod-1",

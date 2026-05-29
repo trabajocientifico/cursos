@@ -1,6 +1,7 @@
 const COURSE_DATA = {
   title: "Automatizacion de Tareas con Python + IA",
   subtitle: "Automatiza procesos repetitivos combinando la potencia de Python con inteligencia artificial",
+  hours: 12,
   modules: [
     {
       id: "mod-1",

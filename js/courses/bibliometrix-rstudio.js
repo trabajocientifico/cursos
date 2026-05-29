@@ -1,6 +1,7 @@
 const COURSE_DATA = {
   title: "Bibliometrix en Rstudio",
   subtitle: "Domina el mapeo científico y análisis de redes de investigación",
+  hours: 9,
   modules: [
     {
       id: "mod-1",

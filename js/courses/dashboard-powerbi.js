@@ -1,6 +1,7 @@
 const COURSE_DATA = {
   title: "Dashboard con Power BI",
   subtitle: "Domina Power BI y crea dashboards profesionales para la toma de decisiones",
+  hours: 12,
   modules: [
     {
       id: "mod-1",

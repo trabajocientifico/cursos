@@ -1,6 +1,7 @@
 const COURSE_DATA = {
   title: "IA para la Vida",
   subtitle: "Aprende a usar la inteligencia artificial para potenciar tu día a día",
+  hours: 12,
   modules: [
     {
       id: "mod-1",

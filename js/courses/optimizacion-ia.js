@@ -1,6 +1,7 @@
 const COURSE_DATA = {
   title: "Optimización Científica con IA",
   subtitle: "Acelera tus procesos de investigación y análisis con inteligencia artificial",
+  hours: 12,
   modules: [
     {
       id: "mod-1",

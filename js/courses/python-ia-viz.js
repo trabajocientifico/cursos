@@ -1,6 +1,7 @@
 const COURSE_DATA = {
   title: "Python + IA para Visualizacion Inteligente",
   subtitle: "Crea visualizaciones impactantes potenciadas con inteligencia artificial",
+  hours: 12,
   modules: [
     {
       id: "mod-1",

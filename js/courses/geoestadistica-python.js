@@ -1,6 +1,7 @@
 const COURSE_DATA = {
   title: "GeoEstadística con Python",
   subtitle: "Domina el análisis estadístico espacial y la interpolación avanzada",
+  hours: 12,
   modules: [
     {
       id: "mod-1",

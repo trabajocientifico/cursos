@@ -1,6 +1,7 @@
 const COURSE_DATA = {
   title: "Python + IA en GeoInformación",
   subtitle: "Potencia el análisis espacial con algoritmos de Inteligencia Artificial",
+  hours: 9,
   modules: [
     {
       id: "mod-1",

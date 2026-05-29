@@ -1,6 +1,7 @@
 const COURSE_DATA = {
   title: "AgroClima con Python y RStudio",
   subtitle: "Analiza datos climáticos y agrícolas para la toma de decisiones",
+  hours: 9,
   modules: [
     {
       id: "mod-1",

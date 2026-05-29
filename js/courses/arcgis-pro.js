@@ -1,6 +1,7 @@
 const COURSE_DATA = {
   title: "Analizando con ArcGIS PRO",
   subtitle: "Analisis espacial profesional con la herramienta lider en sistemas de informacion geografica",
+  hours: 12,
   modules: [
     {
       id: "mod-1",
