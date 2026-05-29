@@ -5,8 +5,371 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Trabajo Científico - Cargando curso...</title>
   <link rel="stylesheet" href="css/styles.css">
+  <style>
+    /* ============================================
+       Free Course — UI overrides
+       ============================================ */
+
+    /* Hide gamification elements not used in free courses */
+    body.is-free-course .sidebar-xp,
+    body.is-free-course .sidebar-achievements-btn-wrap,
+    body.is-free-course .sidebar-streak,
+    body.is-free-course .user-role,
+    body.is-free-course .hero-stats,
+    body.is-free-course #skill-tree,
+    body.is-free-course .section-title { display: none !important; }
+
+    /* Hide stub elements used only to keep app.js happy */
+    .free-course-stubs { display: none !important; }
+
+    /* Slightly tighter hero in free courses */
+    body.is-free-course .dashboard-hero { padding: 16px 0 4px; margin-bottom: 14px; }
+    body.is-free-course .dashboard-hero h1 { font-size: 1.6rem; margin-bottom: 4px; }
+    body.is-free-course .hero-subtitle { font-size: 0.95rem; }
+
+    /* ====== Sidebar free-course stats ====== */
+    .sidebar-free-stats {
+      margin: 0 16px 14px;
+      padding: 12px 14px;
+      background: var(--bg-hover);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .free-stat { display: flex; align-items: center; gap: 10px; }
+    .free-stat-icon { font-size: 1.1rem; width: 28px; text-align: center; }
+    .free-stat-text { flex: 1; display: flex; flex-direction: column; line-height: 1.2; }
+    .free-stat-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+    }
+    .free-stat-value {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    /* ====== Top tabs panel ====== */
+    .classes-tabs {
+      display: flex;
+      gap: 6px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 8px;
+      margin-bottom: 22px;
+      flex-wrap: wrap;
+    }
+    .class-tab {
+      flex: 1 1 auto;
+      min-width: 120px;
+      padding: 12px 18px;
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: var(--radius-sm);
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: inherit;
+    }
+    .class-tab:hover { background: var(--bg-hover); color: var(--text-primary); }
+    .class-tab.active {
+      background: var(--accent-gradient);
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(0, 212, 255, 0.25);
+    }
+    .class-tab .tab-check {
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      background: var(--success);
+      color: #fff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      font-weight: 700;
+    }
+    .class-tab.class-tab-cert.active {
+      background: linear-gradient(135deg, #ffd700, #ff8c00);
+      color: #1a1a1a;
+    }
+
+    /* ====== Class panels ====== */
+    .class-panel { display: none; animation: tcFadeIn 0.25s; }
+    .class-panel.active { display: block; }
+    @keyframes tcFadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .class-panel-header { margin-bottom: 18px; }
+    .class-panel-header h2 {
+      font-size: 1.5rem;
+      margin: 0 0 6px;
+      color: var(--text-primary);
+    }
+    .class-panel-header p { color: var(--text-secondary); margin: 0; font-size: 0.95rem; }
+
+    /* Large video container (desktop-first) */
+    .class-video-wrap {
+      position: relative;
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto 22px;
+      background: #000;
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+    }
+    .class-video-wrap::before {
+      content: "";
+      display: block;
+      padding-top: 56.25%;
+    }
+    .class-video-wrap iframe {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      border: 0;
+    }
+    .class-video-placeholder {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 10px;
+      color: #b9bcd1;
+      text-align: center;
+      padding: 24px;
+    }
+    .class-video-placeholder .ph-emoji { font-size: 2.4rem; }
+    .class-video-placeholder .ph-text { font-size: 1rem; max-width: 480px; }
+
+    /* Info grid: concepts + resources */
+    .class-info-grid {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr;
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+    @media (max-width: 1000px) {
+      .class-info-grid { grid-template-columns: 1fr; }
+    }
+    .class-info-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+    }
+    .class-info-card h3 {
+      margin: 0 0 12px;
+      font-size: 1rem;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .class-info-card .reading-content {
+      color: var(--text-secondary);
+      font-size: 0.92rem;
+      line-height: 1.65;
+      max-height: 360px;
+      overflow-y: auto;
+      padding-right: 6px;
+    }
+    .class-info-card .reading-content strong { color: var(--text-primary); }
+    .class-resources-list { display: flex; flex-direction: column; gap: 8px; }
+    .class-resource {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      background: var(--bg-hover);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+    }
+    .class-resource:hover {
+      border-color: var(--accent-cyan);
+      transform: translateX(2px);
+    }
+    .class-resource-icon { font-size: 1.1rem; }
+
+    /* Quiz action block inside each class panel */
+    .class-quiz-action {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 18px 22px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      flex-wrap: wrap;
+    }
+    .class-quiz-action-info h3 {
+      margin: 0 0 4px;
+      font-size: 1.05rem;
+      color: var(--text-primary);
+    }
+    .class-quiz-action-info p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+    .class-quiz-action .quiz-status-done {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--success);
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    /* Mark-video-watched action */
+    .class-watched-btn {
+      margin-top: 4px;
+    }
+    .class-watched-btn.done {
+      background: rgba(34, 197, 94, 0.12);
+      border-color: var(--success);
+      color: var(--success);
+      cursor: default;
+    }
+
+    /* ====== Certificate panel ====== */
+    .cert-panel {
+      max-width: 720px;
+      margin: 0 auto;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px 30px;
+    }
+    .cert-panel-header {
+      text-align: center;
+      margin-bottom: 22px;
+    }
+    .cert-panel-header h2 {
+      margin: 0 0 6px;
+      color: var(--text-primary);
+      font-size: 1.6rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .cert-panel-header p { color: var(--text-secondary); margin: 0; }
+    .cert-checklist {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 22px;
+    }
+    .cert-check-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 14px;
+      background: var(--bg-hover);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+    }
+    .cert-check-icon {
+      width: 26px; height: 26px;
+      border-radius: 50%;
+      background: var(--bg-deep);
+      color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      border: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .cert-check-item.done .cert-check-icon {
+      background: var(--success);
+      color: #fff;
+      border-color: var(--success);
+    }
+    .cert-check-text { flex: 1; color: var(--text-primary); font-size: 0.95rem; }
+    .cert-check-item.done .cert-check-text { opacity: 0.78; }
+    .cert-actions { display: flex; justify-content: center; }
+    #cert-download-btn { min-width: 260px; }
+    #cert-download-btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      filter: grayscale(0.5);
+    }
+
+    /* ====== Theme toggle ====== */
+    .theme-toggle {
+      position: fixed;
+      top: 14px;
+      right: 16px;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      cursor: pointer;
+      font-size: 1.15rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+      transition: all 0.2s;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+    }
+    .theme-toggle:hover {
+      transform: scale(1.06);
+      border-color: var(--accent-cyan);
+    }
+    @media (max-width: 768px) {
+      .theme-toggle { top: 10px; right: 10px; width: 36px; height: 36px; font-size: 1rem; }
+    }
+
+    /* ====== Light theme ====== */
+    body[data-theme="light"] {
+      --bg-deep: #eef1f7;
+      --bg-surface: #ffffff;
+      --bg-hover: #f3f5fb;
+      --border: rgba(15, 23, 42, 0.08);
+      --border-hover: rgba(15, 23, 42, 0.18);
+      --text-primary: #111827;
+      --text-secondary: #475569;
+      --text-muted: #94a3b8;
+    }
+    body[data-theme="light"] .modal { color: var(--text-primary); background: #ffffff; }
+    body[data-theme="light"] .modal-title,
+    body[data-theme="light"] .modal-subtitle { color: var(--text-primary); }
+    body[data-theme="light"] .class-video-wrap { box-shadow: 0 6px 20px rgba(15, 23, 42, 0.12); }
+    body[data-theme="light"] .class-tab.active { color: #fff; }
+    body[data-theme="light"] .class-tab.class-tab-cert.active { color: #1a1a1a; }
+    body[data-theme="light"] .gradient-text {
+      background: linear-gradient(135deg, #0ea5e9, #7b2ff7);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  </style>
 </head>
-<body>
+<body class="is-free-course" data-theme="dark">
 
   <!-- Welcome Modal -->
   <div id="welcome-modal" class="modal-overlay">
@@ -32,6 +395,9 @@
       <button id="cert-download" class="btn btn-primary">Descargar certificado</button>
     </div>
   </div>
+
+  <!-- Theme toggle -->
+  <button id="theme-toggle" class="theme-toggle hidden" aria-label="Cambiar tema" title="Cambiar tema">🌙</button>
 
   <!-- App Shell -->
   <div id="app" class="app hidden">
@@ -73,24 +439,35 @@
         </div>
       </div>
 
-      <div class="sidebar-xp">
-        <div class="xp-level-row">
-          <span class="xp-level-icon" id="xp-level-icon">⚡</span>
-          <span class="xp-level-name" id="xp-level-name">Nivel 1 — Novato</span>
-          <span class="xp-amount" id="xp-amount">0 XP</span>
+      <!-- Free course mini stats (replaces XP block visually) -->
+      <div class="sidebar-free-stats">
+        <div class="free-stat">
+          <span class="free-stat-icon">📺</span>
+          <div class="free-stat-text">
+            <span class="free-stat-label">Lecciones revisadas</span>
+            <span class="free-stat-value"><span id="stat-completed">0</span> / <span id="stat-total">3</span></span>
+          </div>
         </div>
-        <div class="xp-bar">
-          <div class="xp-bar-fill" id="xp-bar-fill"></div>
+        <div class="free-stat">
+          <span class="free-stat-icon">✅</span>
+          <div class="free-stat-text">
+            <span class="free-stat-label">Quizzes aprobados</span>
+            <span class="free-stat-value"><span id="stat-quizzes">0</span> / <span id="stat-quizzes-total">3</span></span>
+          </div>
         </div>
-        <div class="xp-next-label" id="xp-next-label">0 / 200 XP para siguiente nivel</div>
       </div>
 
-      <div class="sidebar-achievements-btn-wrap">
-        <button class="btn btn-outline btn-sm sidebar-achievements-btn" id="btn-achievements">
-          <span>🏆</span>
-          <span>Logros</span>
-          <span class="achievements-count-badge" id="achievements-count-badge">0/14</span>
-        </button>
+      <!-- Hidden stubs kept so app.js doesn't crash on missing IDs -->
+      <div class="free-course-stubs">
+        <span id="xp-level-icon">⚡</span>
+        <span id="xp-level-name"></span>
+        <span id="xp-amount"></span>
+        <div id="xp-bar-fill"></div>
+        <span id="xp-next-label"></span>
+        <span id="achievements-count-badge"></span>
+        <button id="btn-achievements"></button>
+        <span id="stat-xp"></span>
+        <span id="stat-streak"></span>
       </div>
 
       <div class="sidebar-progress">
@@ -118,44 +495,30 @@
     <!-- Main Content -->
     <main class="main-content" id="main-content">
 
-      <!-- Dashboard View -->
+      <!-- Dashboard View (now: hero + class tabs) -->
       <section id="view-dashboard" class="view active">
         <div class="dashboard-hero">
           <div class="hero-content">
             <h1>Bienvenido, <span class="gradient-text" id="dashboard-username">Usuario</span></h1>
-            <p class="hero-subtitle">Continúa tu aprendizaje en ciencia de datos. Cada clase te acerca más a dominar el análisis de datos y Machine Learning.</p>
+            <p class="hero-subtitle">Avanza a tu ritmo. Mira el video, revisa los materiales y aprueba el quiz de cada clase.</p>
           </div>
-          <div class="hero-stats">
-            <div class="stat-card">
-              <span class="stat-number" id="stat-completed">0</span>
-              <span class="stat-label">Lecciones completadas</span>
-            </div>
-            <div class="stat-card">
-              <span class="stat-number" id="stat-total">15</span>
-              <span class="stat-label">Total de lecciones</span>
-            </div>
-            <div class="stat-card">
-              <span class="stat-number" id="stat-quizzes">0</span>
-              <span class="stat-label">Quizzes aprobados</span>
-            </div>
-            <div class="stat-card stat-card--xp">
-              <span class="stat-number" id="stat-xp">0</span>
-              <span class="stat-label">XP Total</span>
-            </div>
-            <div class="stat-card stat-card--streak">
-              <span class="stat-number" id="stat-streak">0</span>
-              <span class="stat-label">Racha de días</span>
-            </div>
-          </div>
+          <!-- hero-stats removed (now in sidebar) -->
         </div>
 
-        <h2 class="section-title">Tu ruta de aprendizaje</h2>
-        <div class="skill-tree" id="skill-tree">
-          <!-- Skill tree rendered by JS -->
+        <!-- Top tabs panel: Clase 1 | Clase 2 | Clase 3 | 🎓 Certificado -->
+        <div class="classes-tabs" id="classes-tabs">
+          <!-- Tabs rendered by inline JS -->
         </div>
+        <div class="classes-content" id="classes-content">
+          <!-- Class panels rendered by inline JS -->
+        </div>
+
+        <!-- Hidden — kept so renderDashboard() still finds it -->
+        <h2 class="section-title">Tu ruta de aprendizaje</h2>
+        <div class="skill-tree" id="skill-tree"></div>
       </section>
 
-      <!-- Lesson View -->
+      <!-- Lesson View (used from sidebar nav clicks) -->
       <section id="view-lesson" class="view">
         <button class="btn-back" id="btn-back-lesson">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
@@ -216,19 +579,16 @@
         </div>
       </section>
 
-      <!-- Achievements View -->
+      <!-- Achievements View (kept as empty stub so navigation never explodes) -->
       <section id="view-achievements" class="view">
         <button class="btn-back" id="btn-back-achievements">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
           Volver al dashboard
         </button>
         <div class="achievements-header">
-          <h1>Logros <span class="gradient-text">🏆</span></h1>
-          <p class="achievements-subtitle" id="achievements-subtitle">0 de 14 desbloqueados</p>
+          <h1 id="achievements-subtitle">Logros</h1>
         </div>
-        <div class="achievements-grid" id="achievements-grid">
-          <!-- Achievement cards rendered by JS -->
-        </div>
+        <div class="achievements-grid" id="achievements-grid"></div>
       </section>
 
       <!-- Quiz View -->
@@ -241,7 +601,7 @@
         <div class="quiz-header">
           <span class="lesson-badge" id="quiz-badge">Quiz</span>
           <h1 id="quiz-title">Quiz de la Clase</h1>
-          <p class="quiz-instruction">Responde correctamente al menos el 70% de las preguntas para desbloquear la siguiente clase.</p>
+          <p class="quiz-instruction">Responde correctamente al menos el 70% de las preguntas para aprobar.</p>
         </div>
 
         <div class="quiz-body" id="quiz-body">
@@ -329,6 +689,279 @@
   <canvas id="confetti-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:9999;pointer-events:none;display:none;"></canvas>
 
   <script>
+    /* ============================================
+       Free course initializer
+       Renders the tabs panel + cert checklist
+       and wires the theme toggle.
+       ============================================ */
+    (function() {
+      const THEME_KEY = 'tc_theme';
+      const ACTIVE_TAB_KEY = 'tc_free_active_tab_' +
+        (new URLSearchParams(window.location.search).get('curso') || 'bibliometrix-rstudio');
+
+      // ----- Theme toggle -----
+      function applyTheme(theme) {
+        document.body.setAttribute('data-theme', theme);
+        const btn = document.getElementById('theme-toggle');
+        if (btn) btn.textContent = theme === 'light' ? '🌙' : '☀️';
+      }
+      function initTheme() {
+        const saved = localStorage.getItem(THEME_KEY) || 'dark';
+        applyTheme(saved);
+        const btn = document.getElementById('theme-toggle');
+        if (!btn) return;
+        btn.classList.remove('hidden');
+        btn.addEventListener('click', function() {
+          const current = document.body.getAttribute('data-theme') || 'dark';
+          const next = current === 'dark' ? 'light' : 'dark';
+          localStorage.setItem(THEME_KEY, next);
+          applyTheme(next);
+        });
+      }
+
+      // ----- Markdown-lite formatter for reading content -----
+      function fmtReading(md) {
+        if (!md) return '<em>Sin contenido teórico.</em>';
+        return md
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+          .replace(/\n/g, '<br>');
+      }
+
+      // ----- Resource icon -----
+      function resourceIcon(type) {
+        if (type === 'download') return '⬇️';
+        if (type === 'link') return '🔗';
+        return '📄';
+      }
+
+      // ----- Build tab buttons -----
+      function buildTabs() {
+        const tabsEl = document.getElementById('classes-tabs');
+        if (!tabsEl) return;
+        tabsEl.innerHTML = '';
+
+        COURSE_DATA.modules.forEach(function(mod, i) {
+          const quizDone = App.isQuizCompleted(mod.quiz.id);
+          const lessonsDone = mod.lessons.every(function(l) { return App.isLessonCompleted(l.id); });
+          const isDone = quizDone && lessonsDone;
+          const btn = document.createElement('button');
+          btn.className = 'class-tab' + (i === 0 ? ' active' : '');
+          btn.dataset.tabIndex = String(i);
+          btn.innerHTML = (isDone ? '<span class="tab-check">✓</span>' : '') +
+            '<span>Clase ' + (i + 1) + '</span>';
+          tabsEl.appendChild(btn);
+        });
+
+        // Certificate tab
+        const certBtn = document.createElement('button');
+        certBtn.className = 'class-tab class-tab-cert';
+        certBtn.dataset.tabIndex = 'cert';
+        certBtn.innerHTML = '<span>🎓</span><span>Certificado</span>';
+        tabsEl.appendChild(certBtn);
+
+        tabsEl.querySelectorAll('.class-tab').forEach(function(b) {
+          b.addEventListener('click', function() { activateTab(b.dataset.tabIndex); });
+        });
+      }
+
+      // ----- Build class content panels -----
+      function buildPanels() {
+        const wrap = document.getElementById('classes-content');
+        if (!wrap) return;
+        wrap.innerHTML = '';
+
+        COURSE_DATA.modules.forEach(function(mod, i) {
+          const panel = document.createElement('div');
+          panel.className = 'class-panel' + (i === 0 ? ' active' : '');
+          panel.dataset.tabIndex = String(i);
+
+          const lesson = mod.lessons[0] || {};
+          const quizDone = App.isQuizCompleted(mod.quiz.id);
+          const lessonDone = lesson.id ? App.isLessonCompleted(lesson.id) : false;
+          const videoHtml = lesson.videoId
+            ? '<iframe src="https://www.youtube.com/embed/' + lesson.videoId +
+              '" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'
+            : '<div class="class-video-placeholder">' +
+              '<span class="ph-emoji">🎬</span>' +
+              '<span class="ph-text">El video de esta clase estará disponible próximamente.</span>' +
+              '</div>';
+
+          const resourcesHtml = (lesson.resources || []).map(function(r) {
+            return '<a class="class-resource" href="' + r.url + '" target="_blank" rel="noopener">' +
+              '<span class="class-resource-icon">' + resourceIcon(r.type) + '</span>' +
+              '<span>' + r.title + '</span></a>';
+          }).join('') || '<p style="color:var(--text-secondary);font-size:0.9rem;margin:0;">Sin materiales adicionales.</p>';
+
+          panel.innerHTML =
+            '<div class="class-panel-header">' +
+              '<h2>Clase ' + (i + 1) + ': ' + (lesson.title || mod.title) + '</h2>' +
+              '<p>' + (mod.description || '') + '</p>' +
+            '</div>' +
+            '<div class="class-video-wrap">' + videoHtml + '</div>' +
+            '<div class="class-info-grid">' +
+              '<div class="class-info-card">' +
+                '<h3>📘 Conceptos clave</h3>' +
+                '<div class="reading-content">' + fmtReading(lesson.reading) + '</div>' +
+                (lesson.id ? ('<button class="btn btn-outline btn-sm class-watched-btn' +
+                  (lessonDone ? ' done' : '') + '" data-lesson-id="' + lesson.id +
+                  '" data-module-index="' + i + '" data-lesson-index="0">' +
+                  (lessonDone ? '✓ Video revisado' : 'Marcar video como revisado') +
+                  '</button>') : '') +
+              '</div>' +
+              '<div class="class-info-card">' +
+                '<h3>📎 Materiales</h3>' +
+                '<div class="class-resources-list">' + resourcesHtml + '</div>' +
+              '</div>' +
+            '</div>' +
+            '<div class="class-quiz-action">' +
+              '<div class="class-quiz-action-info">' +
+                '<h3>' + (mod.quiz && mod.quiz.title ? mod.quiz.title : 'Quiz de la clase') + '</h3>' +
+                '<p>Aprueba con 70% o más para validar la clase.</p>' +
+              '</div>' +
+              (quizDone
+                ? '<span class="quiz-status-done">✓ Aprobado</span> ' +
+                  '<button class="btn btn-outline btn-sm" data-quiz-module="' + i + '">Repasar quiz</button>'
+                : '<button class="btn btn-primary" data-quiz-module="' + i + '">Hacer quiz</button>') +
+            '</div>';
+
+          wrap.appendChild(panel);
+        });
+
+        // Certificate panel
+        const certPanel = document.createElement('div');
+        certPanel.className = 'class-panel';
+        certPanel.dataset.tabIndex = 'cert';
+        certPanel.innerHTML = renderCertPanelHtml();
+        wrap.appendChild(certPanel);
+
+        // Bind quiz buttons
+        wrap.querySelectorAll('[data-quiz-module]').forEach(function(b) {
+          b.addEventListener('click', function() {
+            const idx = parseInt(b.dataset.quizModule, 10);
+            persistActiveTab(String(idx));
+            App.navigateTo('quiz', { moduleIndex: idx });
+          });
+        });
+        // Bind "video revisado"
+        wrap.querySelectorAll('.class-watched-btn').forEach(function(b) {
+          if (b.classList.contains('done')) return;
+          b.addEventListener('click', function() {
+            const mi = parseInt(b.dataset.moduleIndex, 10);
+            const li = parseInt(b.dataset.lessonIndex, 10);
+            App.state.currentModuleIndex = mi;
+            App.state.currentLessonIndex = li;
+            App.completeCurrentLesson();
+            // re-render to update checkmarks
+            renderFreeUI();
+          });
+        });
+        // Bind cert download
+        const certBtn = certPanel.querySelector('#cert-download-btn');
+        if (certBtn) certBtn.addEventListener('click', function() {
+          if (!certBtn.disabled) App.showCertificate();
+        });
+      }
+
+      function renderCertPanelHtml() {
+        let html = '<div class="cert-panel">' +
+          '<div class="cert-panel-header">' +
+            '<h2>🎓 Tu certificado</h2>' +
+            '<p>Completa estos requisitos para descargar tu certificado:</p>' +
+          '</div>' +
+          '<div class="cert-checklist">';
+        let allDone = true;
+        COURSE_DATA.modules.forEach(function(mod, i) {
+          const lesson = mod.lessons[0] || {};
+          const videoDone = lesson.id ? App.isLessonCompleted(lesson.id) : true;
+          const quizDone = App.isQuizCompleted(mod.quiz.id);
+          if (!videoDone) allDone = false;
+          if (!quizDone) allDone = false;
+          html +=
+            '<div class="cert-check-item' + (videoDone ? ' done' : '') + '">' +
+              '<span class="cert-check-icon">' + (videoDone ? '✓' : (i + 1)) + '</span>' +
+              '<span class="cert-check-text">Ver el video y materiales de la Clase ' + (i + 1) + '</span>' +
+            '</div>' +
+            '<div class="cert-check-item' + (quizDone ? ' done' : '') + '">' +
+              '<span class="cert-check-icon">' + (quizDone ? '✓' : '?') + '</span>' +
+              '<span class="cert-check-text">Aprobar el quiz de la Clase ' + (i + 1) + '</span>' +
+            '</div>';
+        });
+        html += '</div>' +
+          '<div class="cert-actions">' +
+            '<button class="btn btn-primary btn-lg" id="cert-download-btn"' + (allDone ? '' : ' disabled') + '>' +
+              (allDone ? '⬇️ Descargar certificado' : 'Completa los pasos para desbloquear') +
+            '</button>' +
+          '</div>' +
+        '</div>';
+        return html;
+      }
+
+      function activateTab(tabIndex) {
+        document.querySelectorAll('.class-tab').forEach(function(b) {
+          b.classList.toggle('active', b.dataset.tabIndex === tabIndex);
+        });
+        document.querySelectorAll('.class-panel').forEach(function(p) {
+          p.classList.toggle('active', p.dataset.tabIndex === tabIndex);
+        });
+        persistActiveTab(tabIndex);
+      }
+
+      function persistActiveTab(tabIndex) {
+        try { localStorage.setItem(ACTIVE_TAB_KEY, tabIndex); } catch (e) {}
+      }
+
+      function restoreActiveTab() {
+        let t;
+        try { t = localStorage.getItem(ACTIVE_TAB_KEY); } catch (e) {}
+        if (t && document.querySelector('[data-tab-index="' + t + '"]')) {
+          activateTab(t);
+        }
+      }
+
+      function renderFreeUI() {
+        if (typeof App === 'undefined' || typeof COURSE_DATA === 'undefined') return;
+        if (!App.IS_FREE_COURSE) return;
+        buildTabs();
+        buildPanels();
+        restoreActiveTab();
+      }
+
+      // Hook into App lifecycle so tabs refresh after lesson/quiz completion
+      function hookApp() {
+        if (typeof App === 'undefined') return;
+        const origRenderSidebar = App.renderSidebar.bind(App);
+        App.renderSidebar = function() {
+          origRenderSidebar();
+          // update stat-quizzes-total label to match course
+          const totalQuizEl = document.getElementById('stat-quizzes-total');
+          if (totalQuizEl && typeof COURSE_DATA !== 'undefined') {
+            totalQuizEl.textContent = String(COURSE_DATA.modules.length);
+          }
+        };
+        const origRenderDashboard = App.renderDashboard.bind(App);
+        App.renderDashboard = function() {
+          origRenderDashboard();
+          renderFreeUI();
+        };
+      }
+
+      // Entry point: called by the loader after app.js loads
+      window.initFreeCourseUI = function() {
+        initTheme();
+        hookApp();
+        // Trigger initial render (App may already have rendered dashboard once)
+        renderFreeUI();
+      };
+    })();
+  </script>
+
+  <script>
+    /* ============================================
+       Course loader (loads course data + app scripts)
+       ============================================ */
     (function() {
       const params = new URLSearchParams(window.location.search);
       const courseId = params.get('curso') || 'bibliometrix-rstudio';
@@ -362,6 +995,11 @@
             s.src = scripts[i++];
             s.onload = loadNext;
             document.body.appendChild(s);
+          } else {
+            // All core scripts loaded — boot free-course UI
+            if (typeof window.initFreeCourseUI === 'function') {
+              window.initFreeCourseUI();
+            }
           }
         }
         loadNext();
