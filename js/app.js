@@ -274,7 +274,9 @@ const App = {
     document.getElementById('cert-close').addEventListener('click', () => {
       document.getElementById('cert-modal').classList.add('hidden');
     });
-    document.getElementById('cert-download').addEventListener('click', () => this.downloadCertificate());
+    document.getElementById('cert-download').addEventListener('click', () => this.downloadCertificatePNG());
+    const pdfBtn = document.getElementById('cert-download-pdf');
+    if (pdfBtn) pdfBtn.addEventListener('click', () => this.downloadCertificatePDF());
 
 
     // Memory game close
@@ -1288,12 +1290,72 @@ const App = {
     lines.forEach((l, i) => ctx.fillText(l, cx, startY + i * lineHeight));
   },
 
-  downloadCertificate() {
-    const canvas = document.getElementById('cert-canvas');
-    const link = document.createElement('a');
-    link.download = `Certificado_${this.state.username.replace(/\s+/g, '_')}_${COURSE_DATA.title.replace(/\s+/g, '_')}.png`;
-    link.href = canvas.toDataURL('image/png');
-    link.click();
+  _baseFilename() {
+    const user = (this.state.username || 'estudiante').replace(/\s+/g, '_');
+    const course = (COURSE_DATA.title || 'curso').replace(/\s+/g, '_');
+    return `Certificado_${user}_${course}`;
+  },
+
+  _renderHighRes(scale = 3) {
+    const W = 1200, H = 800;
+    const off = document.createElement('canvas');
+    off.width = W * scale;
+    off.height = H * scale;
+    const ctx = off.getContext('2d');
+    ctx.scale(scale, scale);
+    this._drawCertificate(ctx, W, H);
+    return off;
+  },
+
+  _doHighResRender(cb) {
+    if (this._certLogo && this._certLogo.complete && this._certLogo.naturalWidth > 0) {
+      cb(this._renderHighRes(3));
+      return;
+    }
+    const img = new Image();
+    img.onload = () => { this._certLogo = img; cb(this._renderHighRes(3)); };
+    img.onerror = () => { this._certLogo = null; cb(this._renderHighRes(3)); };
+    img.src = 'imagenes/logo.png';
+  },
+
+  downloadCertificatePNG() {
+    this._doHighResRender((canvas) => {
+      const link = document.createElement('a');
+      link.download = this._baseFilename() + '.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    });
+  },
+
+  _loadJsPDF() {
+    if (window.jspdf && window.jspdf.jsPDF) return Promise.resolve(window.jspdf.jsPDF);
+    return new Promise((resolve, reject) => {
+      const s = document.createElement('script');
+      s.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+      s.onload = () => resolve(window.jspdf.jsPDF);
+      s.onerror = () => reject(new Error('No se pudo cargar jsPDF'));
+      document.head.appendChild(s);
+    });
+  },
+
+  downloadCertificatePDF() {
+    const btn = document.getElementById('cert-download-pdf');
+    const originalText = btn ? btn.textContent : '';
+    if (btn) { btn.disabled = true; btn.textContent = 'Generando PDF...'; }
+    this._loadJsPDF()
+      .then((jsPDF) => {
+        this._doHighResRender((canvas) => {
+          const imgData = canvas.toDataURL('image/jpeg', 0.95);
+          const pdf = new jsPDF({ orientation: 'landscape', unit: 'pt', format: [1200, 800] });
+          pdf.addImage(imgData, 'JPEG', 0, 0, 1200, 800, undefined, 'FAST');
+          pdf.save(this._baseFilename() + '.pdf');
+          if (btn) { btn.disabled = false; btn.textContent = originalText; }
+        });
+      })
+      .catch((err) => {
+        alert('No se pudo generar el PDF: ' + err.message);
+        if (btn) { btn.disabled = false; btn.textContent = originalText; }
+      });
   },
 
   // ============================================
