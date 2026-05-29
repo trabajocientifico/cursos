@@ -1085,29 +1085,25 @@ const App = {
     ctx.beginPath(); ctx.moveTo(40, h - 40 - br); ctx.lineTo(40, h - 40); ctx.lineTo(40 + br, h - 40); ctx.stroke();
     ctx.beginPath(); ctx.moveTo(w - 40 - br, h - 40); ctx.lineTo(w - 40, h - 40); ctx.lineTo(w - 40, h - 40 - br); ctx.stroke();
 
-    // ---- Header: logo + brand ----
-    ctx.textBaseline = 'middle';
-    const brandY = 105;
-    const brandText = 'TRABAJO CIENTÍFICO';
-    ctx.font = 'bold 22px ' + FONT;
-    const brandW = ctx.measureText(brandText).width;
-    const logoSize = 52;
-    const gap = 16;
-    const hasLogo = !!this._certLogo;
-    const groupW = (hasLogo ? logoSize + gap : 0) + brandW;
-    const groupX = (w - groupW) / 2;
-
-    if (hasLogo) {
-      ctx.drawImage(this._certLogo, groupX, brandY - logoSize / 2, logoSize, logoSize);
+    // ---- Header: logo (contains brand name) ----
+    if (this._certLogo) {
+      const maxLogoW = 380;
+      const maxLogoH = 150;
+      const natW = this._certLogo.naturalWidth || this._certLogo.width || maxLogoW;
+      const natH = this._certLogo.naturalHeight || this._certLogo.height || maxLogoH;
+      const scale = Math.min(maxLogoW / natW, maxLogoH / natH);
+      const dw = natW * scale;
+      const dh = natH * scale;
+      const dx = (w - dw) / 2;
+      const dy = 70 + (maxLogoH - dh) / 2;
+      ctx.drawImage(this._certLogo, dx, dy, dw, dh);
+    } else {
+      ctx.textBaseline = 'middle';
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 32px ' + FONT;
+      ctx.textAlign = 'center';
+      ctx.fillText('TRABAJO CIENTÍFICO', w / 2, 145);
     }
-    ctx.fillStyle = '#ffffff';
-    ctx.textAlign = 'left';
-    ctx.fillText(brandText, groupX + (hasLogo ? logoSize + gap : 0), brandY);
-
-    ctx.fillStyle = '#8b8fa3';
-    ctx.font = '11px ' + FONT;
-    ctx.textAlign = 'center';
-    ctx.fillText('P L A T A F O R M A   D E   F O R M A C I Ó N   C I E N T Í F I C A', w / 2, brandY + 30);
 
     // ---- Divider ----
     ctx.textBaseline = 'alphabetic';
