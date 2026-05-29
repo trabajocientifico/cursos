@@ -1087,8 +1087,8 @@ const App = {
 
     // ---- Header: logo (contains brand name) ----
     if (this._certLogo) {
-      const maxLogoW = 380;
-      const maxLogoH = 150;
+      const maxLogoW = 440;
+      const maxLogoH = 180;
       const natW = this._certLogo.naturalWidth || this._certLogo.width || maxLogoW;
       const natH = this._certLogo.naturalHeight || this._certLogo.height || maxLogoH;
       const scale = Math.min(maxLogoW / natW, maxLogoH / natH);
@@ -1107,7 +1107,7 @@ const App = {
 
     // ---- Divider ----
     ctx.textBaseline = 'alphabetic';
-    const dY = 195;
+    const dY = 220;
     const lineGrad = ctx.createLinearGradient(w / 2 - 280, 0, w / 2 + 280, 0);
     lineGrad.addColorStop(0, 'transparent');
     lineGrad.addColorStop(0.5, '#00d4ff');
@@ -1126,7 +1126,7 @@ const App = {
     ctx.fillStyle = '#e4e4e7';
     ctx.font = '14px ' + FONT;
     ctx.textAlign = 'center';
-    ctx.fillText('C E R T I F I C A D O    D E    F O R M A C I Ó N', w / 2, 232);
+    ctx.fillText('C E R T I F I C A D O    D E    F O R M A C I Ó N', w / 2, 257);
 
     // ---- "OTORGADO A" ----
     ctx.fillStyle = '#8b8fa3';
