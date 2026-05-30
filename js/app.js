@@ -1097,7 +1097,7 @@ const App = {
       const dw = natW * scale;
       const dh = natH * scale;
       const dx = (w - dw) / 2;
-      const dy = 70 + (maxLogoH - dh) / 2;
+      const dy = 50 + (maxLogoH - dh) / 2;
       ctx.drawImage(this._certLogo, dx, dy, dw, dh);
     } else {
       ctx.textBaseline = 'middle';
@@ -1182,7 +1182,7 @@ const App = {
     const badgeTextW = ctx.measureText(badgeText).width;
     const badgeW = badgeTextW + 70;
     const badgeH = 36;
-    const badgeY = 590;
+    const badgeY = 560;
     const badgeX = (w - badgeW) / 2;
     ctx.fillStyle = 'rgba(0, 212, 255, 0.10)';
     ctx.strokeStyle = '#00d4ff';
@@ -1207,32 +1207,45 @@ const App = {
     ctx.fillText(badgeText, badgeX + 40, badgeY + 1);
     ctx.textBaseline = 'alphabetic';
 
-    // ---- Bottom: signature & date ----
+    // ---- Bottom: two signatures + date ----
     const sigY = 700;
-    const leftCx = 240, rightCx = w - 240;
+    const leftCx = 220, midCx = w / 2, rightCx = w - 220;
+    const lineHalf = 100;
     ctx.strokeStyle = 'rgba(255,255,255,0.18)';
     ctx.lineWidth = 1;
-    ctx.beginPath(); ctx.moveTo(leftCx - 120, sigY); ctx.lineTo(leftCx + 120, sigY); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(rightCx - 120, sigY); ctx.lineTo(rightCx + 120, sigY); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(leftCx - lineHalf, sigY); ctx.lineTo(leftCx + lineHalf, sigY); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(midCx - lineHalf, sigY); ctx.lineTo(midCx + lineHalf, sigY); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(rightCx - lineHalf, sigY); ctx.lineTo(rightCx + lineHalf, sigY); ctx.stroke();
 
-    // Stylized signature (gradient script) above the line
+    ctx.textAlign = 'center';
+
+    // Left signature — Oscar
     ctx.fillStyle = nameGrad;
-    ctx.font = 'italic bold 28px "Segoe Script", "Brush Script MT", cursive';
-    ctx.textAlign = 'center';
+    ctx.font = 'italic bold 26px "Segoe Script", "Brush Script MT", cursive';
     ctx.fillText('Oscar I. Vargas', leftCx, sigY - 8);
-
-    ctx.textAlign = 'center';
     ctx.fillStyle = '#ffffff';
-    ctx.font = 'bold 14px ' + FONT;
+    ctx.font = 'bold 13px ' + FONT;
     ctx.fillText('Oscar Ivan Vargas Pineda', leftCx, sigY + 22);
     ctx.fillStyle = '#8b8fa3';
     ctx.font = '11px ' + FONT;
     ctx.fillText('CEO  ·  Trabajo Científico', leftCx, sigY + 40);
 
+    // Middle signature — Lali
+    ctx.fillStyle = nameGrad;
+    ctx.font = 'italic bold 26px "Segoe Script", "Brush Script MT", cursive';
+    ctx.fillText('Lali V. Pedroza', midCx, sigY - 8);
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 13px ' + FONT;
+    ctx.fillText('Lali Valentina Pedroza', midCx, sigY + 22);
+    ctx.fillStyle = '#8b8fa3';
+    ctx.font = '11px ' + FONT;
+    ctx.fillText('Gestora Educativa  ·  Trabajo Científico', midCx, sigY + 40);
+
+    // Right — date
     const now = new Date();
     const dateStr = now.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
     ctx.fillStyle = '#ffffff';
-    ctx.font = 'bold 14px ' + FONT;
+    ctx.font = 'bold 13px ' + FONT;
     ctx.fillText(dateStr, rightCx, sigY + 22);
     ctx.fillStyle = '#8b8fa3';
     ctx.font = '11px ' + FONT;
