@@ -1207,54 +1207,52 @@ const App = {
     ctx.fillText(badgeText, badgeX + 40, badgeY + 1);
     ctx.textBaseline = 'alphabetic';
 
-    // ---- Bottom: two signatures + date ----
+    // ---- Bottom: two signatures (left & right) ----
     const sigY = 700;
-    const leftCx = 220, midCx = w / 2, rightCx = w - 220;
-    const lineHalf = 100;
+    const leftCx = 240, rightCx = w - 240;
+    const lineHalf = 120;
     ctx.strokeStyle = 'rgba(255,255,255,0.18)';
     ctx.lineWidth = 1;
     ctx.beginPath(); ctx.moveTo(leftCx - lineHalf, sigY); ctx.lineTo(leftCx + lineHalf, sigY); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(midCx - lineHalf, sigY); ctx.lineTo(midCx + lineHalf, sigY); ctx.stroke();
     ctx.beginPath(); ctx.moveTo(rightCx - lineHalf, sigY); ctx.lineTo(rightCx + lineHalf, sigY); ctx.stroke();
 
     ctx.textAlign = 'center';
 
     // Left signature — Oscar
     ctx.fillStyle = nameGrad;
-    ctx.font = 'italic bold 26px "Segoe Script", "Brush Script MT", cursive';
+    ctx.font = 'italic bold 28px "Segoe Script", "Brush Script MT", cursive';
     ctx.fillText('Oscar I. Vargas', leftCx, sigY - 8);
     ctx.fillStyle = '#ffffff';
-    ctx.font = 'bold 13px ' + FONT;
+    ctx.font = 'bold 14px ' + FONT;
     ctx.fillText('Oscar Ivan Vargas Pineda', leftCx, sigY + 22);
     ctx.fillStyle = '#8b8fa3';
     ctx.font = '11px ' + FONT;
     ctx.fillText('CEO  ·  Trabajo Científico', leftCx, sigY + 40);
 
-    // Middle signature — Lali
+    // Right signature — Lali
     ctx.fillStyle = nameGrad;
-    ctx.font = 'italic bold 26px "Segoe Script", "Brush Script MT", cursive';
-    ctx.fillText('Lali V. Pedroza', midCx, sigY - 8);
+    ctx.font = 'italic bold 28px "Segoe Script", "Brush Script MT", cursive';
+    ctx.fillText('Lali V. Pedroza', rightCx, sigY - 8);
     ctx.fillStyle = '#ffffff';
-    ctx.font = 'bold 13px ' + FONT;
-    ctx.fillText('Lali Valentina Pedroza', midCx, sigY + 22);
+    ctx.font = 'bold 14px ' + FONT;
+    ctx.fillText('Lali Valentina Pedroza', rightCx, sigY + 22);
     ctx.fillStyle = '#8b8fa3';
     ctx.font = '11px ' + FONT;
-    ctx.fillText('Gestora Educativa  ·  Trabajo Científico', midCx, sigY + 40);
+    ctx.fillText('Gestora Educativa  ·  Trabajo Científico', rightCx, sigY + 40);
 
-    // Right — date
+    // ---- Center bottom: date + cert ID ----
     const now = new Date();
     const dateStr = now.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
+    ctx.fillStyle = '#a0a4b8';
+    ctx.font = '11px ' + FONT;
+    ctx.fillText('F E C H A   D E   E M I S I Ó N', w / 2, h - 90);
     ctx.fillStyle = '#ffffff';
     ctx.font = 'bold 13px ' + FONT;
-    ctx.fillText(dateStr, rightCx, sigY + 22);
-    ctx.fillStyle = '#8b8fa3';
-    ctx.font = '11px ' + FONT;
-    ctx.fillText('FECHA DE EMISIÓN', rightCx, sigY + 40);
+    ctx.fillText(dateStr, w / 2, h - 72);
 
-    // ---- Cert ID ----
     ctx.fillStyle = 'rgba(255,255,255,0.32)';
     ctx.font = '10px ' + FONT;
-    ctx.fillText('ID: ' + this._getCertId(), w / 2, h - 60);
+    ctx.fillText('ID: ' + this._getCertId(), w / 2, h - 50);
   },
 
   _getCertId() {
