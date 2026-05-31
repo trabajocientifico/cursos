@@ -103,6 +103,42 @@
       background: linear-gradient(135deg, #ffd700, #ff8c00);
       color: #1a1a1a;
     }
+    .class-tab.class-tab-upcoming { opacity: 0.75; }
+    .class-tab .tab-soon-pill {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-secondary);
+      border: 1px solid var(--border);
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      font-weight: 600;
+    }
+    .class-tab.class-tab-upcoming.active .tab-soon-pill {
+      background: rgba(255, 255, 255, 0.18);
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    /* ====== Upcoming class panel ====== */
+    .class-upcoming {
+      background: var(--bg-surface);
+      border: 1px dashed var(--border);
+      border-radius: var(--radius);
+      padding: 48px 32px;
+      text-align: center;
+      color: var(--text-secondary);
+      max-width: 720px;
+      margin: 16px auto;
+    }
+    .class-upcoming-icon { font-size: 3rem; margin-bottom: 12px; }
+    .class-upcoming h3 { color: var(--text-primary); font-size: 1.3rem; margin: 8px 0 10px; }
+    .class-upcoming p { font-size: 0.95rem; line-height: 1.6; max-width: 480px; margin: 0 auto; }
+
+    .cert-check-item.upcoming { opacity: 0.7; }
+    .cert-check-item.upcoming .cert-check-icon {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: var(--border);
+    }
 
     /* ====== Class panels ====== */
     .class-panel { display: none; animation: tcFadeIn 0.25s; }
@@ -746,17 +782,24 @@
         if (!tabsEl) return;
         tabsEl.innerHTML = '';
 
-        COURSE_DATA.modules.forEach(function(mod, i) {
-          const quizDone = App.isQuizCompleted(mod.quiz.id);
-          const lessonsDone = mod.lessons.every(function(l) { return App.isLessonCompleted(l.id); });
-          const isDone = quizDone && lessonsDone;
+        const TOTAL_CLASSES = 3;
+        for (let i = 0; i < TOTAL_CLASSES; i++) {
+          const mod = COURSE_DATA.modules[i];
           const btn = document.createElement('button');
-          btn.className = 'class-tab' + (i === 0 ? ' active' : '');
           btn.dataset.tabIndex = String(i);
-          btn.innerHTML = (isDone ? '<span class="tab-check">✓</span>' : '') +
-            '<span>Clase ' + (i + 1) + '</span>';
+          if (!mod) {
+            btn.className = 'class-tab class-tab-upcoming' + (i === 0 ? ' active' : '');
+            btn.innerHTML = '<span>Clase ' + (i + 1) + '</span><span class="tab-soon-pill">Próximamente</span>';
+          } else {
+            const quizDone = App.isQuizCompleted(mod.quiz.id);
+            const lessonsDone = mod.lessons.every(function(l) { return App.isLessonCompleted(l.id); });
+            const isDone = quizDone && lessonsDone;
+            btn.className = 'class-tab' + (i === 0 ? ' active' : '');
+            btn.innerHTML = (isDone ? '<span class="tab-check">✓</span>' : '') +
+              '<span>Clase ' + (i + 1) + '</span>';
+          }
           tabsEl.appendChild(btn);
-        });
+        }
 
         // Certificate tab
         const certBtn = document.createElement('button');
@@ -776,10 +819,27 @@
         if (!wrap) return;
         wrap.innerHTML = '';
 
-        COURSE_DATA.modules.forEach(function(mod, i) {
+        const TOTAL_CLASSES = 3;
+        for (let i = 0; i < TOTAL_CLASSES; i++) {
+          const mod = COURSE_DATA.modules[i];
           const panel = document.createElement('div');
           panel.className = 'class-panel' + (i === 0 ? ' active' : '');
           panel.dataset.tabIndex = String(i);
+
+          if (!mod) {
+            panel.innerHTML =
+              '<div class="class-panel-header">' +
+                '<h2>Clase ' + (i + 1) + ': Próximamente</h2>' +
+                '<p>Esta clase aún no está disponible. Pronto subiremos el video, los materiales y el quiz.</p>' +
+              '</div>' +
+              '<div class="class-upcoming">' +
+                '<div class="class-upcoming-icon">⏳</div>' +
+                '<h3>Estamos preparando esta clase</h3>' +
+                '<p>Vuelve pronto para completar tu certificado. Te recomendamos avanzar primero con la Clase 1 mientras tanto.</p>' +
+              '</div>';
+            wrap.appendChild(panel);
+            continue;
+          }
 
           const lesson = mod.lessons[0] || {};
           const quizDone = App.isQuizCompleted(mod.quiz.id);
@@ -831,7 +891,7 @@
             '</div>';
 
           wrap.appendChild(panel);
-        });
+        }
 
         // Certificate panel
         const certPanel = document.createElement('div');
@@ -876,7 +936,18 @@
           '</div>' +
           '<div class="cert-checklist">';
         let allDone = true;
-        COURSE_DATA.modules.forEach(function(mod, i) {
+        const TOTAL_CLASSES = 3;
+        for (let i = 0; i < TOTAL_CLASSES; i++) {
+          const mod = COURSE_DATA.modules[i];
+          if (!mod) {
+            allDone = false;
+            html +=
+              '<div class="cert-check-item upcoming">' +
+                '<span class="cert-check-icon">⏳</span>' +
+                '<span class="cert-check-text">Clase ' + (i + 1) + ' — Próximamente</span>' +
+              '</div>';
+            continue;
+          }
           const lesson = mod.lessons[0] || {};
           const videoDone = lesson.id ? App.isLessonCompleted(lesson.id) : true;
           const quizDone = App.isQuizCompleted(mod.quiz.id);
@@ -891,7 +962,7 @@
               '<span class="cert-check-icon">' + (quizDone ? '✓' : '?') + '</span>' +
               '<span class="cert-check-text">Aprobar el quiz de la Clase ' + (i + 1) + '</span>' +
             '</div>';
-        });
+        }
         html += '</div>' +
           '<div class="cert-actions">' +
             '<button class="btn btn-primary btn-lg" id="cert-download-btn"' + (allDone ? '' : ' disabled') + '>' +
@@ -938,11 +1009,11 @@
         const origRenderSidebar = App.renderSidebar.bind(App);
         App.renderSidebar = function() {
           origRenderSidebar();
-          // update stat-quizzes-total label to match course
+          // Force totals to 3 — every free course is presented as 3 classes
           const totalQuizEl = document.getElementById('stat-quizzes-total');
-          if (totalQuizEl && typeof COURSE_DATA !== 'undefined') {
-            totalQuizEl.textContent = String(COURSE_DATA.modules.length);
-          }
+          if (totalQuizEl) totalQuizEl.textContent = '3';
+          const totalLessonEl = document.getElementById('stat-total');
+          if (totalLessonEl) totalLessonEl.textContent = '3';
         };
         const origRenderDashboard = App.renderDashboard.bind(App);
         App.renderDashboard = function() {
