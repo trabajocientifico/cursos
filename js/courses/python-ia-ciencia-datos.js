@@ -197,81 +197,114 @@ const COURSE_DATA = {
         passingScore: 70,
         questions: [
           {
-            question: "¿Para qué sirve principalmente Streamlit?",
+            question: "Según se explica en el video, ¿qué es GitHub en esencia?",
             options: [
-              "Para entrenar modelos de Machine Learning desde cero.",
-              "Para crear aplicaciones web interactivas de ciencia de datos usando solo Python.",
-              "Para editar hojas de cálculo de Excel en la nube.",
-              "Para diseñar bases de datos relacionales."
+              "Una librería de Python para crear interfaces gráficas.",
+              "Una red social pensada para programadores o desarrolladores donde se establecen repositorios.",
+              "Un entorno de desarrollo local exclusivo para HTML y CSS.",
+              "Un modelo de inteligencia artificial de Google."
             ],
             correct: 1,
-            explanation: "Streamlit permite crear aplicaciones web interactivas para proyectos de ciencia de datos escribiendo solo código Python."
+            explanation: "El instructor define a GitHub como una red social pensada para programadores o desarrolladores en la que se establecen repositorios."
           },
           {
-            question: "¿Qué tipo de proyectos se pueden compartir fácilmente con Streamlit?",
+            question: "¿Cómo se describe la herramienta Streamlit en la clase?",
             options: [
-              "Solamente videojuegos en 3D.",
-              "Únicamente sitios estáticos sin interacción.",
-              "Dashboards, visualizaciones y aplicaciones de datos interactivas.",
-              "Sistemas operativos completos."
+              "Como un gestor de versiones de código local.",
+              "Como un entorno para escribir y ejecutar código HTML.",
+              "Como una librería de Python pensada para construir herramientas interactivas con una interfaz gráfica.",
+              "Como un modelo de inteligencia artificial que compite con ChatGPT."
             ],
             correct: 2,
-            explanation: "Streamlit está pensado para compartir dashboards, visualizaciones y apps de datos interactivas con muy pocas líneas de código."
+            explanation: "Streamlit se describe como una librería o framework de Python adaptado para construir aplicaciones o herramientas de datos con una interfaz gráfica interactiva, sin que el usuario final necesite tener conocimientos de código."
           },
           {
-            question: "¿Qué es GitHub?",
+            question: "Para que el repositorio público de GitHub muestre correctamente el aplicativo web creado con HTML, ¿qué nombre específico se le debe dar al código fuente antes de cargarlo?",
             options: [
-              "Un editor de texto offline.",
-              "Una plataforma en la nube para alojar, versionar y colaborar en proyectos de código usando Git.",
-              "Un lenguaje de programación.",
-              "Una red social para compartir fotografías."
+              "app.py",
+              "main.html",
+              "index",
+              "readme.md"
             ],
-            correct: 1,
-            explanation: "GitHub es una plataforma en la nube basada en Git para alojar repositorios, versionar el código y colaborar en proyectos."
+            correct: 2,
+            explanation: "El instructor recalca que al archivo se le debe cambiar el nombre y llamarlo obligatoriamente \"index\" antes de arrastrarlo y cargarlo al repositorio."
           },
           {
-            question: "¿Cuál es una ventaja clave de subir tus proyectos a GitHub?",
+            question: "¿Cuál es el paso necesario en la configuración (Settings) de GitHub para visualizar el aplicativo web generado a través de la función \"Pages\"?",
             options: [
-              "Que el código deja de funcionar fuera de tu computador.",
-              "Mantener un historial de cambios, respaldo en la nube y poder compartirlo o colaborar con otras personas.",
-              "Que los archivos se vuelven privados y nadie más puede verlos nunca.",
-              "Que GitHub ejecuta el código por ti automáticamente sin configuración."
+              "Cambiar la opción de la rama (branch) de \"None\" a \"main\" y guardar.",
+              "Crear un archivo llamado requirements.txt.",
+              "Configurar una base de datos relacional en la pestaña de seguridad.",
+              "Activar un entorno virtual de Google Cloud."
             ],
-            correct: 1,
-            explanation: "GitHub guarda el historial de cambios, respalda el proyecto en la nube y facilita compartirlo y colaborar."
+            correct: 0,
+            explanation: "Se debe ir a la opción \"Settings\", luego buscar \"Pages\", y cambiar la rama (branch) de \"None\" a \"main\", para posteriormente guardar los cambios (save)."
           },
           {
-            question: "¿Para qué sirve GitHub Pages?",
+            question: "Al cargar un código de Python para desplegar un aplicativo de Streamlit desde GitHub, además del script de código principal (app.py), ¿qué otro archivo es indispensable subir al repositorio?",
             options: [
-              "Para ejecutar modelos de Machine Learning en GPU.",
-              "Para publicar sitios web estáticos de forma gratuita directamente desde un repositorio de GitHub.",
-              "Para enviar correos electrónicos masivos.",
-              "Para descargar videos de YouTube."
+              "Un archivo index.html.",
+              "Un archivo de texto llamado requeriments (requirements) con el nombre de las librerías necesarias.",
+              "Un archivo CSV con la base de datos a procesar.",
+              "Un archivo de estilos CSS."
             ],
             correct: 1,
-            explanation: "GitHub Pages permite publicar sitios web estáticos gratis a partir de los archivos de un repositorio de GitHub."
+            explanation: "Se requiere un archivo de texto (que el instructor llama \"requeriments\") el cual contiene el nombre de las librerías que se necesitan para poder correr el aplicativo."
           },
           {
-            question: "¿Qué tipo de contenido es ideal para publicar con GitHub Pages?",
+            question: "Según la analogía usada por el instructor sobre el desarrollo web, ¿cómo se relacionan HTML y JavaScript en la creación de un aplicativo?",
             options: [
-              "Bases de datos transaccionales con millones de escrituras por segundo.",
-              "Páginas web estáticas: documentación, portafolios, presentaciones y landing pages de proyectos.",
-              "Aplicaciones de escritorio compiladas en C++.",
-              "Servidores backend con lógica compleja en tiempo real."
+              "HTML es el \"cerebro\" y JavaScript es el \"cascarón de por fuera\".",
+              "HTML y JavaScript funcionan como bases de datos independientes.",
+              "HTML sirve como el \"cascarón de por fuera\" para mostrar información, y JavaScript funciona como el \"cerebro\" que otorga funcionalidad.",
+              "Ambos lenguajes se utilizan exclusivamente para configurar el servidor (backend)."
             ],
-            correct: 1,
-            explanation: "GitHub Pages está orientado a contenido estático: documentación, portafolios, presentaciones y landings de proyectos."
+            correct: 2,
+            explanation: "El instructor menciona que HTML sirve para mostrar el \"cascarón de por fuera\" de la aplicación, mientras que JavaScript es el \"cerebro\" que le da la funcionalidad para solucionar temas complejos."
           },
           {
-            question: "Si quieres mostrar una aplicación interactiva de Python (por ejemplo, un dashboard) y un sitio con la documentación o presentación del proyecto, ¿qué combinación tiene más sentido?",
+            question: "¿Qué práctica menciona el instructor como \"lo correcto\" al utilizar inteligencia artificial en el desarrollo de herramientas o artículos científicos?",
             options: [
-              "Solo Excel para todo.",
-              "Streamlit para la app interactiva y GitHub Pages para el sitio estático con la documentación o presentación.",
-              "GitHub Pages para la app interactiva y Streamlit para el sitio estático.",
-              "Ninguno de los dos sirve para compartir proyectos."
+              "Ocultar el uso de IA para evitar penalizaciones de derechos de autor.",
+              "Declarar siempre el uso de la inteligencia artificial, indicando que se usó como asistencia para traducir, redactar o generar ideas.",
+              "Modificar el código generado para que no parezca hecho por una máquina.",
+              "Utilizar exclusivamente modelos de IA de pago y no gratuitos."
             ],
             correct: 1,
-            explanation: "Streamlit se encarga de la app interactiva en Python, mientras GitHub Pages publica el sitio estático con documentación o presentación."
+            explanation: "Se enfatiza que lo ético y correcto es siempre declarar el uso de la inteligencia artificial e indicar explícitamente en qué tareas asistió el modelo."
+          },
+          {
+            question: "Según la explicación del video, ¿qué es Git y cómo se relaciona con GitHub?",
+            options: [
+              "Git es una extensión de navegador exclusiva para interactuar con GitHub.",
+              "Git es un software o gestor de control de versiones que trabaja perfectamente integrado con GitHub.",
+              "Git es el lenguaje de programación en el que está escrito GitHub.",
+              "Git es una herramienta de inteligencia artificial para corregir errores de sintaxis."
+            ],
+            correct: 1,
+            explanation: "Git se describe como un software gestor de control de versiones que permite trabajar de manera local en el computador y escalar los cambios para que se actualicen automáticamente gracias a su integración con GitHub."
+          },
+          {
+            question: "Al pedirle a la inteligencia artificial Gemini que genere el código inicial del aplicativo conversor de temperaturas, ¿qué herramienta y modelo específico recomienda configurar el instructor?",
+            options: [
+              "La herramienta Canvas (o lienzo) y el modelo 3.1 Pro.",
+              "El modo de desarrollador avanzado y el modelo 4.8.",
+              "La integración nativa con Streamlit y el modelo 4.0.",
+              "La búsqueda web en tiempo real con el modelo GPT."
+            ],
+            correct: 0,
+            explanation: "Se aconseja seleccionar la herramienta \"Canvas\" (o lienzo en español) y trabajar con el modelo 3.1 Pro, ya que está mejor pensado para solucionar problemáticas de programación o matemáticas."
+          },
+          {
+            question: "¿Cuáles son los requisitos principales que menciona el instructor para obtener el certificado gratuito del curso de Trabajo Científico?",
+            options: [
+              "Pagar una tarifa de emisión en la plataforma y subir un repositorio final.",
+              "Asistir obligatoriamente en vivo a todas las clases sin falta alguna.",
+              "Ingresar nombre y correo, marcar los videos de las tres clases como vistos y aprobar los pequeños \"quiz\" de 10 preguntas por clase.",
+              "Descargar la aplicación Streamlit en el entorno local y crear un dashboard validado por un docente."
+            ],
+            correct: 2,
+            explanation: "Para que se genere automáticamente el certificado, el estudiante debe acceder a la plataforma con su nombre y correo, confirmar que vio las clases correspondientes y desarrollar un quiz de 10 preguntas que está anclado a cada sesión."
           }
         ]
       }
