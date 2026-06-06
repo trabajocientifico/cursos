@@ -155,7 +155,7 @@ const COURSE_DATA = {
           duration: "60 min",
           videoId: "FGk0K2Ub4Io",
           description: "Fundamentos de programación en Python y uso de pandas para la manipulación de datos.",
-          reading: "**Clase 2 — Fundamentos de Programación en Python y pandas para manipulación de datos**\n\nContenido pendiente de publicación.",
+          reading: "**Conceptos Fundamentales — Clase 2**\n\nEsta clase se centra en el uso de **Python dentro del entorno en la nube Google Colab**. Python destaca por su sintaxis **intuitiva y cercana al idioma inglés**, lo que facilita enormemente su curva de aprendizaje.\n\n**Fundamentos básicos de programación**\n\n1. **Variables:** Funcionan como **cajas flexibles** que almacenan objetos, desde simples números o textos hasta bases de datos completas.\n\n2. **Listas:** Estructuras de datos capaces de **contener y agrupar múltiples objetos de distintos tipos** al mismo tiempo.\n\n3. **Comentarios (`#`):** Textos descriptivos que ayudan a entender el algoritmo y que **el sistema omite al ejecutar** el código.\n\n4. **Función `print`:** Trabaja como un **megáfono** para mostrar o visualizar la información en pantalla.\n\n5. **Condicionales (`if` / `else`):** Reglas que **establecen condiciones para tomar decisiones lógicas** dentro del código.\n\n6. **Bucles (`for`):** Bloques que **ejecutan acciones sobre los datos de manera cíclica**.\n\n7. **Funciones (`def`):** Segmentos de código creados para **no duplicar tareas** y poder ejecutarlas repetidamente en distintas partes del algoritmo.\n\n**Pandas — librería esencial para la gestión de datos**\n\nLa librería **Pandas** es esencial para la gestión de la información, ya que permite **cargar, leer y procesar grandes volúmenes de datos** en formatos como Excel o CSV de manera casi instantánea. Con ella es posible:\n\n- **Automatizar tareas complejas**, como segmentar información y exportarla a nuevos archivos.\n- **Generar estadísticas descriptivas** rápidamente.\n\n**Visualización gráfica**\n\nLa visualización gráfica también es clave: con las herramientas integradas se pueden generar **histogramas y gráficos de líneas** directamente desde los DataFrames.\n\n**Potenciado por Inteligencia Artificial**\n\nTodo este flujo se potencia fuertemente con la **Inteligencia Artificial**, la cual asiste al analista permitiéndole **generar, explicar, iterar, transformar y corregir** el código de Python a través de **lenguaje natural**.",
           resources: [
             { title: "Repositorio GitHub — Curso Python + IA en Ciencia de Datos", url: "https://github.com/trabajocientifico/curso-python-ia-ciencia-datos", type: "link" },
             { title: "Presentación de la clase (web)", url: "https://trabajocientifico.github.io/curso-python-ia-ciencia-datos/", type: "link" },
@@ -165,9 +165,120 @@ const COURSE_DATA = {
       ],
       quiz: {
         id: "q2",
-        title: "Quiz Clase 2 (próximamente)",
+        title: "Quiz Clase 2: Fundamentos de Python y pandas",
         passingScore: 70,
-        questions: []
+        questions: [
+          {
+            question: "Según el video, ¿qué es Google Colab?",
+            options: [
+              "Un lenguaje de búsqueda estandarizado para bases de datos relacionales.",
+              "Un entorno en la nube que permite desarrollar código, principalmente en Python.",
+              "Un programa para trabajar exclusivamente de manera manual como Excel.",
+              "Una librería especializada en la creación de gráficos interactivos."
+            ],
+            correct: 1,
+            explanation: "Google Colab es un entorno en la nube que permite desarrollar código, principalmente de Python para ciencia de datos."
+          },
+          {
+            question: "¿Por qué el instructor afirma que la curva de aprendizaje de Python es más fácil de desarrollar?",
+            options: [
+              "Porque es idéntico a trabajar con bases de datos relacionales (SQL).",
+              "Porque sus reglas lógicas y sintaxis son muy cercanas al idioma inglés.",
+              "Porque no requiere el uso de librerías para procesar información.",
+              "Porque todas las variables se comportan exactamente igual que en estadística."
+            ],
+            correct: 1,
+            explanation: "La sintaxis de Python y sus reglas lógicas son muy cercanas al lenguaje inglés, lo que lo hace intuitivo y permite entender el código sin tener programación avanzada."
+          },
+          {
+            question: "¿Cuál es el nombre de la librería fundamental que se utiliza para manipular y hacer gestión de datos en Python?",
+            options: [
+              "Matplotlib",
+              "Seaborn",
+              "Pandas",
+              "Plotly"
+            ],
+            correct: 2,
+            explanation: "En la clase se explica que Pandas es la base de las librerías para manipular y hacer gestión básicamente de datos."
+          },
+          {
+            question: "¿Qué símbolo se utiliza en Python para indicarle al sistema que un texto es un \"comentario\" y no debe ser ejecutado?",
+            options: [
+              "Un asterisco (*)",
+              "Comillas (\" \")",
+              "Un símbolo de numeral (#)",
+              "Un signo de igual (=)"
+            ],
+            correct: 2,
+            explanation: "Los comentarios son textos descriptivos que el sistema reconoce porque llevan un símbolo de numeral, lo que evita que Python intente ejecutarlos."
+          },
+          {
+            question: "En la sintaxis de Python, ¿cuál es la función de la instrucción print?",
+            options: [
+              "Leer un archivo de Excel o CSV.",
+              "Importar una nueva librería al entorno de trabajo.",
+              "Crear una variable y asignarle información.",
+              "Hacer de \"megáfono\" para mostrar o visualizar la información contenida en ella cuando se ejecuta el código."
+            ],
+            correct: 3,
+            explanation: "La función print actúa como un megáfono; todo lo que esté contenido dentro de ella se va a mostrar o visualizar al ejecutar el código."
+          },
+          {
+            question: "¿Cómo se define el concepto de \"variable\" dentro del entorno de Python explicado en la clase?",
+            options: [
+              "Como una característica estadística exclusiva de un elemento de estudio.",
+              "Como una caja que guarda información y objetos, como números, textos, imágenes o bases de datos.",
+              "Como un bloque de código cíclico que se ejecuta repetidas veces.",
+              "Como una regla lógica que toma decisiones según los datos de entrada."
+            ],
+            correct: 1,
+            explanation: "Una variable en Python funciona como una caja en la que se pueden guardar distintos tipos de objetos, desde un dato numérico hasta una base de datos completa."
+          },
+          {
+            question: "Cuando en el código de Python aparecen palabras como if o else, ¿a qué tipo de estructura funcional nos estamos refiriendo?",
+            options: [
+              "Bucles",
+              "Listas",
+              "Condicionales",
+              "Funciones"
+            ],
+            correct: 2,
+            explanation: "Las palabras if y else indican que hay una estructura de condicionales, las cuales establecen condiciones para tomar una decisión lógica."
+          },
+          {
+            question: "¿Cuál es la palabra clave empleada en el código para identificar que se está desarrollando un \"bucle\" cíclico?",
+            options: [
+              "def",
+              "print",
+              "for",
+              "pd.read_excel"
+            ],
+            correct: 2,
+            explanation: "La palabra for es una de las principales formas de identificar que el código está ejecutando un bucle para procesar un bloque de código de manera cíclica."
+          },
+          {
+            question: "Para organizar y no duplicar un bloque de código de varias líneas que se necesita ejecutar en diferentes partes del algoritmo, se utilizan las Funciones. ¿Qué palabra se usa en el código para crearlas?",
+            options: [
+              "def",
+              "while",
+              "import",
+              "list"
+            ],
+            correct: 0,
+            explanation: "Cuando aparece en el código la palabra def, significa que allí se está definiendo o creando una función que tiene un propósito específico dentro del algoritmo."
+          },
+          {
+            question: "Según el video, ¿cuál de los siguientes elementos corresponde a una \"estructura de datos\" descrita como una variable que puede contener múltiples objetos de diferentes tipos al mismo tiempo (números, texto, bases de datos)?",
+            options: [
+              "Un archivo CSV",
+              "Las listas",
+              "Una función condicional",
+              "Una librería"
+            ],
+            correct: 1,
+            explanation: "Las listas son variables o cajas muy flexibles que tienen el potencial de contener y guardar diferentes cantidades y tipos de objetos en un mismo lugar."
+          }
+        ]
       }
     },
     {
@@ -183,7 +294,7 @@ const COURSE_DATA = {
           duration: "60 min",
           videoId: "GmHd2lRMUzg",
           description: "Aprende a publicar tu proyecto de ciencia de datos en la web usando Streamlit y GitHub Pages.",
-          reading: "**Clase 3 — Publicación de proyectos con Streamlit y GitHub Pages**\n\nContenido teórico pendiente de publicación.",
+          reading: "**Conceptos Fundamentales — Clase 3**\n\nEl enfoque principal de esta clase es la **creación de prototipos o Productos Mínimos Viables (MVP)** orientados a la ciencia de datos y la automatización.\n\n**Conceptos y elementos clave**\n\n1. **Uso de IA para programación:** Se emplean modelos como **Gemini** (mediante su entorno *Canvas*), **Claude** y **ChatGPT** para generar código de aplicaciones de forma rápida. El instructor resalta que, **por ética profesional, siempre debe declararse el uso de IA** como asistente de redacción o programación.\n\n2. **Arquitectura Web (HTML, CSS y JavaScript):** Se crean herramientas interactivas, como un **conversor de temperaturas** y un **filtro de bases de datos**. En esta dinámica:\n   - **HTML** funciona como el *\"cascarón\" visual* para mostrar información.\n   - **JavaScript** actúa como el *\"cerebro\"* que otorga la funcionalidad.\n\n3. **GitHub y GitHub Pages:** GitHub se describe como una **red social para desarrolladores** donde se almacenan *repositorios* de proyectos. Mediante la función **Pages** se pueden desplegar estos aplicativos en la web para el acceso público, recordando que el código fuente **debe llamarse obligatoriamente `index`**.\n\n4. **Streamlit:** Es un **framework o librería de Python** diseñada para construir aplicaciones de datos con **interfaces interactivas**. Esto permite que un usuario final aproveche todo el potencial de Python **sin necesidad de saber codificar**.\n\n5. **Despliegue en la nube (Streamlit + GitHub):** Se demuestra cómo conectar un repositorio de GitHub con la plataforma Streamlit. Para lograr el despliegue es **obligatorio cargar dos archivos**:\n   - El **script del código principal** (`app.py`).\n   - Un **archivo de texto con las librerías requeridas** (`requirements.txt`).\n\n6. **Certificación del curso:** Para obtener el certificado es necesario **ingresar a la plataforma**, **confirmar la visualización de los videos** y **aprobar un quiz de 10 preguntas por cada sesión**.",
           resources: [
             { title: "Repositorio GitHub — Curso Python + IA en Ciencia de Datos", url: "https://github.com/trabajocientifico/curso-python-ia-ciencia-datos", type: "link" },
             { title: "Presentación de la clase (web)", url: "https://trabajocientifico.github.io/curso-python-ia-ciencia-datos/", type: "link" },
