@@ -169,6 +169,112 @@ const COURSE_DATA = {
         passingScore: 70,
         questions: []
       }
+    },
+    {
+      id: "mod-3",
+      title: "Clase 3: Publicación de proyectos con Streamlit y GitHub Pages",
+      description: "Comparte tu proyecto de ciencia de datos en la web usando Streamlit, GitHub y GitHub Pages.",
+      icon: "🚀",
+      lessons: [
+        {
+          id: "les-3-1",
+          title: "Despliegue de proyectos con Streamlit y GitHub Pages",
+          type: "video",
+          duration: "60 min",
+          videoId: "GmHd2lRMUzg",
+          description: "Aprende a publicar tu proyecto de ciencia de datos en la web usando Streamlit y GitHub Pages.",
+          reading: "**Clase 3 — Publicación de proyectos con Streamlit y GitHub Pages**\n\nContenido teórico pendiente de publicación.",
+          resources: [
+            { title: "Repositorio GitHub — Curso Python + IA en Ciencia de Datos", url: "https://github.com/trabajocientifico/curso-python-ia-ciencia-datos", type: "link" },
+            { title: "Presentación de la clase (web)", url: "https://trabajocientifico.github.io/curso-python-ia-ciencia-datos/", type: "link" },
+            { title: "Grabación de la Clase 3 (YouTube)", url: "https://www.youtube.com/watch?v=GmHd2lRMUzg", type: "link" }
+          ]
+        }
+      ],
+      quiz: {
+        id: "q3",
+        title: "Quiz Clase 3: Streamlit, GitHub y GitHub Pages",
+        passingScore: 70,
+        questions: [
+          {
+            question: "¿Para qué sirve principalmente Streamlit?",
+            options: [
+              "Para entrenar modelos de Machine Learning desde cero.",
+              "Para crear aplicaciones web interactivas de ciencia de datos usando solo Python.",
+              "Para editar hojas de cálculo de Excel en la nube.",
+              "Para diseñar bases de datos relacionales."
+            ],
+            correct: 1,
+            explanation: "Streamlit permite crear aplicaciones web interactivas para proyectos de ciencia de datos escribiendo solo código Python."
+          },
+          {
+            question: "¿Qué tipo de proyectos se pueden compartir fácilmente con Streamlit?",
+            options: [
+              "Solamente videojuegos en 3D.",
+              "Únicamente sitios estáticos sin interacción.",
+              "Dashboards, visualizaciones y aplicaciones de datos interactivas.",
+              "Sistemas operativos completos."
+            ],
+            correct: 2,
+            explanation: "Streamlit está pensado para compartir dashboards, visualizaciones y apps de datos interactivas con muy pocas líneas de código."
+          },
+          {
+            question: "¿Qué es GitHub?",
+            options: [
+              "Un editor de texto offline.",
+              "Una plataforma en la nube para alojar, versionar y colaborar en proyectos de código usando Git.",
+              "Un lenguaje de programación.",
+              "Una red social para compartir fotografías."
+            ],
+            correct: 1,
+            explanation: "GitHub es una plataforma en la nube basada en Git para alojar repositorios, versionar el código y colaborar en proyectos."
+          },
+          {
+            question: "¿Cuál es una ventaja clave de subir tus proyectos a GitHub?",
+            options: [
+              "Que el código deja de funcionar fuera de tu computador.",
+              "Mantener un historial de cambios, respaldo en la nube y poder compartirlo o colaborar con otras personas.",
+              "Que los archivos se vuelven privados y nadie más puede verlos nunca.",
+              "Que GitHub ejecuta el código por ti automáticamente sin configuración."
+            ],
+            correct: 1,
+            explanation: "GitHub guarda el historial de cambios, respalda el proyecto en la nube y facilita compartirlo y colaborar."
+          },
+          {
+            question: "¿Para qué sirve GitHub Pages?",
+            options: [
+              "Para ejecutar modelos de Machine Learning en GPU.",
+              "Para publicar sitios web estáticos de forma gratuita directamente desde un repositorio de GitHub.",
+              "Para enviar correos electrónicos masivos.",
+              "Para descargar videos de YouTube."
+            ],
+            correct: 1,
+            explanation: "GitHub Pages permite publicar sitios web estáticos gratis a partir de los archivos de un repositorio de GitHub."
+          },
+          {
+            question: "¿Qué tipo de contenido es ideal para publicar con GitHub Pages?",
+            options: [
+              "Bases de datos transaccionales con millones de escrituras por segundo.",
+              "Páginas web estáticas: documentación, portafolios, presentaciones y landing pages de proyectos.",
+              "Aplicaciones de escritorio compiladas en C++.",
+              "Servidores backend con lógica compleja en tiempo real."
+            ],
+            correct: 1,
+            explanation: "GitHub Pages está orientado a contenido estático: documentación, portafolios, presentaciones y landings de proyectos."
+          },
+          {
+            question: "Si quieres mostrar una aplicación interactiva de Python (por ejemplo, un dashboard) y un sitio con la documentación o presentación del proyecto, ¿qué combinación tiene más sentido?",
+            options: [
+              "Solo Excel para todo.",
+              "Streamlit para la app interactiva y GitHub Pages para el sitio estático con la documentación o presentación.",
+              "GitHub Pages para la app interactiva y Streamlit para el sitio estático.",
+              "Ninguno de los dos sirve para compartir proyectos."
+            ],
+            correct: 1,
+            explanation: "Streamlit se encarga de la app interactiva en Python, mientras GitHub Pages publica el sitio estático con documentación o presentación."
+          }
+        ]
+      }
     }
   ]
 };
