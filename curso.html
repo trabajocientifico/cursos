@@ -36,6 +36,24 @@
     </div>
   </div>
 
+  <!-- Pro Course Promo Modal (shown on top of certificate) -->
+  <div id="promo-modal" class="modal-overlay hidden" style="z-index:1100;background:rgba(5,5,15,0.78);">
+    <div class="modal" style="max-width:520px;padding:40px 32px;background:linear-gradient(160deg,#0e1226 0%,#161a36 100%);border:1px solid rgba(0,212,255,0.35);box-shadow:0 30px 80px rgba(0,212,255,0.15),0 0 0 1px rgba(123,47,247,0.2);">
+      <button class="modal-close" id="promo-close" aria-label="Cerrar">&times;</button>
+      <div style="display:inline-block;padding:6px 14px;border-radius:999px;background:linear-gradient(135deg,#00d4ff 0%,#7b2ff7 100%);color:#fff;font-size:0.75rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:16px;">🚀 Da el siguiente paso</div>
+      <h2 class="modal-title" style="font-size:1.7rem;margin-bottom:8px;">Curso Profesional de<br><span style="background:linear-gradient(135deg,#00d4ff,#7b2ff7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Ciencia de Datos</span></h2>
+      <p class="modal-subtitle" style="margin-bottom:20px;">Llevamos lo que aprendiste al siguiente nivel: <strong style="color:#fff;">20 horas</strong> de formación profesional. <strong style="color:#00d4ff;">Inicia en Julio.</strong></p>
+      <ul style="list-style:none;padding:0;margin:0 0 24px;text-align:left;color:#cfd3e3;font-size:0.92rem;line-height:1.8;">
+        <li>✅ Proyectos reales con Python, Pandas y Machine Learning</li>
+        <li>✅ Despliegue profesional con Streamlit y GitHub</li>
+        <li>✅ Certificación profesional avalada</li>
+        <li>✅ Acompañamiento del instructor</li>
+      </ul>
+      <a href="https://trabajocientifico.github.io/curso-profesional-ciencia-de-datos/" target="_blank" rel="noopener" id="promo-cta" class="btn btn-primary" style="display:block;text-align:center;text-decoration:none;margin-bottom:10px;">Ver detalles del curso →</a>
+      <button id="promo-continue" class="btn btn-secondary" style="width:100%;">Continuar a mi certificado</button>
+    </div>
+  </div>
+
   <!-- App Shell -->
   <div id="app" class="app hidden">
 

@@ -278,6 +278,14 @@ const App = {
     const pdfBtn = document.getElementById('cert-download-pdf');
     if (pdfBtn) pdfBtn.addEventListener('click', () => this.downloadCertificatePDF());
 
+    // Pro course promo modal (shown on top of certificate — does NOT close cert)
+    const promoModal = document.getElementById('promo-modal');
+    if (promoModal) {
+      const hidePromo = () => promoModal.classList.add('hidden');
+      document.getElementById('promo-close').addEventListener('click', hidePromo);
+      document.getElementById('promo-continue').addEventListener('click', hidePromo);
+    }
+
 
     // Memory game close
     document.getElementById('memory-close').addEventListener('click', () => {
@@ -1019,6 +1027,12 @@ const App = {
   showCertificate() {
     document.getElementById('cert-modal').classList.remove('hidden');
     this.renderCertificate();
+    this.showProCoursePromo();
+  },
+
+  showProCoursePromo() {
+    const promo = document.getElementById('promo-modal');
+    if (promo) promo.classList.remove('hidden');
   },
 
   renderCertificate() {
