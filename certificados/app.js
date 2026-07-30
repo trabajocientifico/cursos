@@ -271,146 +271,193 @@ class CertificateApp {
     const w = 1200;
     const h = 800;
     const FONT = "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
-    const SERIF = "Georgia, 'Times New Roman', 'Cambria', serif";
-
-    // Paleta ejecutiva: marfil, azul marino y dorado
-    const BG = '#f8f6ef';
-    const NAVY = '#1c2b4a';
-    const GOLD = '#a9873f';
-    const INK = '#3d3d3d';
-    const MUTED = '#7a7a7a';
 
     ctx.clearRect(0, 0, w, h);
 
-    // 1. Fondo marfil sobrio
-    ctx.fillStyle = BG;
+    // 1. Fondo degradado profesional
+    const bgGrad = ctx.createLinearGradient(0, 0, 0, h);
+    bgGrad.addColorStop(0, '#0a0d1a');
+    bgGrad.addColorStop(1, '#0e1226');
+    ctx.fillStyle = bgGrad;
     ctx.fillRect(0, 0, w, h);
 
-    // 2. Doble marco elegante (azul marino + filete dorado)
-    ctx.strokeStyle = NAVY;
-    ctx.lineWidth = 3;
-    ctx.strokeRect(38, 38, w - 76, h - 76);
-
-    ctx.strokeStyle = GOLD;
+    // 2. Rejilla tecnológica sutil
+    ctx.strokeStyle = 'rgba(0, 212, 255, 0.03)';
     ctx.lineWidth = 1;
-    ctx.strokeRect(50, 50, w - 100, h - 100);
+    for (let x = 60; x < w; x += 60) {
+      ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+    }
+    for (let y = 60; y < h; y += 60) {
+      ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+    }
 
-    // 3. Adornos dorados en las esquinas
-    const br = 26;
-    ctx.strokeStyle = GOLD;
-    ctx.lineWidth = 2;
-    ctx.beginPath(); ctx.moveTo(50, 50 + br); ctx.lineTo(50, 50); ctx.lineTo(50 + br, 50); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(w - 50 - br, 50); ctx.lineTo(w - 50, 50); ctx.lineTo(w - 50, 50 + br); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(50, h - 50 - br); ctx.lineTo(50, h - 50); ctx.lineTo(50 + br, h - 50); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(w - 50 - br, h - 50); ctx.lineTo(w - 50, h - 50); ctx.lineTo(w - 50, h - 50 - br); ctx.stroke();
+    // 3. Resplandores ambientales en esquinas
+    const glowCyan = ctx.createRadialGradient(0, 0, 0, 0, 0, 500);
+    glowCyan.addColorStop(0, 'rgba(0, 212, 255, 0.14)');
+    glowCyan.addColorStop(1, 'rgba(0, 212, 255, 0)');
+    ctx.fillStyle = glowCyan; ctx.fillRect(0, 0, 600, 600);
 
-    // 4. Logotipo institucional
+    const glowPurple = ctx.createRadialGradient(w, h, 0, w, h, 500);
+    glowPurple.addColorStop(0, 'rgba(123, 47, 247, 0.14)');
+    glowPurple.addColorStop(1, 'rgba(123, 47, 247, 0)');
+    ctx.fillStyle = glowPurple; ctx.fillRect(w - 600, h - 600, 600, 600);
+
+    // 4. Marcadores y marco elegante
+    const accentGrad = ctx.createLinearGradient(0, 0, w, h);
+    accentGrad.addColorStop(0, '#00d4ff');
+    accentGrad.addColorStop(1, '#7b2ff7');
+
+    ctx.strokeStyle = accentGrad;
+    ctx.lineWidth = 1.5;
+    ctx.strokeRect(45, 45, w - 90, h - 90);
+
+    // Esquinas tecnológicas reforzadas
+    const br = 30;
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = accentGrad;
+    ctx.beginPath(); ctx.moveTo(45, 45 + br); ctx.lineTo(45, 45); ctx.lineTo(45 + br, 45); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(w - 45 - br, 45); ctx.lineTo(w - 45, 45); ctx.lineTo(w - 45, 45 + br); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(45, h - 45 - br); ctx.lineTo(45, h - 45); ctx.lineTo(45 + br, h - 45); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(w - 45 - br, h - 45); ctx.lineTo(w - 45, h - 45); ctx.lineTo(w - 45, h - 45 - br); ctx.stroke();
+
+    // 5. Logotipo institucional
     if (this.logoImg) {
-      const maxLogoW = 360;
-      const maxLogoH = 92;
+      const maxLogoW = 380;
+      const maxLogoH = 100;
       const natW = this.logoImg.naturalWidth || maxLogoW;
       const natH = this.logoImg.naturalHeight || maxLogoH;
       const scale = Math.min(maxLogoW / natW, maxLogoH / natH);
       const dw = natW * scale;
       const dh = natH * scale;
       const dx = (w - dw) / 2;
-      const dy = 62 + (maxLogoH - dh) / 2;
+      const dy = 55 + (maxLogoH - dh) / 2;
       ctx.drawImage(this.logoImg, dx, dy, dw, dh);
     } else {
       ctx.textBaseline = 'middle';
-      ctx.fillStyle = NAVY;
-      ctx.font = 'bold 30px ' + SERIF;
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 30px ' + FONT;
       ctx.textAlign = 'center';
-      ctx.fillText('TRABAJO CIENTÍFICO', w / 2, 108);
+      ctx.fillText('TRABAJO CIENTÍFICO', w / 2, 105);
     }
 
-    // 5. Línea divisora superior con rombo dorado
+    // 6. Línea divisora superior
     ctx.textBaseline = 'alphabetic';
-    const dY = 180;
-    ctx.strokeStyle = GOLD;
+    const dY = 175;
+    const lineGrad = ctx.createLinearGradient(w / 2 - 280, 0, w / 2 + 280, 0);
+    lineGrad.addColorStop(0, 'transparent');
+    lineGrad.addColorStop(0.5, '#00d4ff');
+    lineGrad.addColorStop(1, 'transparent');
+    ctx.strokeStyle = lineGrad;
     ctx.lineWidth = 1;
-    ctx.beginPath(); ctx.moveTo(w / 2 - 250, dY); ctx.lineTo(w / 2 - 12, dY); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(w / 2 + 12, dY); ctx.lineTo(w / 2 + 250, dY); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(w / 2 - 280, dY); ctx.lineTo(w / 2 + 280, dY); ctx.stroke();
 
+    // Rombo decorativo central
     ctx.save();
     ctx.translate(w / 2, dY);
     ctx.rotate(Math.PI / 4);
-    ctx.fillStyle = GOLD;
+    ctx.fillStyle = accentGrad;
     ctx.fillRect(-4, -4, 8, 8);
     ctx.restore();
 
-    // 6. Texto: CERTIFICADO DE ASISTENCIA
-    ctx.fillStyle = NAVY;
-    ctx.font = '600 17px ' + SERIF;
+    // 7. Texto: CERTIFICADO DE ASISTENCIA
+    ctx.fillStyle = '#e4e4e7';
+    ctx.font = '600 15px ' + FONT;
     ctx.textAlign = 'center';
-    ctx.fillText('C E R T I F I C A D O   D E   A S I S T E N C I A', w / 2, 222);
+    ctx.fillText('C E R T I F I C A D O    D E    A S I S T E N C I A', w / 2, 215);
 
-    // 7. Texto: OTORGADO A
-    ctx.fillStyle = MUTED;
+    // 8. Texto: OTORGADO A
+    ctx.fillStyle = '#8b8fa3';
     ctx.font = '600 13px ' + FONT;
-    ctx.fillText('O T O R G A D O   A', w / 2, 266);
+    ctx.fillText('O T O R G A D O   A', w / 2, 260);
 
-    // 8. Nombre del participante (serif, azul marino)
-    let nameSize = 50;
-    ctx.font = 'bold ' + nameSize + 'px ' + SERIF;
+    // 9. Nombre del participante (color sólido, sin degradado)
+    const nameGrad = ctx.createLinearGradient(w / 2 - 260, 0, w / 2 + 260, 0);
+    nameGrad.addColorStop(0, '#00d4ff');
+    nameGrad.addColorStop(1, '#7b2ff7');
+
+    let nameSize = 48;
+    ctx.font = '800 ' + nameSize + 'px ' + FONT;
     while (ctx.measureText(name).width > w - 240 && nameSize > 26) {
       nameSize -= 2;
-      ctx.font = 'bold ' + nameSize + 'px ' + SERIF;
+      ctx.font = '800 ' + nameSize + 'px ' + FONT;
     }
-    const nameY = 330;
-    ctx.fillStyle = NAVY;
+    const nameY = 325;
+    ctx.fillStyle = '#ffffff';
     ctx.fillText(name, w / 2, nameY);
 
-    // Subrayado dorado sobrio para el nombre
+    // Subrayado estilizado para el nombre
     const nameW = ctx.measureText(name).width;
-    ctx.strokeStyle = GOLD;
-    ctx.lineWidth = 1.5;
+    ctx.strokeStyle = nameGrad;
+    ctx.lineWidth = 2;
     ctx.beginPath();
-    ctx.moveTo(w / 2 - nameW / 2 - 25, nameY + 14);
-    ctx.lineTo(w / 2 + nameW / 2 + 25, nameY + 14);
+    ctx.moveTo(w / 2 - nameW / 2 - 25, nameY + 12);
+    ctx.lineTo(w / 2 + nameW / 2 + 25, nameY + 12);
     ctx.stroke();
 
-    // 9. Texto: por su asistencia al taller
-    ctx.fillStyle = INK;
-    ctx.font = 'italic 17px ' + SERIF;
-    ctx.fillText('por su asistencia al taller gratuito de', w / 2, 398);
+    // 10. Texto: por su participación activa en
+    ctx.fillStyle = '#a0a4b8';
+    ctx.font = 'italic 17px ' + FONT;
+    ctx.fillText('por su asistencia al taller gratuito de', w / 2, 395);
 
-    // 10. TÍTULO DEL TALLER
+    // 11. TÍTULO DEL TALLER
     const eventTitle = "AI para la Investigación Científica";
-    let titleSize = 34;
-    ctx.font = 'bold ' + titleSize + 'px ' + SERIF;
+    let titleSize = 36;
+    ctx.font = 'bold ' + titleSize + 'px ' + FONT;
     while (ctx.measureText(eventTitle).width > w - 220 && titleSize > 24) {
       titleSize -= 2;
-      ctx.font = 'bold ' + titleSize + 'px ' + SERIF;
+      ctx.font = 'bold ' + titleSize + 'px ' + FONT;
     }
-    ctx.fillStyle = NAVY;
-    ctx.fillText(eventTitle, w / 2, 458);
+    ctx.fillStyle = '#ffffff';
+    ctx.fillText(eventTitle, w / 2, 455);
 
-    // 11. Duración: texto sobrio con filetes dorados
+    // 12. Insignia de Horas (Pill Container)
     const badgeText = '1 hora';
     ctx.font = '600 15px ' + FONT;
-    ctx.fillStyle = GOLD;
-    ctx.textAlign = 'center';
-    ctx.fillText(badgeText, w / 2, 512);
     const badgeTextW = ctx.measureText(badgeText).width;
-    ctx.strokeStyle = GOLD;
+    const badgeW = badgeTextW + 65;
+    const badgeH = 34;
+    const badgeY = 515;
+    const badgeX = (w - badgeW) / 2;
+
+    ctx.fillStyle = 'rgba(0, 212, 255, 0.10)';
+    ctx.strokeStyle = '#00d4ff';
     ctx.lineWidth = 1;
-    ctx.beginPath(); ctx.moveTo(w / 2 - badgeTextW / 2 - 40, 507); ctx.lineTo(w / 2 - badgeTextW / 2 - 15, 507); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(w / 2 + badgeTextW / 2 + 15, 507); ctx.lineTo(w / 2 + badgeTextW / 2 + 40, 507); ctx.stroke();
+    this.roundRect(ctx, badgeX, badgeY - badgeH / 2, badgeW, badgeH, badgeH / 2);
+    ctx.fill();
+    ctx.stroke();
 
-    // 11b. Fecha de realización del taller
-    ctx.fillStyle = MUTED;
-    ctx.font = 'italic 15px ' + SERIF;
-    ctx.fillText('Taller realizado el 28 de julio de 2026', w / 2, 560);
+    // Icono Reloj en Badge
+    ctx.strokeStyle = '#00d4ff';
+    ctx.lineWidth = 1.6;
+    ctx.beginPath();
+    ctx.arc(badgeX + 22, badgeY, 7, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(badgeX + 22, badgeY); ctx.lineTo(badgeX + 22, badgeY - 4);
+    ctx.moveTo(badgeX + 22, badgeY); ctx.lineTo(badgeX + 25, badgeY);
+    ctx.stroke();
 
-    // 12. Firmas al pie (Izquierda y Derecha)
-    const sigY = 662;
+    // Texto de Badge
+    ctx.fillStyle = '#00d4ff';
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(badgeText, badgeX + 38, badgeY + 1);
+    ctx.textBaseline = 'alphabetic';
+
+    // 12b. Fecha de realización del taller
+    ctx.fillStyle = '#a0a4b8';
+    ctx.font = 'italic 15px ' + FONT;
+    ctx.textAlign = 'center';
+    ctx.fillText('Taller realizado el 28 de julio de 2026', w / 2, 575);
+
+    // 13. Firmas digitales al pie (Izquierda y Derecha)
+    const sigY = 665;
     const leftCx = 260;
     const rightCx = w - 260;
     const lineHalf = 110;
 
     // Líneas de firma
-    ctx.strokeStyle = 'rgba(28, 43, 74, 0.35)';
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
     ctx.lineWidth = 1;
     ctx.beginPath(); ctx.moveTo(leftCx - lineHalf, sigY); ctx.lineTo(leftCx + lineHalf, sigY); ctx.stroke();
     ctx.beginPath(); ctx.moveTo(rightCx - lineHalf, sigY); ctx.lineTo(rightCx + lineHalf, sigY); ctx.stroke();
@@ -418,35 +465,35 @@ class CertificateApp {
     ctx.textAlign = 'center';
 
     // Firma Izquierda — Oscar Ivan Vargas Pineda
-    ctx.fillStyle = NAVY;
-    ctx.font = 'italic 26px "Segoe Script", "Brush Script MT", cursive';
+    ctx.fillStyle = nameGrad;
+    ctx.font = 'italic bold 26px "Segoe Script", "Brush Script MT", cursive';
     ctx.fillText('Oscar I. Vargas', leftCx, sigY - 8);
-    ctx.fillStyle = NAVY;
-    ctx.font = 'bold 14px ' + SERIF;
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 14px ' + FONT;
     ctx.fillText('Oscar Ivan Vargas Pineda', leftCx, sigY + 22);
-    ctx.fillStyle = MUTED;
+    ctx.fillStyle = '#8b8fa3';
     ctx.font = '11px ' + FONT;
     ctx.fillText('CEO  ·  Trabajo Científico', leftCx, sigY + 38);
 
     // Firma Derecha — Lali Valentina Pedroza
-    ctx.fillStyle = NAVY;
-    ctx.font = 'italic 26px "Segoe Script", "Brush Script MT", cursive';
+    ctx.fillStyle = nameGrad;
+    ctx.font = 'italic bold 26px "Segoe Script", "Brush Script MT", cursive';
     ctx.fillText('Lali V. Pedroza', rightCx, sigY - 8);
-    ctx.fillStyle = NAVY;
-    ctx.font = 'bold 14px ' + SERIF;
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 14px ' + FONT;
     ctx.fillText('Lali Valentina Pedroza', rightCx, sigY + 22);
-    ctx.fillStyle = MUTED;
+    ctx.fillStyle = '#8b8fa3';
     ctx.font = '11px ' + FONT;
     ctx.fillText('Gestora Educativa  ·  Trabajo Científico', rightCx, sigY + 38);
 
-    // 13. Fecha de emisión al centro inferior
+    // 14. Fecha de emisión al centro inferior
     const meses = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio',
                    'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
     const hoy = new Date();
     const issueDate = `Emitido el ${hoy.getDate()} de ${meses[hoy.getMonth()]} de ${hoy.getFullYear()}`;
-    ctx.fillStyle = MUTED;
+    ctx.fillStyle = '#a0a4b8';
     ctx.font = '11px ' + FONT;
-    ctx.fillText(issueDate.toUpperCase(), w / 2, h - 62);
+    ctx.fillText(issueDate.toUpperCase(), w / 2, h - 60);
   }
 
   // Utilidad de rectángulo redondeado
