@@ -20,7 +20,6 @@ class CertificateApp {
     this.certSection = document.getElementById('certificate-section');
     this.canvas = document.getElementById('cert-canvas');
     this.downloadPdfBtn = document.getElementById('btn-download-pdf');
-    this.downloadPngBtn = document.getElementById('btn-download-png');
 
     this.init();
   }
@@ -159,11 +158,6 @@ class CertificateApp {
     // Descarga PDF
     this.downloadPdfBtn.addEventListener('click', () => {
       this.downloadPDF();
-    });
-
-    // Descarga PNG
-    this.downloadPngBtn.addEventListener('click', () => {
-      this.downloadPNG();
     });
   }
 
@@ -403,7 +397,7 @@ class CertificateApp {
     // 10. Texto: por su participación activa en
     ctx.fillStyle = '#a0a4b8';
     ctx.font = 'italic 17px ' + FONT;
-    ctx.fillText('por su participación y asistencia al taller gratuito de', w / 2, 395);
+    ctx.fillText('por su asistencia al taller gratuito de', w / 2, 395);
 
     // 11. TÍTULO DEL TALLER
     const eventTitle = "AI para la Investigación Científica";
@@ -417,7 +411,7 @@ class CertificateApp {
     ctx.fillText(eventTitle, w / 2, 455);
 
     // 12. Insignia de Horas (Pill Container)
-    const badgeText = '1 hora de formación especializada';
+    const badgeText = '1 hora';
     ctx.font = '600 15px ' + FONT;
     const badgeTextW = ctx.measureText(badgeText).width;
     const badgeW = badgeTextW + 65;
@@ -449,6 +443,12 @@ class CertificateApp {
     ctx.textBaseline = 'middle';
     ctx.fillText(badgeText, badgeX + 38, badgeY + 1);
     ctx.textBaseline = 'alphabetic';
+
+    // 12b. Fecha de realización del taller
+    ctx.fillStyle = '#a0a4b8';
+    ctx.font = 'italic 15px ' + FONT;
+    ctx.textAlign = 'center';
+    ctx.fillText('Taller realizado el 28 de julio de 2026', w / 2, 575);
 
     // 13. Firmas digitales al pie (Izquierda y Derecha)
     const sigY = 665;
@@ -487,26 +487,13 @@ class CertificateApp {
     ctx.fillText('Gestora Educativa  ·  Trabajo Científico', rightCx, sigY + 38);
 
     // 14. Fecha e ID de Certificado al centro inferior
-    const issueDate = 'Emitido en Julio de 2026';
+    const meses = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio',
+                   'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+    const hoy = new Date();
+    const issueDate = `Emitido el ${hoy.getDate()} de ${meses[hoy.getMonth()]} de ${hoy.getFullYear()}`;
     ctx.fillStyle = '#a0a4b8';
     ctx.font = '11px ' + FONT;
-    ctx.fillText(issueDate.toUpperCase(), w / 2, h - 68);
-
-    const certId = this.generateCertID(name);
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.35)';
-    ctx.font = '10px ' + FONT;
-    ctx.fillText(`CÓDIGO DE VERIFICACIÓN: ${certId}`, w / 2, h - 50);
-  }
-
-  // --- Generación de ID de Verificación Único ---
-  generateCertID(name) {
-    const str = name + '|AI_INVESTIGACION_CIENTIFICA';
-    let hash = 0;
-    for (let i = 0; i < str.length; i++) {
-      hash = ((hash << 5) - hash) + str.charCodeAt(i);
-      hash |= 0;
-    }
-    return 'TC-AI-' + Math.abs(hash).toString(36).toUpperCase().padStart(8, '0');
+    ctx.fillText(issueDate.toUpperCase(), w / 2, h - 60);
   }
 
   // Utilidad de rectángulo redondeado
@@ -546,7 +533,17 @@ class CertificateApp {
 
       // Convertir Canvas a Imagen JPEG de alta calidad
       const imgData = this.canvas.toDataURL('image/jpeg', 0.95);
-      const pdf = new jsPDFClass({ orientation: 'landscape', unit: 'pt', format: [1200, 800] });
+      const pdf = new jsPDFClass({
+        orientation: 'landscape',
+        unit: 'pt',
+        format: [1200, 800],
+        // El PDF se abre sin contraseña, pero editarlo requiere la contraseña de propietario.
+        encryption: {
+          userPassword: '',
+          ownerPassword: '0603',
+          userPermissions: ['print', 'copy']
+        }
+      });
       pdf.addImage(imgData, 'JPEG', 0, 0, 1200, 800, undefined, 'FAST');
 
       const safeName = this.currentAttendee.replace(/\s+/g, '_');
@@ -558,16 +555,6 @@ class CertificateApp {
       this.downloadPdfBtn.disabled = false;
       this.downloadPdfBtn.textContent = '📄 Descargar PDF';
     }
-  }
-
-  // --- Descarga como PNG ---
-  downloadPNG() {
-    if (!this.currentAttendee) return;
-    const safeName = this.currentAttendee.replace(/\s+/g, '_');
-    const link = document.createElement('a');
-    link.download = `Certificado_Asistencia_${safeName}_AI_Investigacion.png`;
-    link.href = this.canvas.toDataURL('image/png');
-    link.click();
   }
 
   // --- Gestión de Mensajes de Estado ---
