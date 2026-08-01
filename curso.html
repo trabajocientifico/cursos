@@ -81,41 +81,23 @@
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
         Volver al portal
       </a>
-      <a href="certificados/index.html" class="btn btn-outline btn-sm" style="margin:0 16px 12px;display:flex;align-items:center;gap:6px;justify-content:center;font-size:0.8rem;">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>
-        Certificados
-      </a>
-
       <div class="sidebar-user">
         <div class="user-avatar" id="user-avatar">U</div>
         <div class="user-info">
           <span class="user-name" id="sidebar-username">Usuario</span>
-          <span class="user-role" id="sidebar-level-label">Novato</span>
-        </div>
-        <div class="sidebar-streak" id="sidebar-streak">
-          <span class="streak-fire" id="streak-fire">🔥</span>
-          <span class="streak-count" id="streak-count">0</span>
+          <span class="user-role" id="sidebar-level-label">Estudiante</span>
         </div>
       </div>
 
-      <div class="sidebar-xp">
-        <div class="xp-level-row">
-          <span class="xp-level-icon" id="xp-level-icon">⚡</span>
-          <span class="xp-level-name" id="xp-level-name">Nivel 1 — Novato</span>
-          <span class="xp-amount" id="xp-amount">0 XP</span>
+      <div class="sidebar-modules">
+        <div class="modules-viewed-row">
+          <span class="modules-viewed-icon">👁</span>
+          <span class="modules-viewed-label" id="modules-viewed-label">Módulos vistos</span>
+          <span class="modules-viewed-count" id="modules-viewed-count">0 / 0</span>
         </div>
-        <div class="xp-bar">
-          <div class="xp-bar-fill" id="xp-bar-fill"></div>
+        <div class="modules-viewed-bar">
+          <div class="modules-viewed-bar-fill" id="modules-viewed-bar"></div>
         </div>
-        <div class="xp-next-label" id="xp-next-label">0 / 200 XP para siguiente nivel</div>
-      </div>
-
-      <div class="sidebar-achievements-btn-wrap">
-        <button class="btn btn-outline btn-sm sidebar-achievements-btn" id="btn-achievements">
-          <span>🏆</span>
-          <span>Logros</span>
-          <span class="achievements-count-badge" id="achievements-count-badge">0/14</span>
-        </button>
       </div>
 
       <div class="sidebar-progress">
@@ -151,25 +133,25 @@
             <p class="hero-subtitle">Continúa tu aprendizaje en ciencia de datos. Cada módulo te acerca más a dominar el análisis de datos y Machine Learning.</p>
           </div>
           <div class="hero-stats">
+            <div class="stat-card stat-card--modules">
+              <span class="stat-number" id="stat-modules">0</span>
+              <span class="stat-label" id="stat-modules-label">Módulos vistos</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-number" id="stat-modules-total">0</span>
+              <span class="stat-label">Módulos del curso</span>
+            </div>
             <div class="stat-card">
               <span class="stat-number" id="stat-completed">0</span>
-              <span class="stat-label">Lecciones completadas</span>
+              <span class="stat-label">Clases vistas</span>
             </div>
             <div class="stat-card">
               <span class="stat-number" id="stat-total">15</span>
-              <span class="stat-label">Total de lecciones</span>
+              <span class="stat-label">Total de clases</span>
             </div>
             <div class="stat-card">
               <span class="stat-number" id="stat-quizzes">0</span>
               <span class="stat-label">Quizzes aprobados</span>
-            </div>
-            <div class="stat-card stat-card--xp">
-              <span class="stat-number" id="stat-xp">0</span>
-              <span class="stat-label">XP Total</span>
-            </div>
-            <div class="stat-card stat-card--streak">
-              <span class="stat-number" id="stat-streak">0</span>
-              <span class="stat-label">Racha de días</span>
             </div>
           </div>
         </div>
@@ -241,21 +223,6 @@
         </div>
       </section>
 
-      <!-- Achievements View -->
-      <section id="view-achievements" class="view">
-        <button class="btn-back" id="btn-back-achievements">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
-          Volver al dashboard
-        </button>
-        <div class="achievements-header">
-          <h1>Logros <span class="gradient-text">🏆</span></h1>
-          <p class="achievements-subtitle" id="achievements-subtitle">0 de 14 desbloqueados</p>
-        </div>
-        <div class="achievements-grid" id="achievements-grid">
-          <!-- Achievement cards rendered by JS -->
-        </div>
-      </section>
-
       <!-- Quiz View -->
       <section id="view-quiz" class="view">
         <button class="btn-back" id="btn-back-quiz">
@@ -266,7 +233,12 @@
         <div class="quiz-header">
           <span class="lesson-badge" id="quiz-badge">Quiz</span>
           <h1 id="quiz-title">Quiz del Módulo</h1>
-          <p class="quiz-instruction">Responde correctamente al menos el 70% de las preguntas para desbloquear el siguiente módulo.</p>
+          <p class="quiz-instruction">Responde correctamente al menos el 70% de las preguntas para aprobar este quiz.</p>
+          <div class="quiz-timer hidden" id="quiz-timer">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2"/><path d="M9 2h6"/></svg>
+            <span class="quiz-timer-label">Tiempo restante</span>
+            <span class="quiz-timer-value" id="quiz-timer-value">20:00</span>
+          </div>
         </div>
 
         <div class="quiz-body" id="quiz-body">

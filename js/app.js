@@ -11,26 +11,9 @@ const App = {
     currentView: 'dashboard',
     currentModuleIndex: null,
     currentLessonIndex: null,
-    // Gamification
-    xp: 0,
-    currentStreak: 0,
-    bestStreak: 0,
-    lastActiveDate: null,
-    unlockedAchievements: [],
-    dailyLessonsCount: 0,
-    dailyLessonsDate: null,
-    // Combo system
-    comboMultiplier: 1,
-    lastActionTimestamp: 0,
     // Easter eggs
     konamiUsed: false,
     logoSecretUsed: false,
-    // Focus mode
-    focusMinutesToday: 0,
-    focusSessionsToday: 0,
-    focusDate: null,
-    totalFocusMinutes: 0,
-    totalFocusSessions: 0,
   },
 
   STORAGE_KEY: 'tc_progress_' + (new URLSearchParams(window.location.search).get('curso') || 'excel-vida'),
@@ -38,35 +21,6 @@ const App = {
   IS_FREE_COURSE: /curso-gratis\.html/i.test(window.location.pathname),
   get UNIT_LABEL() { return this.IS_FREE_COURSE ? 'Clase' : 'Módulo'; },
   APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbxyxBvuAFLo_y_i2xhGdlHgBtV2z7vLC2AqrNnu3f1N-nMXs8EHcYpwCCioOL7P5Fj1xg/exec',
-
-  // XP Levels table
-  LEVELS: [
-    { level: 1, name: 'Novato', xp: 0, icon: '⚡' },
-    { level: 2, name: 'Aprendiz', xp: 200, icon: '🔥' },
-    { level: 3, name: 'Explorador', xp: 500, icon: '🧭' },
-    { level: 4, name: 'Analista', xp: 900, icon: '📊' },
-    { level: 5, name: 'Científico', xp: 1400, icon: '🔬' },
-    { level: 6, name: 'Experto', xp: 2000, icon: '🧠' },
-    { level: 7, name: 'Maestro', xp: 2800, icon: '👑' },
-  ],
-
-  // Achievements definitions
-  ACHIEVEMENTS: [
-    { id: 'first-lesson', name: 'Primer Paso', desc: 'Completa tu primera lección', icon: '🎯', xp: 75 },
-    { id: 'first-quiz', name: 'Evaluado', desc: 'Aprueba tu primer quiz', icon: '✅', xp: 75 },
-    { id: 'perfect-quiz', name: 'Perfeccionista', desc: 'Obtén 100% en un quiz', icon: '💎', xp: 75 },
-    { id: 'module-complete', name: 'Módulo Maestro', desc: 'Completa un módulo entero', icon: '🏆', xp: 75 },
-    { id: 'halfway', name: 'Medio Camino', desc: 'Completa el 50% del curso', icon: '🌗', xp: 75 },
-    { id: 'all-lessons', name: 'Estudioso', desc: 'Completa todas las lecciones', icon: '📚', xp: 75 },
-    { id: 'streak-3', name: 'En Racha', desc: 'Mantén 3 días seguidos de estudio', icon: '🔥', xp: 75 },
-    { id: 'streak-7', name: 'Semana Perfecta', desc: 'Mantén 7 días seguidos de estudio', icon: '⭐', xp: 75 },
-    { id: 'fast-learner', name: 'Veloz', desc: 'Completa 3 lecciones en un solo día', icon: '⚡', xp: 75 },
-    { id: 'course-done', name: 'Graduado', desc: 'Completa todo el curso', icon: '🎓', xp: 75 },
-    { id: 'focused', name: 'Enfocado', desc: 'Completa 3 sesiones Pomodoro', icon: '🍅', xp: 75 },
-    { id: 'marathoner', name: 'Maratonista', desc: 'Completa 5 Pomodoros en un día', icon: '🏃', xp: 75 },
-    { id: 'hacker', name: 'Hacker', desc: 'Descubre el código secreto', icon: '💻', xp: 75 },
-    { id: 'curious', name: 'Curioso', desc: 'Descubre el easter egg del logo', icon: '🔍', xp: 75 },
-  ],
 
   // Motivational messages
   MOTIVATIONAL_MESSAGES: [
@@ -126,17 +80,8 @@ const App = {
         username: this.state.username,
         completedLessons: this.state.completedLessons,
         completedQuizzes: this.state.completedQuizzes,
-        xp: this.state.xp,
-        currentStreak: this.state.currentStreak,
-        bestStreak: this.state.bestStreak,
-        lastActiveDate: this.state.lastActiveDate,
-        unlockedAchievements: this.state.unlockedAchievements,
-        dailyLessonsCount: this.state.dailyLessonsCount,
-        dailyLessonsDate: this.state.dailyLessonsDate,
         konamiUsed: this.state.konamiUsed,
         logoSecretUsed: this.state.logoSecretUsed,
-        totalFocusMinutes: this.state.totalFocusMinutes,
-        totalFocusSessions: this.state.totalFocusSessions,
       };
       localStorage.setItem(this.STORAGE_KEY, JSON.stringify(toSave));
     } catch (e) {
@@ -154,7 +99,7 @@ const App = {
         evento: evento,
         detalle: detalle,
         puntaje: puntaje !== undefined ? puntaje : '',
-        xpTotal: this.state.xp,
+        modulosVistos: `${this.getViewedModulesCount()}/${COURSE_DATA.modules.length}`,
         progreso: this.getGlobalProgress(),
         fecha: new Date().toLocaleString('es-CO', { timeZone: 'America/Bogota' })
       };
@@ -173,22 +118,8 @@ const App = {
     if (!confirm('¿Estás seguro de que quieres reiniciar todo tu progreso? Esta acción no se puede deshacer.')) return;
     this.state.completedLessons = [];
     this.state.completedQuizzes = [];
-    this.state.xp = 0;
-    this.state.currentStreak = 0;
-    this.state.bestStreak = 0;
-    this.state.lastActiveDate = null;
-    this.state.unlockedAchievements = [];
-    this.state.dailyLessonsCount = 0;
-    this.state.dailyLessonsDate = null;
     this.state.konamiUsed = false;
     this.state.logoSecretUsed = false;
-    this.state.comboMultiplier = 1;
-    this.state.lastActionTimestamp = 0;
-    this.state.totalFocusMinutes = 0;
-    this.state.totalFocusSessions = 0;
-    this.state.focusMinutesToday = 0;
-    this.state.focusSessionsToday = 0;
-    this.state.focusDate = null;
     this.saveState();
     this.renderSidebar();
     this.renderDashboard();
@@ -226,7 +157,6 @@ const App = {
   showApp() {
     document.getElementById('welcome-modal').classList.add('hidden');
     document.getElementById('app').classList.remove('hidden');
-    this.validateStreak();
     this.renderSidebar();
     this.renderDashboard();
     this.navigateTo('dashboard');
@@ -242,14 +172,6 @@ const App = {
     // Reset progress
     document.getElementById('reset-progress-btn').addEventListener('click', () => this.resetProgress());
 
-    // Achievements
-    document.getElementById('btn-achievements').addEventListener('click', () => {
-      this.navigateTo('achievements');
-    });
-    document.getElementById('btn-back-achievements').addEventListener('click', () => {
-      this.navigateTo('dashboard');
-    });
-
     // Lesson tabs
     document.querySelectorAll('.lesson-tabs .tab').forEach(tab => {
       tab.addEventListener('click', () => {
@@ -263,7 +185,10 @@ const App = {
     // Lesson actions (only static handlers here — dynamic onclick set in renderLessonActions)
     document.getElementById('btn-complete-lesson').addEventListener('click', () => this.completeCurrentLesson());
     document.getElementById('btn-back-lesson').addEventListener('click', () => this.navigateTo('dashboard'));
-    document.getElementById('btn-back-quiz').addEventListener('click', () => this.navigateTo('dashboard'));
+    document.getElementById('btn-back-quiz').addEventListener('click', () => {
+      QuizEngine.stopTimer();
+      this.navigateTo('dashboard');
+    });
 
     // Quiz actions
     document.getElementById('btn-submit-quiz').addEventListener('click', () => QuizEngine.submit());
@@ -311,6 +236,10 @@ const App = {
 
   // ---- Navigation ----
   navigateTo(view, data) {
+    // Al salir del quiz se detiene el temporizador
+    if (this.state.currentView === 'quiz' && view !== 'quiz' && typeof QuizEngine !== 'undefined') {
+      QuizEngine.stopTimer();
+    }
     this.state.currentView = view;
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
 
@@ -322,11 +251,7 @@ const App = {
       this.renderLesson(data.moduleIndex, data.lessonIndex);
     } else if (view === 'quiz') {
       document.getElementById('view-quiz').classList.add('active');
-      // moduleIndex null/undefined → evaluación final del curso
-      QuizEngine.render(data && data.moduleIndex !== undefined ? data.moduleIndex : null);
-    } else if (view === 'achievements') {
-      document.getElementById('view-achievements').classList.add('active');
-      this.renderAchievementsPanel();
+      QuizEngine.render(data.moduleIndex);
     }
 
     this.toggleSidebar(false);
@@ -354,22 +279,14 @@ const App = {
     return true;
   },
 
-  // ---- Final Quiz (course-level evaluation) ----
-  get FINAL_QUIZ() {
-    return (typeof COURSE_DATA !== 'undefined' && COURSE_DATA.finalQuiz) ? COURSE_DATA.finalQuiz : null;
+  // Un módulo cuenta como "visto" cuando el estudiante vio todas sus clases
+  isModuleViewed(moduleIndex) {
+    const mod = COURSE_DATA.modules[moduleIndex];
+    return mod.lessons.length > 0 && mod.lessons.every(l => this.isLessonCompleted(l.id));
   },
 
-  areAllLessonsDone() {
-    return COURSE_DATA.modules.every(mod => mod.lessons.every(l => this.isLessonCompleted(l.id)));
-  },
-
-  // La evaluación final solo se habilita al terminar todas las clases del curso
-  isFinalQuizUnlocked() {
-    return !!this.FINAL_QUIZ && this.areAllLessonsDone();
-  },
-
-  isFinalQuizCompleted() {
-    return !!this.FINAL_QUIZ && this.isQuizCompleted(this.FINAL_QUIZ.id);
+  getViewedModulesCount() {
+    return COURSE_DATA.modules.filter((mod, mi) => this.isModuleViewed(mi)).length;
   },
 
   getModuleProgress(moduleIndex) {
@@ -389,10 +306,6 @@ const App = {
       completed += mod.lessons.filter(l => this.isLessonCompleted(l.id)).length;
       if (mod.quiz && this.isQuizCompleted(mod.quiz.id)) completed++;
     });
-    if (this.FINAL_QUIZ) {
-      total += 1;
-      if (this.isFinalQuizCompleted()) completed++;
-    }
     return total > 0 ? Math.round((completed / total) * 100) : 0;
   },
 
@@ -409,13 +322,11 @@ const App = {
   },
 
   isCourseDone() {
-    const modulesDone = COURSE_DATA.modules.every((mod, i) => {
+    return COURSE_DATA.modules.every((mod, i) => {
       const lessonsDone = mod.lessons.every(l => this.isLessonCompleted(l.id));
       const quizDone = mod.quiz ? this.isQuizCompleted(mod.quiz.id) : true;
       return lessonsDone && quizDone;
     });
-    if (!modulesDone) return false;
-    return this.FINAL_QUIZ ? this.isFinalQuizCompleted() : true;
   },
 
   // ---- Complete Actions ----
@@ -426,16 +337,13 @@ const App = {
 
     if (!wasAlreadyDone) {
       this.state.completedLessons.push(lesson.id);
-
-      // Combo system
-      this.updateCombo();
-
-      // Gamification
-      this.awardXP(50, 'Lección completada');
-      this.checkStreak();
-      this.trackDailyLesson();
       this.saveState();
-      this.checkAchievements();
+
+      // Aviso al terminar de ver todas las clases de un módulo
+      if (this.isModuleViewed(this.state.currentModuleIndex)) {
+        this.showToast('module', `${this.UNIT_LABEL} ${this.state.currentModuleIndex + 1} visto`,
+          `Llevas ${this.getViewedModulesCount()} de ${COURSE_DATA.modules.length} ${this.UNIT_LABEL.toLowerCase()}s vistos.`);
+      }
 
       // Enviar avance a Google Sheets
       this.sendProgress('Lección completada', `${mod.title} — ${lesson.title}`);
@@ -457,53 +365,24 @@ const App = {
     this.updateGlobalProgress();
   },
 
-  // moduleIndex === null → evaluación final del curso
   completeQuiz(moduleIndex, score) {
-    const isFinal = moduleIndex === null || moduleIndex === undefined;
-    const mod = isFinal ? null : COURSE_DATA.modules[moduleIndex];
-    const quiz = isFinal ? this.FINAL_QUIZ : (mod && mod.quiz);
+    const mod = COURSE_DATA.modules[moduleIndex];
+    const quiz = mod && mod.quiz;
     if (!quiz) return;
     const wasAlreadyDone = this.isQuizCompleted(quiz.id);
 
     if (!wasAlreadyDone) {
       this.state.completedQuizzes.push(quiz.id);
-
-      // Combo system
-      this.updateCombo();
-
-      // Gamification — XP for quiz
-      this.awardXP(100, 'Quiz aprobado');
-
-      // Bonus for perfect quiz
-      if (score === 100) {
-        setTimeout(() => this.awardXP(50, 'Quiz perfecto — Bonus'), 600);
-      }
-
-      this.checkStreak();
       this.saveState();
 
-      // Check if entire module just got completed
-      const moduleProgress = isFinal ? 100 : this.getModuleProgress(moduleIndex);
-      if (moduleProgress === 100) {
-        setTimeout(() => this.awardXP(150, isFinal ? 'Evaluación final aprobada — Bonus' : `${this.UNIT_LABEL} completada — Bonus`), 800);
-        if (typeof Confetti !== 'undefined') {
-          Confetti.moduleComplete();
-        }
-      } else {
-        if (typeof Confetti !== 'undefined') {
-          Confetti.quizPass();
-        }
+      // Confeti según si el módulo quedó completo
+      if (typeof Confetti !== 'undefined') {
+        if (this.getModuleProgress(moduleIndex) === 100) Confetti.moduleComplete();
+        else Confetti.quizPass();
       }
 
-      // Check achievements after XP is awarded
-      setTimeout(() => this.checkAchievements({ perfectQuiz: score === 100 }), 400);
-
       // Enviar avance a Google Sheets
-      this.sendProgress(
-        isFinal ? 'Evaluación final aprobada' : 'Quiz aprobado',
-        isFinal ? quiz.title : `${mod.title} — ${quiz.title}`,
-        score
-      );
+      this.sendProgress('Quiz aprobado', `${mod.title} — ${quiz.title}`, score);
 
       // Motivational message + milestone
       this.showMotivationalMessage();
@@ -531,37 +410,16 @@ const App = {
     document.getElementById('sidebar-username').textContent = this.state.username;
     document.getElementById('user-avatar').textContent = this.state.username.charAt(0).toUpperCase();
 
-    // Level & XP
-    const levelInfo = this.getLevel(this.state.xp);
-    const levelProgress = this.getLevelProgress();
-    document.getElementById('sidebar-level-label').textContent = levelInfo.name;
-    document.getElementById('xp-level-icon').textContent = levelInfo.icon;
-    document.getElementById('xp-level-name').textContent = `Nivel ${levelInfo.level} — ${levelInfo.name}`;
-    document.getElementById('xp-amount').textContent = `${this.state.xp} XP`;
-    document.getElementById('xp-bar-fill').style.width = `${levelProgress.percent}%`;
-    document.getElementById('xp-next-label').textContent =
-      levelProgress.isMax
-        ? '¡Nivel máximo alcanzado!'
-        : `${this.state.xp - levelProgress.currentLevelXp} / ${levelProgress.nextLevelXp - levelProgress.currentLevelXp} XP para siguiente nivel`;
+    document.getElementById('sidebar-level-label').textContent = 'Estudiante';
 
-    // Streak
-    const streakEl = document.getElementById('streak-count');
-    const fireEl = document.getElementById('streak-fire');
-    streakEl.textContent = this.state.currentStreak;
-    if (this.state.currentStreak >= 7) {
-      streakEl.classList.add('high');
-    } else {
-      streakEl.classList.remove('high');
-    }
-    if (this.state.currentStreak >= 3) {
-      fireEl.classList.add('active');
-    } else {
-      fireEl.classList.remove('active');
-    }
-
-    // Achievements count
-    const unlockedCount = this.state.unlockedAchievements.length;
-    document.getElementById('achievements-count-badge').textContent = `${unlockedCount}/${this.ACHIEVEMENTS.length}`;
+    // Módulos vistos
+    const viewed = this.getViewedModulesCount();
+    const totalMods = COURSE_DATA.modules.length;
+    document.getElementById('modules-viewed-count').textContent = `${viewed} / ${totalMods}`;
+    document.getElementById('modules-viewed-label').textContent =
+      `${this.UNIT_LABEL}s vistos`;
+    document.getElementById('modules-viewed-bar').style.width =
+      `${totalMods > 0 ? Math.round((viewed / totalMods) * 100) : 0}%`;
 
     // Global progress
     this.updateGlobalProgress();
@@ -644,32 +502,6 @@ const App = {
       nav.appendChild(moduleEl);
     });
 
-    // Evaluación final del curso (se habilita al completar todas las clases)
-    if (this.FINAL_QUIZ) {
-      const finalUnlocked = this.isFinalQuizUnlocked();
-      const finalDone = this.isFinalQuizCompleted();
-
-      const finalEl = document.createElement('div');
-      finalEl.className = `nav-module nav-module--final${finalUnlocked ? '' : ' locked'}`;
-
-      const finalBtn = document.createElement('button');
-      finalBtn.className = `nav-module-btn${!finalUnlocked ? ' locked' : ''}${finalDone ? ' completed' : ''}`;
-      finalBtn.innerHTML = `
-        <span class="mod-icon">${finalDone ? '✓' : finalUnlocked ? '🎓' : '🔒'}</span>
-        <span class="mod-title">${this.FINAL_QUIZ.title}</span>
-      `;
-
-      finalBtn.addEventListener('click', () => {
-        if (finalUnlocked) {
-          this.navigateTo('quiz', { moduleIndex: null });
-        } else {
-          this.showToast('tip', '🔒 Evaluación bloqueada', 'Completa todas las clases del curso para presentar la evaluación final.');
-        }
-      });
-
-      finalEl.appendChild(finalBtn);
-      nav.appendChild(finalEl);
-    }
   },
 
   updateGlobalProgress() {
@@ -684,11 +516,13 @@ const App = {
     document.getElementById('dashboard-username').textContent = this.state.username;
 
     // Animate stat count-ups
+    this.animateCountUp('stat-modules', this.getViewedModulesCount());
+    this.animateCountUp('stat-modules-total', COURSE_DATA.modules.length);
     this.animateCountUp('stat-completed', this.getTotalCompletedLessons());
     this.animateCountUp('stat-total', this.getTotalLessons());
     this.animateCountUp('stat-quizzes', this.getCompletedQuizzesCount());
-    this.animateCountUp('stat-xp', this.state.xp);
-    this.animateCountUp('stat-streak', this.state.currentStreak);
+    const modLabel = document.getElementById('stat-modules-label');
+    if (modLabel) modLabel.textContent = `${this.UNIT_LABEL}s vistos`;
 
     const tree = document.getElementById('skill-tree');
     tree.innerHTML = '';
@@ -722,10 +556,11 @@ const App = {
       else if (unlocked) stateClass = 'skill-node--unlocked';
 
       // Status text
+      const lessonsSeen = mod.lessons.filter(l => this.isLessonCompleted(l.id)).length;
       let statusText = '🔒 Bloqueado';
       if (isComplete) statusText = '✓ Completado';
-      else if (isActive) statusText = `En progreso — ${progress}%`;
-      else if (unlocked) statusText = `${progress}% completado`;
+      else if (this.isModuleViewed(mi)) statusText = '👁 Visto — falta el quiz';
+      else if (unlocked) statusText = `${lessonsSeen} de ${mod.lessons.length} clases vistas`;
 
       // Progress ring calculations (circumference of circle with r=27)
       const circumference = 2 * Math.PI * 27;
@@ -792,70 +627,10 @@ const App = {
       });
     });
 
-    // Final evaluation node (course-level quiz)
-    if (this.FINAL_QUIZ) {
-      const finalUnlocked = this.isFinalQuizUnlocked();
-      const finalDone = this.isFinalQuizCompleted();
-      const side = COURSE_DATA.modules.length % 2 === 0 ? 'left' : 'right';
-
-      let stateClass = 'skill-node--locked';
-      if (finalDone) stateClass = 'skill-node--completed';
-      else if (finalUnlocked) stateClass = 'skill-node--unlocked skill-node--active';
-
-      let statusText = '🔒 Termina todas las clases';
-      if (finalDone) statusText = '✓ Aprobada';
-      else if (finalUnlocked) statusText = 'Presentar evaluación →';
-
-      const finalNode = document.createElement('div');
-      finalNode.className = `skill-node skill-node--${side} ${stateClass} skill-node--final`;
-      finalNode.innerHTML = `
-        <div class="skill-node-connector"></div>
-        <div class="skill-node-card btn-ripple">
-          <div class="skill-node-circle">
-            <span class="skill-node-icon">📝</span>
-            ${finalDone ? '<div class="skill-node-check">✓</div>' : ''}
-            ${!finalUnlocked ? '<div class="skill-node-lock">🔒</div>' : ''}
-          </div>
-          <div class="skill-node-info">
-            <div class="skill-node-number">Evaluación</div>
-            <div class="skill-node-title">${this.FINAL_QUIZ.title}</div>
-            <div class="skill-node-status">${statusText}</div>
-          </div>
-        </div>
-      `;
-
-      const finalCard = finalNode.querySelector('.skill-node-card');
-      finalCard.addEventListener('click', (e) => {
-        this.createRipple(e, finalCard);
-        if (finalUnlocked) {
-          this.navigateTo('quiz', { moduleIndex: null });
-        } else {
-          this.showToast('tip', '🔒 Evaluación bloqueada', 'Completa todas las clases del curso para presentar la evaluación final.');
-        }
-      });
-
-      const finalDot = document.createElement('div');
-      let finalDotClass = 'skill-tree-dot';
-      if (finalDone) finalDotClass += ' skill-tree-dot--completed';
-      else if (finalUnlocked) finalDotClass += ' skill-tree-dot--unlocked';
-      finalDot.className = finalDotClass;
-
-      tree.appendChild(finalNode);
-      tree.appendChild(finalDot);
-
-      requestAnimationFrame(() => {
-        const nodeRect = finalNode.getBoundingClientRect();
-        const treeRect = tree.getBoundingClientRect();
-        const nodeCenter = nodeRect.top - treeRect.top + nodeRect.height / 2;
-        finalDot.style.top = `${nodeCenter}px`;
-      });
-    }
-
     // Certificate node if course is done
     if (this.isCourseDone()) {
       const certNode = document.createElement('div');
-      const nodesBefore = COURSE_DATA.modules.length + (this.FINAL_QUIZ ? 1 : 0);
-      const side = nodesBefore % 2 === 0 ? 'left' : 'right';
+      const side = COURSE_DATA.modules.length % 2 === 0 ? 'left' : 'right';
       certNode.className = `skill-node skill-node--${side} skill-node--completed skill-node--cert`;
       certNode.innerHTML = `
         <div class="skill-node-connector" style="background:linear-gradient(90deg, #ffd700, #ff8c00);box-shadow:0 0 8px rgba(255,215,0,0.3);"></div>
@@ -1096,11 +871,6 @@ const App = {
           nextBtn.classList.remove('hidden');
           nextBtn.onclick = () => this.navigateTo('lesson', { moduleIndex: mi + 1, lessonIndex: 0 });
         }
-      } else if (this.FINAL_QUIZ && this.isFinalQuizUnlocked()) {
-        // Última clase del curso: evaluación final
-        nextBtn.innerHTML = `Ir a la Evaluación Final ${arrowSvg}`;
-        nextBtn.classList.remove('hidden');
-        nextBtn.onclick = () => this.navigateTo('quiz', { moduleIndex: null });
       }
     } else if (isDone) {
       // Only show next if current lesson is completed
@@ -1152,16 +922,6 @@ const App = {
 
   // ---- Navigation helpers ----
   goToNextModule() {
-    // Tras aprobar la evaluación final: certificado
-    if (typeof QuizEngine !== 'undefined' && QuizEngine.isFinal) {
-      if (this.isCourseDone()) {
-        this.showCertificate();
-      } else {
-        this.navigateTo('dashboard');
-      }
-      return;
-    }
-
     const nextIndex = this.state.currentModuleIndex + 1;
     if (nextIndex < COURSE_DATA.modules.length) {
       if (this.isModuleUnlocked(nextIndex)) {
@@ -1541,260 +1301,6 @@ const App = {
   //  GAMIFICATION SYSTEM
   // ============================================
 
-  // ---- XP System ----
-  getLevel(xp) {
-    let result = this.LEVELS[0];
-    for (const lvl of this.LEVELS) {
-      if (xp >= lvl.xp) result = lvl;
-      else break;
-    }
-    return result;
-  },
-
-  getLevelProgress() {
-    const currentLevel = this.getLevel(this.state.xp);
-    const currentIndex = this.LEVELS.indexOf(currentLevel);
-    const isMax = currentIndex === this.LEVELS.length - 1;
-
-    if (isMax) {
-      return { percent: 100, isMax: true, currentLevelXp: currentLevel.xp, nextLevelXp: currentLevel.xp };
-    }
-
-    const nextLevel = this.LEVELS[currentIndex + 1];
-    const xpInLevel = this.state.xp - currentLevel.xp;
-    const xpNeeded = nextLevel.xp - currentLevel.xp;
-    const percent = Math.min(Math.round((xpInLevel / xpNeeded) * 100), 100);
-
-    return { percent, isMax: false, currentLevelXp: currentLevel.xp, nextLevelXp: nextLevel.xp };
-  },
-
-  awardXP(amount, reason) {
-    const oldLevel = this.getLevel(this.state.xp);
-    const multiplied = Math.round(amount * this.state.comboMultiplier);
-    this.state.xp += multiplied;
-    this.saveState();
-
-    // Show XP toast with combo info
-    const comboText = this.state.comboMultiplier > 1
-      ? ` <span class="combo-badge">x${this.state.comboMultiplier} COMBO${this.state.comboMultiplier >= 2 ? '!!' : '!'}</span>`
-      : '';
-    this.showToast(
-      this.state.comboMultiplier > 1 ? 'combo' : 'xp',
-      `+${multiplied} XP${comboText}`,
-      reason
-    );
-
-    // Check level up
-    const newLevel = this.getLevel(this.state.xp);
-    if (newLevel.level > oldLevel.level) {
-      setTimeout(() => {
-        this.showToast('levelup', `¡Nivel ${newLevel.level}!`, `Ahora eres ${newLevel.icon} ${newLevel.name}`);
-        if (typeof Confetti !== 'undefined') {
-          Confetti.levelUp();
-        }
-      }, 800);
-    }
-
-    // Update sidebar XP display
-    this.renderSidebar();
-  },
-
-  // ---- Streak System ----
-  getTodayStr() {
-    return new Date().toISOString().split('T')[0]; // YYYY-MM-DD
-  },
-
-  validateStreak() {
-    // Called on app load to check if streak is still valid
-    if (!this.state.lastActiveDate) return;
-
-    const today = new Date(this.getTodayStr());
-    const last = new Date(this.state.lastActiveDate);
-    const diffDays = Math.floor((today - last) / (1000 * 60 * 60 * 24));
-
-    if (diffDays > 1) {
-      // Streak broken
-      this.state.currentStreak = 0;
-      this.saveState();
-    }
-  },
-
-  checkStreak() {
-    const todayStr = this.getTodayStr();
-
-    if (this.state.lastActiveDate === todayStr) {
-      // Already counted today
-      return;
-    }
-
-    if (!this.state.lastActiveDate) {
-      // First ever activity
-      this.state.currentStreak = 1;
-    } else {
-      const today = new Date(todayStr);
-      const last = new Date(this.state.lastActiveDate);
-      const diffDays = Math.floor((today - last) / (1000 * 60 * 60 * 24));
-
-      if (diffDays === 1) {
-        // Consecutive day
-        this.state.currentStreak++;
-        this.awardXP(25, 'Racha diaria');
-        this.showToast('streak', `🔥 ${this.state.currentStreak} días`, 'Racha diaria mantenida');
-      } else if (diffDays > 1) {
-        // Streak broken, start new
-        this.state.currentStreak = 1;
-      }
-    }
-
-    this.state.lastActiveDate = todayStr;
-
-    // Update best streak
-    if (this.state.currentStreak > this.state.bestStreak) {
-      this.state.bestStreak = this.state.currentStreak;
-    }
-
-    this.saveState();
-  },
-
-  // ---- Daily lessons tracker ----
-  trackDailyLesson() {
-    const todayStr = this.getTodayStr();
-    if (this.state.dailyLessonsDate === todayStr) {
-      this.state.dailyLessonsCount++;
-    } else {
-      this.state.dailyLessonsDate = todayStr;
-      this.state.dailyLessonsCount = 1;
-    }
-    this.saveState();
-  },
-
-  // ---- Achievements System ----
-  isAchievementUnlocked(achievementId) {
-    return this.state.unlockedAchievements.some(a => a.id === achievementId);
-  },
-
-  unlockAchievement(achievementId) {
-    if (this.isAchievementUnlocked(achievementId)) return;
-
-    const achievement = this.ACHIEVEMENTS.find(a => a.id === achievementId);
-    if (!achievement) return;
-
-    this.state.unlockedAchievements.push({
-      id: achievementId,
-      date: this.getTodayStr(),
-    });
-
-    this.saveState();
-
-    // Show achievement toast with delay for stacking
-    setTimeout(() => {
-      this.showToast('achievement', achievement.name, `${achievement.icon} ${achievement.desc}`);
-      if (typeof Confetti !== 'undefined') {
-        Confetti.achievementUnlock();
-      }
-      // Award XP for achievement (without recursive check)
-      this.state.xp += achievement.xp;
-      this.saveState();
-      this.showToast('xp', `+${achievement.xp} XP`, 'Logro desbloqueado');
-      this.renderSidebar();
-    }, 1200);
-  },
-
-  checkAchievements(context) {
-    context = context || {};
-    const lessons = this.state.completedLessons.length;
-    const quizzes = this.state.completedQuizzes.length;
-    const totalItems = lessons + quizzes;
-
-    // first-lesson: 1+ lessons
-    if (lessons >= 1) this.unlockAchievement('first-lesson');
-
-    // first-quiz: 1+ quizzes
-    if (quizzes >= 1) this.unlockAchievement('first-quiz');
-
-    // perfect-quiz: score 100%
-    if (context.perfectQuiz) this.unlockAchievement('perfect-quiz');
-
-    // module-complete: any module at 100%
-    const anyModuleComplete = COURSE_DATA.modules.some((mod, mi) => this.getModuleProgress(mi) === 100);
-    if (anyModuleComplete) this.unlockAchievement('module-complete');
-
-    // halfway: 50% course (10/20 items)
-    if (totalItems >= 10) this.unlockAchievement('halfway');
-
-    // all-lessons: 15/15
-    if (lessons >= this.getTotalLessons()) this.unlockAchievement('all-lessons');
-
-    // streak-3
-    if (this.state.currentStreak >= 3) this.unlockAchievement('streak-3');
-
-    // streak-7
-    if (this.state.currentStreak >= 7) this.unlockAchievement('streak-7');
-
-    // fast-learner: 3 lessons in one day
-    if (this.state.dailyLessonsCount >= 3) this.unlockAchievement('fast-learner');
-
-    // course-done
-    if (this.isCourseDone()) this.unlockAchievement('course-done');
-
-    // focused: 3 total pomodoro sessions
-    if (this.state.totalFocusSessions >= 3) this.unlockAchievement('focused');
-
-    // marathoner: 5 pomodoros in one day
-    if (this.state.focusSessionsToday >= 5) this.unlockAchievement('marathoner');
-
-    // hacker & curious are unlocked directly by their triggers
-  },
-
-  // ---- Achievements Panel ----
-  renderAchievementsPanel() {
-    const grid = document.getElementById('achievements-grid');
-    const subtitle = document.getElementById('achievements-subtitle');
-    const unlockedCount = this.state.unlockedAchievements.length;
-
-    subtitle.textContent = `${unlockedCount} de ${this.ACHIEVEMENTS.length} desbloqueados`;
-    grid.innerHTML = '';
-
-    this.ACHIEVEMENTS.forEach(ach => {
-      const unlocked = this.isAchievementUnlocked(ach.id);
-      const unlockedData = this.state.unlockedAchievements.find(a => a.id === ach.id);
-
-      const card = document.createElement('div');
-      card.className = `achievement-card ${unlocked ? 'achievement-card--unlocked' : 'achievement-card--locked'}`;
-
-      card.innerHTML = `
-        <div class="achievement-icon">${unlocked ? ach.icon : '🔒'}</div>
-        <div class="achievement-name">${unlocked ? ach.name : '???'}</div>
-        <div class="achievement-desc">${unlocked ? ach.desc : 'Logro oculto — sigue avanzando para descubrirlo'}</div>
-        ${unlocked && unlockedData ? `<div class="achievement-date">Desbloqueado el ${unlockedData.date}</div>` : ''}
-        <div class="achievement-xp-badge">${unlocked ? `+${ach.xp} XP ganados` : `+${ach.xp} XP`}</div>
-      `;
-
-      grid.appendChild(card);
-    });
-  },
-
-  // ============================================
-  //  COMBO SYSTEM
-  // ============================================
-  updateCombo() {
-    const now = Date.now();
-    const elapsed = now - this.state.lastActionTimestamp;
-    const fiveMin = 5 * 60 * 1000;
-
-    if (this.state.lastActionTimestamp && elapsed < fiveMin) {
-      if (this.state.comboMultiplier < 1.5) {
-        this.state.comboMultiplier = 1.5;
-      } else if (this.state.comboMultiplier < 2) {
-        this.state.comboMultiplier = 2;
-      }
-    } else {
-      this.state.comboMultiplier = 1;
-    }
-
-    this.state.lastActionTimestamp = now;
-  },
-
   // ============================================
   //  MOTIVATIONAL MESSAGES
   // ============================================
@@ -1815,7 +1321,7 @@ const App = {
     const progress = this.getGlobalProgress();
     if (progress === 50) {
       setTimeout(() => {
-        this.showToast('achievement', '🎉 ¡Medio camino!', 'Has completado el 50% del curso. ¡Sigue así!');
+        this.showToast('achievement', '¡Medio camino!', 'Has completado el 50% del curso. ¡Sigue así!');
         if (typeof Confetti !== 'undefined') {
           Confetti.courseComplete();
         }
@@ -1858,8 +1364,6 @@ const App = {
 
     // Bonus XP
     setTimeout(() => {
-      this.awardXP(100, 'Konami Code — Easter Egg');
-      this.unlockAchievement('hacker');
     }, 1000);
   },
 
@@ -1992,8 +1496,6 @@ const App = {
                   this.state.logoSecretUsed = true;
                   this.saveState();
                   setTimeout(() => {
-                    this.awardXP(50, 'Memory Game — Easter Egg');
-                    this.unlockAchievement('curious');
                   }, 500);
                 }
               }
@@ -2015,213 +1517,6 @@ const App = {
     document.getElementById('memory-modal').classList.remove('hidden');
   },
 
-  // ============================================
-  //  FOCUS MODE (Pomodoro)
-  // ============================================
-  _focusTimer: null,
-  _focusSeconds: 0,
-  _focusTotalSeconds: 25 * 60,
-  _focusIsBreak: false,
-  _focusAudioCtx: null,
-  _focusAudioNodes: [],
-  _focusSoundType: 'rain', // rain, cafe, silence
-
-  startFocusMode() {
-    // Reset focus date if needed
-    const todayStr = this.getTodayStr();
-    if (this.state.focusDate !== todayStr) {
-      this.state.focusDate = todayStr;
-      this.state.focusMinutesToday = 0;
-      this.state.focusSessionsToday = 0;
-    }
-
-    // Clone lesson content into focus overlay
-    const readingContent = document.getElementById('reading-content');
-    const focusContent = document.getElementById('focus-content');
-    if (readingContent) {
-      focusContent.innerHTML = readingContent.innerHTML;
-    }
-
-    // Show overlay
-    document.getElementById('focus-overlay').classList.remove('hidden');
-
-    // Reset timer
-    this._focusIsBreak = false;
-    this._focusTotalSeconds = 25 * 60;
-    this._focusSeconds = 0;
-    this._focusSoundType = 'rain';
-
-    this.updateFocusTimerDisplay();
-    this.updateFocusStats();
-
-    // Sound
-    document.getElementById('focus-sound-toggle').textContent = '🔊 Lluvia';
-    this.initAmbientSound('rain');
-
-    // Start ticking
-    this._focusTimer = setInterval(() => this.focusTick(), 1000);
-  },
-
-  stopFocusMode() {
-    clearInterval(this._focusTimer);
-    this._focusTimer = null;
-    this.stopAmbientSound();
-    document.getElementById('focus-overlay').classList.add('hidden');
-  },
-
-  focusTick() {
-    this._focusSeconds++;
-    const remaining = this._focusTotalSeconds - this._focusSeconds;
-
-    if (remaining <= 0) {
-      clearInterval(this._focusTimer);
-      this._focusTimer = null;
-
-      if (!this._focusIsBreak) {
-        // Work session completed
-        this.completeFocusSession();
-      } else {
-        // Break completed
-        this.showToast('tip', '☕ Descanso terminado', '¿Listo para otra sesión?');
-        this.stopFocusMode();
-      }
-      return;
-    }
-
-    this.updateFocusTimerDisplay();
-
-    // Progress bar
-    const pct = (this._focusSeconds / this._focusTotalSeconds) * 100;
-    document.getElementById('focus-progress-fill').style.width = `${pct}%`;
-
-    // Warning when < 60s
-    const timerEl = document.getElementById('focus-timer');
-    if (remaining < 60 && !this._focusIsBreak) {
-      timerEl.classList.add('warning');
-    } else {
-      timerEl.classList.remove('warning');
-    }
-  },
-
-  updateFocusTimerDisplay() {
-    const remaining = this._focusTotalSeconds - this._focusSeconds;
-    const mins = Math.floor(remaining / 60);
-    const secs = remaining % 60;
-    const prefix = this._focusIsBreak ? '☕' : '🍅';
-    document.getElementById('focus-timer').textContent = `${prefix} ${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-
-    if (this._focusIsBreak) {
-      document.getElementById('focus-timer').classList.add('on-break');
-    } else {
-      document.getElementById('focus-timer').classList.remove('on-break');
-    }
-  },
-
-  completeFocusSession() {
-    // Update stats
-    this.state.focusMinutesToday += 25;
-    this.state.focusSessionsToday++;
-    this.state.totalFocusMinutes += 25;
-    this.state.totalFocusSessions++;
-    this.saveState();
-
-    // Award XP
-    this.awardXP(30, 'Sesión Pomodoro completada');
-
-    // Celebration
-    if (typeof Confetti !== 'undefined') {
-      Confetti.lessonComplete();
-    }
-
-    // Check achievements
-    this.checkAchievements();
-
-    // Stop sound & timer display
-    this.stopAmbientSound();
-
-    // Show completion modal
-    document.getElementById('focus-complete-stats').textContent =
-      `${this.state.focusSessionsToday} sesiones hoy · ${this.state.focusMinutesToday} min · ${this.state.totalFocusSessions} total`;
-    document.getElementById('focus-overlay').classList.add('hidden');
-    document.getElementById('focus-complete-modal').classList.remove('hidden');
-    clearInterval(this._focusTimer);
-  },
-
-  updateFocusStats() {
-    const info = document.getElementById('focus-session-info');
-    if (info) {
-      info.textContent = `Sesión ${this.state.focusSessionsToday + 1} · ${this.state.focusMinutesToday} min hoy`;
-    }
-  },
-
-  // ---- Ambient Sound (Web Audio API) ----
-  initAmbientSound(type) {
-    this.stopAmbientSound();
-    if (type === 'silence') return;
-
-    try {
-      const ctx = new (window.AudioContext || window.webkitAudioContext)();
-      this._focusAudioCtx = ctx;
-
-      // Generate noise buffer
-      const bufferSize = 2 * ctx.sampleRate;
-      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-      const data = buffer.getChannelData(0);
-      for (let i = 0; i < bufferSize; i++) {
-        data[i] = Math.random() * 2 - 1;
-      }
-
-      const source = ctx.createBufferSource();
-      source.buffer = buffer;
-      source.loop = true;
-
-      // Filter based on type
-      const filter = ctx.createBiquadFilter();
-      const gainNode = ctx.createGain();
-      gainNode.gain.value = 0.15;
-
-      if (type === 'rain') {
-        filter.type = 'lowpass';
-        filter.frequency.value = 400;
-        filter.Q.value = 1;
-      } else if (type === 'cafe') {
-        filter.type = 'bandpass';
-        filter.frequency.value = 1200;
-        filter.Q.value = 0.5;
-        gainNode.gain.value = 0.08;
-      }
-
-      source.connect(filter);
-      filter.connect(gainNode);
-      gainNode.connect(ctx.destination);
-      source.start();
-
-      this._focusAudioNodes = [source, filter, gainNode];
-    } catch (e) {
-      console.warn('Web Audio API not supported');
-    }
-  },
-
-  stopAmbientSound() {
-    if (this._focusAudioCtx) {
-      try {
-        this._focusAudioNodes.forEach(n => { try { n.disconnect(); } catch(e) {} });
-        this._focusAudioCtx.close();
-      } catch (e) {}
-      this._focusAudioCtx = null;
-      this._focusAudioNodes = [];
-    }
-  },
-
-  toggleAmbientSound() {
-    const sounds = ['rain', 'cafe', 'silence'];
-    const labels = { rain: '🔊 Lluvia', cafe: '🔊 Café', silence: '🔇 Silencio' };
-    const idx = sounds.indexOf(this._focusSoundType);
-    this._focusSoundType = sounds[(idx + 1) % sounds.length];
-    document.getElementById('focus-sound-toggle').textContent = labels[this._focusSoundType];
-    this.initAmbientSound(this._focusSoundType);
-  },
-
   // ---- Toast Notifications ----
   showToast(type, title, description) {
     const container = document.getElementById('toast-container');
@@ -2231,10 +1526,9 @@ const App = {
     toast.className = `toast toast--${type}`;
 
     const iconMap = {
-      xp: '✨',
-      achievement: '🏆',
-      levelup: '⬆️',
-      streak: '🔥',
+      module: '👁',
+      achievement: '🎉',
+      tip: '💡',
     };
 
     toast.innerHTML = `

@@ -5,28 +5,30 @@
 const QuizEngine = {
   currentQuiz: null,
   currentModuleIndex: null,
-  isFinal: false,
   answers: {},
   submitted: false,
+  // Temporizador
+  _timerId: null,
+  _secondsLeft: 0,
 
-  // moduleIndex === null → evaluación final del curso
   render(moduleIndex) {
-    this.isFinal = (moduleIndex === null || moduleIndex === undefined);
-    this.currentModuleIndex = this.isFinal ? null : moduleIndex;
-    this.currentQuiz = this.isFinal ? COURSE_DATA.finalQuiz : COURSE_DATA.modules[moduleIndex].quiz;
+    this.stopTimer();
+    this.currentModuleIndex = moduleIndex;
+    this.currentQuiz = COURSE_DATA.modules[moduleIndex].quiz;
     this.answers = {};
     this.submitted = false;
 
-    document.getElementById('quiz-badge').textContent = this.isFinal
-      ? '🎓 Evaluación Final'
-      : `${(typeof App !== 'undefined' && App.UNIT_LABEL) ? App.UNIT_LABEL : 'Módulo'} ${moduleIndex + 1}`;
+    const unit = (typeof App !== 'undefined' && App.UNIT_LABEL) ? App.UNIT_LABEL : 'Módulo';
+    document.getElementById('quiz-badge').textContent = `${unit} ${moduleIndex + 1}`;
     document.getElementById('quiz-title').textContent = this.currentQuiz.title;
 
+    const total = this.currentQuiz.questions.length;
+    const limit = this.currentQuiz.timeLimit;
     const instruction = document.querySelector('.quiz-instruction');
     if (instruction) {
-      instruction.textContent = this.isFinal
-        ? `Responde correctamente al menos el ${this.currentQuiz.passingScore}% de las ${this.currentQuiz.questions.length} preguntas para aprobar el curso y generar tu certificado.`
-        : 'Responde correctamente al menos el 70% de las preguntas para desbloquear el siguiente módulo.';
+      instruction.textContent = limit
+        ? `${total} preguntas sobre los temas vistos. Tienes ${limit} minutos y necesitas al menos ${this.currentQuiz.passingScore}% para aprobar.`
+        : `Responde correctamente al menos el ${this.currentQuiz.passingScore}% de las preguntas para aprobar este quiz.`;
     }
 
     const body = document.getElementById('quiz-body');
@@ -68,6 +70,63 @@ const QuizEngine = {
     const submitBtn = document.getElementById('btn-submit-quiz');
     submitBtn.disabled = false;
     submitBtn.textContent = 'Enviar respuestas';
+
+    this.startTimer();
+  },
+
+  // ---- Temporizador (quiz.timeLimit en minutos) ----
+  startTimer() {
+    const wrap = document.getElementById('quiz-timer');
+    if (!wrap) return;
+
+    const limit = this.currentQuiz.timeLimit;
+    if (!limit) {
+      wrap.classList.add('hidden');
+      return;
+    }
+
+    wrap.classList.remove('hidden');
+    wrap.classList.remove('quiz-timer--warning', 'quiz-timer--danger');
+    this._secondsLeft = limit * 60;
+    this.renderTimer();
+
+    this._timerId = setInterval(() => {
+      this._secondsLeft--;
+      this.renderTimer();
+      if (this._secondsLeft <= 0) {
+        this.stopTimer();
+        this.timeUp();
+      }
+    }, 1000);
+  },
+
+  renderTimer() {
+    const wrap = document.getElementById('quiz-timer');
+    if (!wrap) return;
+    const secs = Math.max(this._secondsLeft, 0);
+    const m = Math.floor(secs / 60);
+    const s = secs % 60;
+    document.getElementById('quiz-timer-value').textContent =
+      `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+
+    wrap.classList.toggle('quiz-timer--warning', secs <= 300 && secs > 60);
+    wrap.classList.toggle('quiz-timer--danger', secs <= 60);
+  },
+
+  stopTimer() {
+    if (this._timerId) {
+      clearInterval(this._timerId);
+      this._timerId = null;
+    }
+  },
+
+  // Se acabó el tiempo: se califica con lo que haya respondido
+  timeUp() {
+    if (this.submitted) return;
+    if (typeof App !== 'undefined') {
+      App.showToast('tip', '⏱ Se acabó el tiempo', 'Se califican las respuestas que alcanzaste a marcar.');
+    }
+    this.submit(true);
   },
 
   selectOption(questionIndex, optionIndex) {
@@ -83,11 +142,13 @@ const QuizEngine = {
     });
   },
 
-  submit() {
+  // force = true cuando se acaba el tiempo (no exige tenerlas todas respondidas)
+  submit(force) {
+    if (this.submitted) return;
     const totalQuestions = this.currentQuiz.questions.length;
     const answeredCount = Object.keys(this.answers).length;
 
-    if (answeredCount < totalQuestions) {
+    if (!force && answeredCount < totalQuestions) {
       // Highlight unanswered with shake
       for (let i = 0; i < totalQuestions; i++) {
         if (this.answers[i] === undefined) {
@@ -104,6 +165,7 @@ const QuizEngine = {
     }
 
     this.submitted = true;
+    this.stopTimer();
     let correct = 0;
 
     this.currentQuiz.questions.forEach((q, i) => {
@@ -143,6 +205,8 @@ const QuizEngine = {
       const passed = score >= this.currentQuiz.passingScore;
 
       document.getElementById('quiz-actions').classList.add('hidden');
+      const timerWrap = document.getElementById('quiz-timer');
+      if (timerWrap) timerWrap.classList.add('hidden');
       const results = document.getElementById('quiz-results');
       results.classList.remove('hidden');
 
@@ -163,10 +227,10 @@ const QuizEngine = {
       const retryBtn = document.getElementById('btn-retry-quiz');
 
       if (passed) {
+        const unit = (typeof App !== 'undefined' && App.UNIT_LABEL) ? App.UNIT_LABEL.toLowerCase() : 'módulo';
+        const isLast = this.currentModuleIndex === COURSE_DATA.modules.length - 1;
         nextBtn.classList.remove('hidden');
-        nextBtn.textContent = this.isFinal
-          ? '🎓 Ver mi certificado'
-          : `Siguiente ${(typeof App !== 'undefined' && App.UNIT_LABEL) ? App.UNIT_LABEL.toLowerCase() : 'módulo'}`;
+        nextBtn.textContent = isLast ? 'Volver al panel' : `Siguiente ${unit}`;
         retryBtn.classList.add('hidden');
 
         // Save quiz as passed (pass score for perfect quiz detection)
@@ -212,7 +276,7 @@ const QuizEngine = {
   },
 
   retry() {
-    this.render(this.isFinal ? null : this.currentModuleIndex);
+    this.render(this.currentModuleIndex);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 };

@@ -11,9 +11,7 @@
        ============================================ */
 
     /* Hide gamification elements not used in free courses */
-    body.is-free-course .sidebar-xp,
-    body.is-free-course .sidebar-achievements-btn-wrap,
-    body.is-free-course .sidebar-streak,
+    body.is-free-course .sidebar-modules,
     body.is-free-course .user-role,
     body.is-free-course .hero-stats,
     body.is-free-course #skill-tree,
@@ -525,15 +523,11 @@
         <div class="user-avatar" id="user-avatar">U</div>
         <div class="user-info">
           <span class="user-name" id="sidebar-username">Usuario</span>
-          <span class="user-role" id="sidebar-level-label">Novato</span>
-        </div>
-        <div class="sidebar-streak" id="sidebar-streak">
-          <span class="streak-fire" id="streak-fire">🔥</span>
-          <span class="streak-count" id="streak-count">0</span>
+          <span class="user-role" id="sidebar-level-label">Estudiante</span>
         </div>
       </div>
 
-      <!-- Free course mini stats (replaces XP block visually) -->
+      <!-- Free course mini stats -->
       <div class="sidebar-free-stats">
         <div class="free-stat">
           <span class="free-stat-icon">📺</span>
@@ -553,15 +547,12 @@
 
       <!-- Hidden stubs kept so app.js doesn't crash on missing IDs -->
       <div class="free-course-stubs">
-        <span id="xp-level-icon">⚡</span>
-        <span id="xp-level-name"></span>
-        <span id="xp-amount"></span>
-        <div id="xp-bar-fill"></div>
-        <span id="xp-next-label"></span>
-        <span id="achievements-count-badge"></span>
-        <button id="btn-achievements"></button>
-        <span id="stat-xp"></span>
-        <span id="stat-streak"></span>
+        <span id="modules-viewed-count"></span>
+        <span id="modules-viewed-label"></span>
+        <div id="modules-viewed-bar"></div>
+        <span id="stat-modules"></span>
+        <span id="stat-modules-total"></span>
+        <span id="stat-modules-label"></span>
       </div>
 
       <div class="sidebar-progress">
@@ -673,18 +664,6 @@
         </div>
       </section>
 
-      <!-- Achievements View (kept as empty stub so navigation never explodes) -->
-      <section id="view-achievements" class="view">
-        <button class="btn-back" id="btn-back-achievements">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
-          Volver al dashboard
-        </button>
-        <div class="achievements-header">
-          <h1 id="achievements-subtitle">Logros</h1>
-        </div>
-        <div class="achievements-grid" id="achievements-grid"></div>
-      </section>
-
       <!-- Quiz View -->
       <section id="view-quiz" class="view">
         <button class="btn-back" id="btn-back-quiz">
@@ -696,6 +675,11 @@
           <span class="lesson-badge" id="quiz-badge">Quiz</span>
           <h1 id="quiz-title">Quiz de la Clase</h1>
           <p class="quiz-instruction">Responde correctamente al menos el 70% de las preguntas para aprobar.</p>
+          <div class="quiz-timer hidden" id="quiz-timer">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2"/><path d="M9 2h6"/></svg>
+            <span class="quiz-timer-label">Tiempo restante</span>
+            <span class="quiz-timer-value" id="quiz-timer-value">20:00</span>
+          </div>
         </div>
 
         <div class="quiz-body" id="quiz-body">

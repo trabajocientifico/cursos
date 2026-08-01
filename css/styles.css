@@ -477,21 +477,6 @@ body {
   filter: none;
 }
 
-/* Evaluación final del curso (quiz único al terminar todas las clases) */
-.nav-module--final {
-  margin-top: 10px;
-  padding-top: 10px;
-  border-top: 1px solid var(--border, rgba(255, 255, 255, 0.08));
-}
-
-.nav-module--final .nav-module-btn:not(.locked) {
-  color: #ffd700;
-}
-
-.nav-module--final .nav-module-btn.completed {
-  color: var(--success);
-}
-
 .nav-lessons {
   max-height: 0;
   overflow: hidden;
@@ -2745,4 +2730,102 @@ body {
     bottom: 16px;
     right: 16px;
   }
+}
+
+/* ============================================
+   Módulos vistos (reemplaza el bloque de XP)
+   ============================================ */
+.sidebar-modules {
+  padding: 0 20px 14px;
+}
+
+.modules-viewed-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+.modules-viewed-icon {
+  font-size: 0.95rem;
+}
+
+.modules-viewed-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  flex: 1;
+}
+
+.modules-viewed-count {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--accent-cyan);
+}
+
+.modules-viewed-bar {
+  height: 6px;
+  background: var(--bg-deep);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.modules-viewed-bar-fill {
+  height: 100%;
+  width: 0%;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.stat-card--modules .stat-number {
+  color: var(--accent-cyan);
+}
+
+/* ============================================
+   Temporizador del quiz
+   ============================================ */
+.quiz-timer {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: rgba(0, 212, 255, 0.08);
+  border: 1px solid rgba(0, 212, 255, 0.25);
+  color: var(--accent-cyan);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.quiz-timer.hidden { display: none; }
+
+.quiz-timer-label {
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.quiz-timer-value {
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+.quiz-timer--warning {
+  background: rgba(245, 158, 11, 0.1);
+  border-color: rgba(245, 158, 11, 0.35);
+  color: #fbbf24;
+}
+
+.quiz-timer--danger {
+  background: rgba(239, 68, 68, 0.12);
+  border-color: rgba(239, 68, 68, 0.4);
+  color: #f87171;
+  animation: quizTimerPulse 1s ease-in-out infinite;
+}
+
+@keyframes quizTimerPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.65; }
 }
