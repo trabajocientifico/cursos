@@ -477,6 +477,21 @@ body {
   filter: none;
 }
 
+/* Evaluación final del curso (quiz único al terminar todas las clases) */
+.nav-module--final {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border, rgba(255, 255, 255, 0.08));
+}
+
+.nav-module--final .nav-module-btn:not(.locked) {
+  color: #ffd700;
+}
+
+.nav-module--final .nav-module-btn.completed {
+  color: var(--success);
+}
+
 .nav-lessons {
   max-height: 0;
   overflow: hidden;

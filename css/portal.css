@@ -581,6 +581,46 @@ body {
   50% { transform: scale(1.05); }
 }
 
+/* En vivo badge */
+.card-live-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 6px 11px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #ef4444, #f43f5e);
+  color: #fff;
+  text-transform: uppercase;
+  box-shadow: 0 4px 14px rgba(239, 68, 68, 0.35);
+}
+
+.live-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
+  animation: pulse-live 1.8s ease-out infinite;
+}
+
+@keyframes pulse-live {
+  0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7); }
+  70% { box-shadow: 0 0 0 8px rgba(255, 255, 255, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
+}
+
+.course-card.live .card-category {
+  color: #fb7185;
+  font-weight: 700;
+}
+
 .course-card.upcoming {
   position: relative;
 }
@@ -1048,6 +1088,17 @@ body {
   border-color: rgba(234, 179, 8, 0.25);
 }
 
+.section-divider--live .section-eyebrow {
+  color: #fb7185;
+  background: rgba(244, 63, 94, 0.08);
+  border-color: rgba(244, 63, 94, 0.28);
+}
+
+/* La primera sección de cursos no necesita el margen superior completo */
+.courses-section > .section-divider:first-child {
+  margin-top: 2rem;
+}
+
 .section-divider h2 {
   margin: 0;
   font-size: clamp(1.8rem, 3.5vw, 2.4rem);
@@ -1067,7 +1118,8 @@ body {
 }
 
 .badge-free,
-.badge-pro {
+.badge-pro,
+.badge-live {
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -1089,6 +1141,18 @@ body {
   color: #fbbf24;
   border-color: rgba(234, 179, 8, 0.35);
   box-shadow: 0 4px 16px rgba(234, 179, 8, 0.15);
+}
+
+.badge-live {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.18), rgba(244, 63, 94, 0.18));
+  color: #fb7185;
+  border-color: rgba(244, 63, 94, 0.35);
+  box-shadow: 0 4px 16px rgba(244, 63, 94, 0.15);
+}
+
+.badge-live .live-dot {
+  background: #fb7185;
+  box-shadow: 0 0 0 0 rgba(251, 113, 133, 0.7);
 }
 
 /* --- Course card refinements --- */

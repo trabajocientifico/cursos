@@ -343,19 +343,19 @@
 
     <div class="hero-stats">
       <div class="hero-stat">
-        <span class="hero-stat-number count-up" data-target="12">0</span>
+        <span class="hero-stat-number count-up" data-target="14">0</span>
         <span class="hero-stat-label">Cursos</span>
       </div>
       <div class="hero-stat">
-        <span class="hero-stat-number count-up" data-target="150">0</span>
+        <span class="hero-stat-number count-up" data-target="190">0</span>
         <span class="hero-stat-label">Horas de contenido</span>
       </div>
       <div class="hero-stat">
-        <span class="hero-stat-number count-up" data-target="200">0</span>
+        <span class="hero-stat-number count-up" data-target="214">0</span>
         <span class="hero-stat-label">Lecciones</span>
       </div>
       <div class="hero-stat">
-        <span class="hero-stat-number count-up" data-target="50">0</span>
+        <span class="hero-stat-number count-up" data-target="52">0</span>
         <span class="hero-stat-label">Quizzes</span>
       </div>
     </div>
@@ -363,7 +363,57 @@
 
   <!-- Courses Section -->
   <section class="courses-section" id="cursos">
-    
+
+    <!-- CURSOS EN VIVO (acceso con clave) -->
+    <div class="section-divider reveal section-divider--live">
+      <div class="section-divider-text">
+        <span class="section-eyebrow">Cupos abiertos</span>
+        <h2>Cursos <span class="gradient-text">En Vivo</span></h2>
+        <p class="section-subtitle">Formación certificada en sesiones en vivo con el instructor. Las grabaciones quedan cargadas en la plataforma para verlas cuando quieras.</p>
+      </div>
+      <span class="badge-live"><span class="live-dot"></span> Inscritos con clave</span>
+    </div>
+
+    <div class="courses-grid">
+      <!-- Curso en vivo 1: Ciencia de Datos Profesional con Python + IA -->
+      <a href="#" class="course-card reveal live" data-theme="cyan" data-lessons="7" onclick="openAccessModal(event, 'ciencia-datos-profesional-ia', 'Ciencia de Datos Profesional con Python + IA', 'ciencia07')">
+        <div class="card-thumbnail">
+          <span class="card-icon">🐍</span>
+          <span class="card-live-badge"><span class="live-dot"></span> En vivo</span>
+          <div class="card-gradient-bar"></div>
+        </div>
+        <div class="card-body">
+          <span class="card-category">🗓️ Inicia 7 de agosto de 2026</span>
+          <h3 class="card-title">Ciencia de Datos Profesional con Python + IA</h3>
+          <p class="card-description">7 sesiones en vivo (6 de 3 horas y 1 de 2 horas) con grabaciones en la plataforma, evaluación final y certificación.</p>
+          <div class="card-meta">
+            <span class="card-meta-item">⏱ 20 horas certificadas</span>
+            <span class="card-meta-item">🎓 Certificado</span>
+            <span class="card-meta-item card-meta-cta">🔑 Ingresar con clave →</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Curso en vivo 2: Inteligencia Artificial para Investigación Científica -->
+      <a href="#" class="course-card reveal live" data-theme="purple" data-lessons="7" onclick="openAccessModal(event, 'ia-investigacion-cientifica', 'Inteligencia Artificial para Investigación Científica', 'investigacion20')">
+        <div class="card-thumbnail">
+          <span class="card-icon">🔬</span>
+          <span class="card-live-badge"><span class="live-dot"></span> En vivo</span>
+          <div class="card-gradient-bar"></div>
+        </div>
+        <div class="card-body">
+          <span class="card-category">🗓️ Inicia 20 de agosto de 2026</span>
+          <h3 class="card-title">Inteligencia Artificial para Investigación Científica</h3>
+          <p class="card-description">7 sesiones en vivo (6 de 3 horas y 1 de 2 horas) con grabaciones en la plataforma, evaluación final y certificación.</p>
+          <div class="card-meta">
+            <span class="card-meta-item">⏱ 20 horas certificadas</span>
+            <span class="card-meta-item">🎓 Certificado</span>
+            <span class="card-meta-item card-meta-cta">🔑 Ingresar con clave →</span>
+          </div>
+        </div>
+      </a>
+    </div>
+
     <!-- CURSOS GRATUITOS -->
     <div class="section-divider reveal">
       <div class="section-divider-text">
@@ -841,7 +891,8 @@
               percent = Math.round((done / 3) * 100);
             } else {
               const done = progressData.completedLessons ? progressData.completedLessons.length : 0;
-              percent = done > 0 ? Math.min(Math.round((done / 15) * 100), 100) : 0; 
+              const totalLessons = parseInt(card.dataset.lessons, 10) || 15;
+              percent = done > 0 ? Math.min(Math.round((done / totalLessons) * 100), 100) : 0;
             }
             if (percent > 0) {
               const meta = card.querySelector('.card-meta');

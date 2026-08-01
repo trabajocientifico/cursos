@@ -5,18 +5,29 @@
 const QuizEngine = {
   currentQuiz: null,
   currentModuleIndex: null,
+  isFinal: false,
   answers: {},
   submitted: false,
 
+  // moduleIndex === null → evaluación final del curso
   render(moduleIndex) {
-    this.currentModuleIndex = moduleIndex;
-    const mod = COURSE_DATA.modules[moduleIndex];
-    this.currentQuiz = mod.quiz;
+    this.isFinal = (moduleIndex === null || moduleIndex === undefined);
+    this.currentModuleIndex = this.isFinal ? null : moduleIndex;
+    this.currentQuiz = this.isFinal ? COURSE_DATA.finalQuiz : COURSE_DATA.modules[moduleIndex].quiz;
     this.answers = {};
     this.submitted = false;
 
-    document.getElementById('quiz-badge').textContent = `${(typeof App !== 'undefined' && App.UNIT_LABEL) ? App.UNIT_LABEL : 'Módulo'} ${moduleIndex + 1}`;
+    document.getElementById('quiz-badge').textContent = this.isFinal
+      ? '🎓 Evaluación Final'
+      : `${(typeof App !== 'undefined' && App.UNIT_LABEL) ? App.UNIT_LABEL : 'Módulo'} ${moduleIndex + 1}`;
     document.getElementById('quiz-title').textContent = this.currentQuiz.title;
+
+    const instruction = document.querySelector('.quiz-instruction');
+    if (instruction) {
+      instruction.textContent = this.isFinal
+        ? `Responde correctamente al menos el ${this.currentQuiz.passingScore}% de las ${this.currentQuiz.questions.length} preguntas para aprobar el curso y generar tu certificado.`
+        : 'Responde correctamente al menos el 70% de las preguntas para desbloquear el siguiente módulo.';
+    }
 
     const body = document.getElementById('quiz-body');
     body.innerHTML = '';
@@ -153,6 +164,9 @@ const QuizEngine = {
 
       if (passed) {
         nextBtn.classList.remove('hidden');
+        nextBtn.textContent = this.isFinal
+          ? '🎓 Ver mi certificado'
+          : `Siguiente ${(typeof App !== 'undefined' && App.UNIT_LABEL) ? App.UNIT_LABEL.toLowerCase() : 'módulo'}`;
         retryBtn.classList.add('hidden');
 
         // Save quiz as passed (pass score for perfect quiz detection)
@@ -198,7 +212,7 @@ const QuizEngine = {
   },
 
   retry() {
-    this.render(this.currentModuleIndex);
+    this.render(this.isFinal ? null : this.currentModuleIndex);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 };

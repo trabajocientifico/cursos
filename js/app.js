@@ -322,7 +322,8 @@ const App = {
       this.renderLesson(data.moduleIndex, data.lessonIndex);
     } else if (view === 'quiz') {
       document.getElementById('view-quiz').classList.add('active');
-      QuizEngine.render(data.moduleIndex);
+      // moduleIndex null/undefined → evaluación final del curso
+      QuizEngine.render(data && data.moduleIndex !== undefined ? data.moduleIndex : null);
     } else if (view === 'achievements') {
       document.getElementById('view-achievements').classList.add('active');
       this.renderAchievementsPanel();
@@ -353,22 +354,45 @@ const App = {
     return true;
   },
 
+  // ---- Final Quiz (course-level evaluation) ----
+  get FINAL_QUIZ() {
+    return (typeof COURSE_DATA !== 'undefined' && COURSE_DATA.finalQuiz) ? COURSE_DATA.finalQuiz : null;
+  },
+
+  areAllLessonsDone() {
+    return COURSE_DATA.modules.every(mod => mod.lessons.every(l => this.isLessonCompleted(l.id)));
+  },
+
+  // La evaluación final solo se habilita al terminar todas las clases del curso
+  isFinalQuizUnlocked() {
+    return !!this.FINAL_QUIZ && this.areAllLessonsDone();
+  },
+
+  isFinalQuizCompleted() {
+    return !!this.FINAL_QUIZ && this.isQuizCompleted(this.FINAL_QUIZ.id);
+  },
+
   getModuleProgress(moduleIndex) {
     const mod = COURSE_DATA.modules[moduleIndex];
-    const totalItems = mod.lessons.length + 1; // lessons + quiz
+    const hasQuiz = !!mod.quiz;
+    const totalItems = mod.lessons.length + (hasQuiz ? 1 : 0);
     let completed = mod.lessons.filter(l => this.isLessonCompleted(l.id)).length;
-    if (this.isQuizCompleted(mod.quiz.id)) completed++;
-    return Math.round((completed / totalItems) * 100);
+    if (hasQuiz && this.isQuizCompleted(mod.quiz.id)) completed++;
+    return totalItems > 0 ? Math.round((completed / totalItems) * 100) : 100;
   },
 
   getGlobalProgress() {
     let total = 0;
     let completed = 0;
     COURSE_DATA.modules.forEach(mod => {
-      total += mod.lessons.length + 1;
+      total += mod.lessons.length + (mod.quiz ? 1 : 0);
       completed += mod.lessons.filter(l => this.isLessonCompleted(l.id)).length;
-      if (this.isQuizCompleted(mod.quiz.id)) completed++;
+      if (mod.quiz && this.isQuizCompleted(mod.quiz.id)) completed++;
     });
+    if (this.FINAL_QUIZ) {
+      total += 1;
+      if (this.isFinalQuizCompleted()) completed++;
+    }
     return total > 0 ? Math.round((completed / total) * 100) : 0;
   },
 
@@ -385,11 +409,13 @@ const App = {
   },
 
   isCourseDone() {
-    return COURSE_DATA.modules.every((mod, i) => {
+    const modulesDone = COURSE_DATA.modules.every((mod, i) => {
       const lessonsDone = mod.lessons.every(l => this.isLessonCompleted(l.id));
-      const quizDone = this.isQuizCompleted(mod.quiz.id);
+      const quizDone = mod.quiz ? this.isQuizCompleted(mod.quiz.id) : true;
       return lessonsDone && quizDone;
     });
+    if (!modulesDone) return false;
+    return this.FINAL_QUIZ ? this.isFinalQuizCompleted() : true;
   },
 
   // ---- Complete Actions ----
@@ -431,12 +457,16 @@ const App = {
     this.updateGlobalProgress();
   },
 
+  // moduleIndex === null → evaluación final del curso
   completeQuiz(moduleIndex, score) {
-    const mod = COURSE_DATA.modules[moduleIndex];
-    const wasAlreadyDone = this.isQuizCompleted(mod.quiz.id);
+    const isFinal = moduleIndex === null || moduleIndex === undefined;
+    const mod = isFinal ? null : COURSE_DATA.modules[moduleIndex];
+    const quiz = isFinal ? this.FINAL_QUIZ : (mod && mod.quiz);
+    if (!quiz) return;
+    const wasAlreadyDone = this.isQuizCompleted(quiz.id);
 
     if (!wasAlreadyDone) {
-      this.state.completedQuizzes.push(mod.quiz.id);
+      this.state.completedQuizzes.push(quiz.id);
 
       // Combo system
       this.updateCombo();
@@ -453,9 +483,9 @@ const App = {
       this.saveState();
 
       // Check if entire module just got completed
-      const moduleProgress = this.getModuleProgress(moduleIndex);
+      const moduleProgress = isFinal ? 100 : this.getModuleProgress(moduleIndex);
       if (moduleProgress === 100) {
-        setTimeout(() => this.awardXP(150, `${this.UNIT_LABEL} completada — Bonus`), 800);
+        setTimeout(() => this.awardXP(150, isFinal ? 'Evaluación final aprobada — Bonus' : `${this.UNIT_LABEL} completada — Bonus`), 800);
         if (typeof Confetti !== 'undefined') {
           Confetti.moduleComplete();
         }
@@ -469,7 +499,11 @@ const App = {
       setTimeout(() => this.checkAchievements({ perfectQuiz: score === 100 }), 400);
 
       // Enviar avance a Google Sheets
-      this.sendProgress('Quiz aprobado', `${mod.title} — ${mod.quiz.title}`, score);
+      this.sendProgress(
+        isFinal ? 'Evaluación final aprobada' : 'Quiz aprobado',
+        isFinal ? quiz.title : `${mod.title} — ${quiz.title}`,
+        score
+      );
 
       // Motivational message + milestone
       this.showMotivationalMessage();
@@ -585,31 +619,57 @@ const App = {
         lessonsEl.appendChild(lessonBtn);
       });
 
-      // Quiz button
-      const quizUnlocked = this.isQuizUnlocked(mi);
-      const quizDone = this.isQuizCompleted(mod.quiz.id);
+      // Quiz button (solo si el módulo tiene quiz propio)
+      if (mod.quiz) {
+        const quizUnlocked = this.isQuizUnlocked(mi);
+        const quizDone = this.isQuizCompleted(mod.quiz.id);
 
-      const quizBtn = document.createElement('button');
-      quizBtn.className = `nav-quiz-btn${quizDone ? ' completed' : ''}${!quizUnlocked ? ' locked' : ''}`;
-      quizBtn.innerHTML = `
-        <span class="quiz-icon">${quizDone ? '✓' : !quizUnlocked ? '🔒' : '?'}</span>
-        <span>Quiz</span>
-      `;
+        const quizBtn = document.createElement('button');
+        quizBtn.className = `nav-quiz-btn${quizDone ? ' completed' : ''}${!quizUnlocked ? ' locked' : ''}`;
+        quizBtn.innerHTML = `
+          <span class="quiz-icon">${quizDone ? '✓' : !quizUnlocked ? '🔒' : '?'}</span>
+          <span>Quiz</span>
+        `;
 
-      if (quizUnlocked && !quizDone) {
-        quizBtn.addEventListener('click', () => {
-          this.navigateTo('quiz', { moduleIndex: mi });
-        });
-      } else if (quizDone) {
-        quizBtn.addEventListener('click', () => {
-          this.navigateTo('quiz', { moduleIndex: mi });
-        });
+        if (quizUnlocked || quizDone) {
+          quizBtn.addEventListener('click', () => {
+            this.navigateTo('quiz', { moduleIndex: mi });
+          });
+        }
+
+        lessonsEl.appendChild(quizBtn);
       }
 
-      lessonsEl.appendChild(quizBtn);
       moduleEl.appendChild(lessonsEl);
       nav.appendChild(moduleEl);
     });
+
+    // Evaluación final del curso (se habilita al completar todas las clases)
+    if (this.FINAL_QUIZ) {
+      const finalUnlocked = this.isFinalQuizUnlocked();
+      const finalDone = this.isFinalQuizCompleted();
+
+      const finalEl = document.createElement('div');
+      finalEl.className = `nav-module nav-module--final${finalUnlocked ? '' : ' locked'}`;
+
+      const finalBtn = document.createElement('button');
+      finalBtn.className = `nav-module-btn${!finalUnlocked ? ' locked' : ''}${finalDone ? ' completed' : ''}`;
+      finalBtn.innerHTML = `
+        <span class="mod-icon">${finalDone ? '✓' : finalUnlocked ? '🎓' : '🔒'}</span>
+        <span class="mod-title">${this.FINAL_QUIZ.title}</span>
+      `;
+
+      finalBtn.addEventListener('click', () => {
+        if (finalUnlocked) {
+          this.navigateTo('quiz', { moduleIndex: null });
+        } else {
+          this.showToast('tip', '🔒 Evaluación bloqueada', 'Completa todas las clases del curso para presentar la evaluación final.');
+        }
+      });
+
+      finalEl.appendChild(finalBtn);
+      nav.appendChild(finalEl);
+    }
   },
 
   updateGlobalProgress() {
@@ -705,7 +765,7 @@ const App = {
           const firstIncompleteLessonIndex = mod.lessons.findIndex(l => !this.isLessonCompleted(l.id));
           if (firstIncompleteLessonIndex !== -1) {
             this.navigateTo('lesson', { moduleIndex: mi, lessonIndex: firstIncompleteLessonIndex });
-          } else if (!this.isQuizCompleted(mod.quiz.id)) {
+          } else if (mod.quiz && !this.isQuizCompleted(mod.quiz.id)) {
             this.navigateTo('quiz', { moduleIndex: mi });
           } else {
             this.navigateTo('lesson', { moduleIndex: mi, lessonIndex: 0 });
@@ -732,10 +792,70 @@ const App = {
       });
     });
 
+    // Final evaluation node (course-level quiz)
+    if (this.FINAL_QUIZ) {
+      const finalUnlocked = this.isFinalQuizUnlocked();
+      const finalDone = this.isFinalQuizCompleted();
+      const side = COURSE_DATA.modules.length % 2 === 0 ? 'left' : 'right';
+
+      let stateClass = 'skill-node--locked';
+      if (finalDone) stateClass = 'skill-node--completed';
+      else if (finalUnlocked) stateClass = 'skill-node--unlocked skill-node--active';
+
+      let statusText = '🔒 Termina todas las clases';
+      if (finalDone) statusText = '✓ Aprobada';
+      else if (finalUnlocked) statusText = 'Presentar evaluación →';
+
+      const finalNode = document.createElement('div');
+      finalNode.className = `skill-node skill-node--${side} ${stateClass} skill-node--final`;
+      finalNode.innerHTML = `
+        <div class="skill-node-connector"></div>
+        <div class="skill-node-card btn-ripple">
+          <div class="skill-node-circle">
+            <span class="skill-node-icon">📝</span>
+            ${finalDone ? '<div class="skill-node-check">✓</div>' : ''}
+            ${!finalUnlocked ? '<div class="skill-node-lock">🔒</div>' : ''}
+          </div>
+          <div class="skill-node-info">
+            <div class="skill-node-number">Evaluación</div>
+            <div class="skill-node-title">${this.FINAL_QUIZ.title}</div>
+            <div class="skill-node-status">${statusText}</div>
+          </div>
+        </div>
+      `;
+
+      const finalCard = finalNode.querySelector('.skill-node-card');
+      finalCard.addEventListener('click', (e) => {
+        this.createRipple(e, finalCard);
+        if (finalUnlocked) {
+          this.navigateTo('quiz', { moduleIndex: null });
+        } else {
+          this.showToast('tip', '🔒 Evaluación bloqueada', 'Completa todas las clases del curso para presentar la evaluación final.');
+        }
+      });
+
+      const finalDot = document.createElement('div');
+      let finalDotClass = 'skill-tree-dot';
+      if (finalDone) finalDotClass += ' skill-tree-dot--completed';
+      else if (finalUnlocked) finalDotClass += ' skill-tree-dot--unlocked';
+      finalDot.className = finalDotClass;
+
+      tree.appendChild(finalNode);
+      tree.appendChild(finalDot);
+
+      requestAnimationFrame(() => {
+        const nodeRect = finalNode.getBoundingClientRect();
+        const treeRect = tree.getBoundingClientRect();
+        const nodeCenter = nodeRect.top - treeRect.top + nodeRect.height / 2;
+        finalDot.style.top = `${nodeCenter}px`;
+      });
+    }
+
     // Certificate node if course is done
     if (this.isCourseDone()) {
       const certNode = document.createElement('div');
-      const side = COURSE_DATA.modules.length % 2 === 0 ? 'left' : 'right';
+      const nodesBefore = COURSE_DATA.modules.length + (this.FINAL_QUIZ ? 1 : 0);
+      const side = nodesBefore % 2 === 0 ? 'left' : 'right';
       certNode.className = `skill-node skill-node--${side} skill-node--completed skill-node--cert`;
       certNode.innerHTML = `
         <div class="skill-node-connector" style="background:linear-gradient(90deg, #ffd700, #ff8c00);box-shadow:0 0 8px rgba(255,215,0,0.3);"></div>
@@ -861,6 +981,17 @@ const App = {
           </div>
         `;
       }
+    } else if (COURSE_DATA.isLive) {
+      // Curso en vivo: la grabación se publica después de cada sesión
+      videoContainer.innerHTML = `
+        <div class="video-wrapper" style="display:flex;align-items:center;justify-content:center;padding-bottom:0;height:300px;">
+          <div style="text-align:center;color:var(--text-muted);padding:0 20px;">
+            <div style="font-size:3rem;margin-bottom:12px;">🔴</div>
+            <p style="color:var(--text-primary);font-weight:600;">Sesión en vivo</p>
+            <p style="font-size:0.85rem;margin-top:6px;">La grabación de esta clase se cargará aquí una vez finalice la sesión.</p>
+          </div>
+        </div>
+      `;
     } else {
       videoContainer.innerHTML = `
         <div class="video-wrapper" style="display:flex;align-items:center;justify-content:center;padding-bottom:0;height:300px;">
@@ -950,15 +1081,26 @@ const App = {
     nextBtn.onclick = null;
     nextBtn.classList.add('hidden');
 
+    const arrowSvg = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>';
+
     if (isLastLesson) {
-      // Check if quiz is available
-      if (this.isQuizUnlocked(mi)) {
-        nextBtn.innerHTML = `
-          Ir al Quiz
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
-        `;
+      if (mod.quiz && this.isQuizUnlocked(mi)) {
+        // Quiz propio del módulo
+        nextBtn.innerHTML = `Ir al Quiz ${arrowSvg}`;
         nextBtn.classList.remove('hidden');
         nextBtn.onclick = () => this.navigateTo('quiz', { moduleIndex: mi });
+      } else if (mi + 1 < COURSE_DATA.modules.length) {
+        // Sin quiz de módulo: pasa al siguiente módulo
+        if (isDone) {
+          nextBtn.innerHTML = `Siguiente ${this.UNIT_LABEL.toLowerCase()} ${arrowSvg}`;
+          nextBtn.classList.remove('hidden');
+          nextBtn.onclick = () => this.navigateTo('lesson', { moduleIndex: mi + 1, lessonIndex: 0 });
+        }
+      } else if (this.FINAL_QUIZ && this.isFinalQuizUnlocked()) {
+        // Última clase del curso: evaluación final
+        nextBtn.innerHTML = `Ir a la Evaluación Final ${arrowSvg}`;
+        nextBtn.classList.remove('hidden');
+        nextBtn.onclick = () => this.navigateTo('quiz', { moduleIndex: null });
       }
     } else if (isDone) {
       // Only show next if current lesson is completed
@@ -1010,6 +1152,16 @@ const App = {
 
   // ---- Navigation helpers ----
   goToNextModule() {
+    // Tras aprobar la evaluación final: certificado
+    if (typeof QuizEngine !== 'undefined' && QuizEngine.isFinal) {
+      if (this.isCourseDone()) {
+        this.showCertificate();
+      } else {
+        this.navigateTo('dashboard');
+      }
+      return;
+    }
+
     const nextIndex = this.state.currentModuleIndex + 1;
     if (nextIndex < COURSE_DATA.modules.length) {
       if (this.isModuleUnlocked(nextIndex)) {
@@ -1031,6 +1183,8 @@ const App = {
   },
 
   showProCoursePromo() {
+    // Los cursos que ya son profesionales no muestran la promo de upgrade
+    if (typeof COURSE_DATA !== 'undefined' && COURSE_DATA.hidePromo) return;
     const promo = document.getElementById('promo-modal');
     if (promo) promo.classList.remove('hidden');
   },
