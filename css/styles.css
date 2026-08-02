@@ -638,7 +638,7 @@ body {
   margin-left: var(--sidebar-w);
   flex: 1;
   padding: 40px;
-  max-width: 960px;
+  max-width: 1320px;
 }
 
 .view { display: none; }
@@ -1741,12 +1741,23 @@ body {
 
 .video-wrapper {
   position: relative;
-  padding-bottom: 56.25%;
-  height: 0;
+  /* 16:9. El ancho es el menor entre el contenedor y lo que cabe a lo alto,
+     para que en portátiles el video no empuje el resto fuera de la pantalla. */
+  aspect-ratio: 16 / 9;
+  width: min(100%, max(320px, calc((100vh - 230px) * 16 / 9)));
+  margin: 0 auto;
   border-radius: var(--radius);
   overflow: hidden;
   background: var(--bg-surface);
   border: 1px solid var(--border);
+}
+
+/* Navegadores sin aspect-ratio: se mantiene la técnica anterior */
+@supports not (aspect-ratio: 16 / 9) {
+  .video-wrapper {
+    padding-bottom: 56.25%;
+    height: 0;
+  }
 }
 
 .video-wrapper iframe {
@@ -3045,4 +3056,24 @@ body {
 .cert-name-value {
   font-size: 1.05rem;
   color: var(--text-primary);
+}
+
+/* ============================================
+   Anchos de lectura dentro del área ampliada
+   El video aprovecha todo el ancho, pero el texto
+   se mantiene en una medida cómoda de leer.
+   ============================================ */
+.reading-content {
+  max-width: 72ch;
+}
+
+.quiz-body,
+.quiz-header,
+.quiz-results {
+  max-width: 900px;
+}
+
+.lesson-header,
+.resources-list {
+  max-width: 900px;
 }
