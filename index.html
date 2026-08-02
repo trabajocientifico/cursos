@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Trabajo Científico - Plataforma de Educación</title>
   <link rel="stylesheet" href="css/portal.css">
+  <script src="js/prefs.js"></script>
   <style>
     /* Estilos adicionales para el modal de acceso */
     .modal-access {
@@ -24,8 +25,8 @@
       display: flex;
     }
     .modal-content {
-      background: #1a1a1a;
-      border: 1px solid #333;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
       padding: 2.5rem;
       border-radius: 20px;
       width: 90%;
@@ -39,17 +40,17 @@
       right: 15px;
       background: none;
       border: none;
-      color: #666;
+      color: var(--text-secondary);
       font-size: 1.5rem;
       cursor: pointer;
     }
     .modal-header h2 {
       margin-top: 0;
-      color: #fff;
+      color: var(--text-primary);
       font-size: 1.8rem;
     }
     .modal-header p {
-      color: #aaa;
+      color: var(--text-secondary);
       margin-bottom: 2rem;
     }
     .form-group {
@@ -57,17 +58,17 @@
     }
     .form-group label {
       display: block;
-      color: #ddd;
+      color: var(--text-primary);
       margin-bottom: 0.5rem;
       font-size: 0.9rem;
     }
     .form-group input {
       width: 100%;
       padding: 0.8rem;
-      background: #252525;
-      border: 1px solid #444;
+      background: var(--bg-deep);
+      border: 1px solid var(--border);
       border-radius: 8px;
-      color: #fff;
+      color: var(--text-primary);
       font-size: 1rem;
     }
     .btn-access {
@@ -84,8 +85,14 @@
     .btn-access:hover {
       transform: translateY(-2px);
     }
+    .field-hint {
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      margin-top: 0.45rem;
+      line-height: 1.5;
+    }
     .error-msg {
-      color: #ff4d4d;
+      color: var(--error, #ff4d4d);
       font-size: 0.85rem;
       margin-top: 0.5rem;
       display: none;
@@ -97,8 +104,8 @@
       padding: 6rem 5% 4rem;
     }
     .instructor-card {
-      background: rgba(26, 26, 26, 0.5);
-      border: 1px solid #333;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
       border-radius: 30px;
       padding: 3rem;
       backdrop-filter: blur(10px);
@@ -135,39 +142,40 @@
     .social-link {
       width: 40px;
       height: 40px;
-      background: #252525;
+      background: var(--bg-surface-2);
       border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #fff;
+      color: var(--text-primary);
       text-decoration: none;
       font-weight: bold;
       transition: all 0.3s;
-      border: 1px solid #333;
+      border: 1px solid var(--border);
     }
     .social-link:hover {
-      background: #00d4ff;
+      background: var(--accent-cyan);
+      color: #fff;
       transform: translateY(-3px);
       box-shadow: 0 5px 15px rgba(0, 212, 255, 0.4);
     }
     .instructor-header-info h3 {
       font-size: 2.2rem;
       margin: 0 0 0.5rem;
-      color: #fff;
+      color: var(--text-primary);
     }
     .instructor-titles {
-      color: #00d4ff;
+      color: var(--accent-cyan);
       font-weight: 600;
       margin-bottom: 0.5rem;
     }
     .instructor-degrees {
       font-size: 0.9rem;
-      color: #aaa;
+      color: var(--text-secondary);
       margin-bottom: 2rem;
     }
     .instructor-current-study {
-      color: #00d4ff;
+      color: var(--accent-cyan);
       font-weight: 600;
       background: linear-gradient(135deg, rgba(0, 212, 255, 0.12), rgba(123, 47, 247, 0.12));
       padding: 2px 10px;
@@ -183,7 +191,7 @@
       gap: 8px;
       margin-top: 1.25rem;
       padding: 10px 18px;
-      color: #fff;
+      color: var(--text-primary);
       text-decoration: none;
       font-size: 0.88rem;
       font-weight: 600;
@@ -196,7 +204,7 @@
       transform: translateY(-2px);
       border-color: rgba(0, 212, 255, 0.6);
       box-shadow: 0 8px 22px rgba(0, 212, 255, 0.25);
-      color: #00d4ff;
+      color: var(--accent-cyan);
     }
     .instructor-cv-link svg {
       transition: transform 0.25s ease;
@@ -205,7 +213,7 @@
       transform: translateY(-1px);
     }
     .instructor-bio {
-      color: #ddd;
+      color: var(--text-primary);
       line-height: 1.7;
       margin-bottom: 2rem;
     }
@@ -223,7 +231,7 @@
       content: '✓';
       position: absolute;
       left: 0;
-      color: #00d4ff;
+      color: var(--accent-cyan);
       font-weight: bold;
     }
     .instructor-contact {
@@ -231,10 +239,10 @@
       flex-wrap: wrap;
       gap: 1.5rem;
       padding-top: 1.5rem;
-      border-top: 1px solid #333;
+      border-top: 1px solid var(--border);
     }
     .contact-item {
-      color: #fff;
+      color: var(--text-primary);
       text-decoration: none;
       display: flex;
       align-items: center;
@@ -243,7 +251,7 @@
       transition: color 0.3s;
     }
     .contact-item:hover {
-      color: #00d4ff;
+      color: var(--accent-cyan);
     }
   </style>
 </head>
@@ -281,9 +289,30 @@
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
         <span>trabajocientifico.org</span>
       </a>
+      <div class="prefs-controls">
+        <div class="prefs-group" role="group" aria-label="Tamaño del texto">
+          <button type="button" class="prefs-btn" data-pref-font="normal" aria-pressed="true" title="Texto normal">A</button>
+          <button type="button" class="prefs-btn" data-pref-font="grande" aria-pressed="false" title="Texto grande">A</button>
+          <button type="button" class="prefs-btn" data-pref-font="extra" aria-pressed="false" title="Texto muy grande">A</button>
+        </div>
+        <button type="button" class="prefs-btn prefs-btn--theme" data-pref-theme>
+          <span data-pref-theme-icon>🌙</span>
+        </button>
+      </div>
       <a href="#cursos" class="nav-cta">Comenzar ahora</a>
     </div>
     <div class="nav-socials nav-socials--mobile">
+      <div class="prefs-controls">
+        <div class="prefs-group" role="group" aria-label="Tamaño del texto">
+          <button type="button" class="prefs-btn" data-pref-font="normal" aria-pressed="true" title="Texto normal">A</button>
+          <button type="button" class="prefs-btn" data-pref-font="grande" aria-pressed="false" title="Texto grande">A</button>
+          <button type="button" class="prefs-btn" data-pref-font="extra" aria-pressed="false" title="Texto muy grande">A</button>
+        </div>
+        <button type="button" class="prefs-btn prefs-btn--theme" data-pref-theme>
+          <span data-pref-theme-icon>🌙</span>
+        </button>
+      </div>
+
       <a href="https://www.youtube.com/@TCientifico" target="_blank" rel="noopener" class="nav-social nav-social--yt" title="YouTube" aria-label="YouTube">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
       </a>
@@ -636,8 +665,9 @@
         <input type="hidden" id="is-free-course">
 
         <div class="form-group">
-          <label>Nombre Completo</label>
-          <input type="text" id="user-name" required placeholder="Tu nombre">
+          <label for="user-name">Nombre completo</label>
+          <input type="text" id="user-name" required maxlength="60" placeholder="Ej: María Fernanda Rodríguez Gómez">
+          <p class="field-hint">Escríbelo tal como quieres que aparezca en tu certificado.</p>
         </div>
         <div class="form-group">
           <label>Correo Electrónico</label>

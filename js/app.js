@@ -11,9 +11,6 @@ const App = {
     currentView: 'dashboard',
     currentModuleIndex: null,
     currentLessonIndex: null,
-    // Easter eggs
-    konamiUsed: false,
-    logoSecretUsed: false,
   },
 
   STORAGE_KEY: 'tc_progress_' + (new URLSearchParams(window.location.search).get('curso') || 'excel-vida'),
@@ -80,8 +77,6 @@ const App = {
         username: this.state.username,
         completedLessons: this.state.completedLessons,
         completedQuizzes: this.state.completedQuizzes,
-        konamiUsed: this.state.konamiUsed,
-        logoSecretUsed: this.state.logoSecretUsed,
       };
       localStorage.setItem(this.STORAGE_KEY, JSON.stringify(toSave));
     } catch (e) {
@@ -118,8 +113,6 @@ const App = {
     if (!confirm('¿Estás seguro de que quieres reiniciar todo tu progreso? Esta acción no se puede deshacer.')) return;
     this.state.completedLessons = [];
     this.state.completedQuizzes = [];
-    this.state.konamiUsed = false;
-    this.state.logoSecretUsed = false;
     this.saveState();
     this.renderSidebar();
     this.renderDashboard();
@@ -169,8 +162,9 @@ const App = {
     document.getElementById('sidebar-close').addEventListener('click', () => this.toggleSidebar(false));
     document.getElementById('sidebar-overlay').addEventListener('click', () => this.toggleSidebar(false));
 
-    // Reset progress
-    document.getElementById('reset-progress-btn').addEventListener('click', () => this.resetProgress());
+    // Reiniciar progreso (ya no está en el menú; se conserva por si se expone en otro sitio)
+    const resetBtn = document.getElementById('reset-progress-btn');
+    if (resetBtn) resetBtn.addEventListener('click', () => this.resetProgress());
 
     // Lesson tabs
     document.querySelectorAll('.lesson-tabs .tab').forEach(tab => {
@@ -186,11 +180,17 @@ const App = {
     document.getElementById('btn-complete-lesson').addEventListener('click', () => this.completeCurrentLesson());
     document.getElementById('btn-back-lesson').addEventListener('click', () => this.navigateTo('dashboard'));
     document.getElementById('btn-back-quiz').addEventListener('click', () => {
+      if (QuizEngine.hasUnsavedAttempt() &&
+          !confirm('Si sales ahora se pierden las respuestas de este intento. ¿Seguro que quieres salir?')) return;
       QuizEngine.stopTimer();
       this.navigateTo('dashboard');
     });
 
     // Quiz actions
+    const startQuizBtn = document.getElementById('btn-start-quiz');
+    if (startQuizBtn) startQuizBtn.addEventListener('click', () => QuizEngine.beginAttempt());
+    const cancelQuizBtn = document.getElementById('btn-cancel-quiz');
+    if (cancelQuizBtn) cancelQuizBtn.addEventListener('click', () => this.navigateTo('dashboard'));
     document.getElementById('btn-submit-quiz').addEventListener('click', () => QuizEngine.submit());
     document.getElementById('btn-retry-quiz').addEventListener('click', () => QuizEngine.retry());
     document.getElementById('btn-next-module').addEventListener('click', () => this.goToNextModule());
@@ -199,6 +199,8 @@ const App = {
     document.getElementById('cert-close').addEventListener('click', () => {
       document.getElementById('cert-modal').classList.add('hidden');
     });
+    const certNameBtn = document.getElementById('cert-name-edit');
+    if (certNameBtn) certNameBtn.addEventListener('click', () => this.editCertName());
     document.getElementById('cert-download').addEventListener('click', () => this.downloadCertificatePNG());
     const pdfBtn = document.getElementById('cert-download-pdf');
     if (pdfBtn) pdfBtn.addEventListener('click', () => this.downloadCertificatePDF());
@@ -212,14 +214,6 @@ const App = {
     }
 
 
-    // Memory game close
-    document.getElementById('memory-close').addEventListener('click', () => {
-      document.getElementById('memory-modal').classList.add('hidden');
-    });
-
-    // Easter eggs
-    this.initKonamiCode();
-    this.initLogoSecret();
   },
 
   toggleSidebar(open) {
@@ -939,7 +933,35 @@ const App = {
   showCertificate() {
     document.getElementById('cert-modal').classList.remove('hidden');
     this.renderCertificate();
+    this.renderCertName();
     this.showProCoursePromo();
+  },
+
+  // El certificado se expide con el nombre que el estudiante escribió,
+  // así que se muestra para revisarlo antes de descargar.
+  renderCertName() {
+    const el = document.getElementById('cert-name-value');
+    if (el) el.textContent = (this.state.username || '').trim() || 'Estudiante';
+  },
+
+  editCertName() {
+    const actual = (this.state.username || '').trim();
+    const nuevo = prompt('¿Cómo debe aparecer tu nombre en el certificado?', actual);
+    if (nuevo === null) return;
+    const limpio = nuevo.trim().slice(0, 60);
+    if (!limpio) return;
+
+    this.state.username = limpio;
+    this.saveState();
+    localStorage.setItem('tc_user_name', limpio);
+
+    this.renderCertName();
+    this.renderCertificate();
+    this.renderSidebar();
+    const dash = document.getElementById('dashboard-username');
+    if (dash) dash.textContent = limpio;
+    this.sendProgress('Nombre corregido', limpio);
+    this.showToast('module', 'Nombre actualizado', 'Tu certificado se generará con el nuevo nombre.');
   },
 
   showProCoursePromo() {
@@ -1327,194 +1349,6 @@ const App = {
         }
       }, 2000);
     }
-  },
-
-  // ============================================
-  //  KONAMI CODE
-  // ============================================
-  initKonamiCode() {
-    const sequence = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
-    let pos = 0;
-
-    document.addEventListener('keydown', (e) => {
-      const key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
-      if (key === sequence[pos]) {
-        pos++;
-        if (pos === sequence.length) {
-          pos = 0;
-          this.triggerKonami();
-        }
-      } else {
-        pos = 0;
-      }
-    });
-  },
-
-  triggerKonami() {
-    if (this.state.konamiUsed) {
-      this.showToast('tip', '💻 Ya usaste el Konami Code', 'Solo funciona una vez');
-      return;
-    }
-
-    this.state.konamiUsed = true;
-    this.saveState();
-
-    // Matrix effect
-    this.showMatrixEffect();
-
-    // Bonus XP
-    setTimeout(() => {
-    }, 1000);
-  },
-
-  showMatrixEffect() {
-    const canvas = document.getElementById('matrix-canvas');
-    canvas.classList.remove('hidden');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    const ctx = canvas.getContext('2d');
-
-    const chars = 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789PYTHON DATA ML AI';
-    const fontSize = 14;
-    const columns = Math.floor(canvas.width / fontSize);
-    const drops = Array(columns).fill(1);
-
-    const startTime = Date.now();
-    const duration = 3000;
-
-    const draw = () => {
-      ctx.fillStyle = 'rgba(11, 13, 23, 0.05)';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = '#00d4ff';
-      ctx.font = `${fontSize}px monospace`;
-
-      for (let i = 0; i < drops.length; i++) {
-        const char = chars[Math.floor(Math.random() * chars.length)];
-        ctx.fillText(char, i * fontSize, drops[i] * fontSize);
-        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-          drops[i] = 0;
-        }
-        drops[i]++;
-      }
-
-      if (Date.now() - startTime < duration) {
-        requestAnimationFrame(draw);
-      } else {
-        canvas.classList.add('hidden');
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-      }
-    };
-
-    draw();
-  },
-
-  // ============================================
-  //  LOGO SECRET (Memory Game)
-  // ============================================
-  initLogoSecret() {
-    let clickCount = 0;
-    let lastClick = 0;
-    const logo = document.querySelector('.sidebar-logo');
-    if (!logo) return;
-
-    logo.style.cursor = 'pointer';
-    logo.addEventListener('click', () => {
-      const now = Date.now();
-      if (now - lastClick > 1500) {
-        clickCount = 1;
-      } else {
-        clickCount++;
-      }
-      lastClick = now;
-
-      if (clickCount >= 5) {
-        clickCount = 0;
-        this.showMemoryGame();
-      }
-    });
-  },
-
-  showMemoryGame() {
-    const pairs = [
-      { term: 'Python', def: 'Lenguaje #1 en Data Science' },
-      { term: 'Pandas', def: 'Librería para DataFrames' },
-      { term: 'Overfitting', def: 'Modelo memoriza datos' },
-      { term: 'K-Means', def: 'Algoritmo de clustering' },
-    ];
-
-    // Create cards: each pair becomes 2 cards
-    let cards = [];
-    pairs.forEach((p, i) => {
-      cards.push({ id: i, type: 'term', text: p.term, pairId: i });
-      cards.push({ id: i, type: 'def', text: p.def, pairId: i });
-    });
-
-    // Shuffle
-    for (let i = cards.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [cards[i], cards[j]] = [cards[j], cards[i]];
-    }
-
-    const grid = document.getElementById('memory-grid');
-    const status = document.getElementById('memory-status');
-    grid.innerHTML = '';
-    status.textContent = 'Encuentra los 4 pares';
-
-    let flipped = [];
-    let matched = 0;
-
-    cards.forEach((card, idx) => {
-      const el = document.createElement('div');
-      el.className = 'memory-card';
-      el.innerHTML = `
-        <div class="memory-card-inner">
-          <div class="memory-card-front">?</div>
-          <div class="memory-card-back">${card.text}</div>
-        </div>
-      `;
-
-      el.addEventListener('click', () => {
-        if (flipped.length >= 2) return;
-        if (el.classList.contains('flipped') || el.classList.contains('matched')) return;
-
-        el.classList.add('flipped');
-        flipped.push({ el, card });
-
-        if (flipped.length === 2) {
-          const [a, b] = flipped;
-          if (a.card.pairId === b.card.pairId && a.card.type !== b.card.type) {
-            // Match!
-            setTimeout(() => {
-              a.el.classList.add('matched');
-              b.el.classList.add('matched');
-              matched++;
-              flipped = [];
-
-              if (matched === pairs.length) {
-                status.textContent = '🎉 ¡Ganaste!';
-                if (!this.state.logoSecretUsed) {
-                  this.state.logoSecretUsed = true;
-                  this.saveState();
-                  setTimeout(() => {
-                  }, 500);
-                }
-              }
-            }, 400);
-          } else {
-            // No match
-            setTimeout(() => {
-              a.el.classList.remove('flipped');
-              b.el.classList.remove('flipped');
-              flipped = [];
-            }, 800);
-          }
-        }
-      });
-
-      grid.appendChild(el);
-    });
-
-    document.getElementById('memory-modal').classList.remove('hidden');
   },
 
   // ---- Toast Notifications ----

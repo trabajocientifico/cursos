@@ -71,7 +71,50 @@ const QuizEngine = {
     submitBtn.disabled = false;
     submitBtn.textContent = 'Enviar respuestas';
 
+    this.showIntro();
+  },
+
+  // ---- Pantalla previa ----
+  // El cronómetro solo arranca cuando el estudiante pulsa "Empezar":
+  // abrir el quiz para mirarlo no debe consumirle tiempo.
+  showIntro() {
+    const intro = document.getElementById('quiz-intro');
+    if (!intro) { this.beginAttempt(); return; }
+
+    const total = this.currentQuiz.questions.length;
+    const limit = this.currentQuiz.timeLimit;
+    const rules = [
+      `<strong>${total} preguntas</strong> de selección múltiple sobre los temas vistos.`,
+      limit
+        ? `Tienes <strong>${limit} minutos</strong>. Si se acaba el tiempo se califica lo que hayas respondido.`
+        : 'No hay límite de tiempo.',
+      `Necesitas <strong>${this.currentQuiz.passingScore}%</strong> para aprobar.`,
+      'Puedes <strong>reintentarlo las veces que quieras</strong>, sin penalización.',
+      'Si sales a mitad del quiz se pierden las respuestas y el intento vuelve a empezar.'
+    ];
+    document.getElementById('quiz-intro-rules').innerHTML =
+      rules.map(r => `<li>${r}</li>`).join('');
+
+    intro.classList.remove('hidden');
+    document.getElementById('quiz-body').classList.add('hidden');
+    document.getElementById('quiz-actions').classList.add('hidden');
+    document.getElementById('quiz-timer').classList.add('hidden');
+  },
+
+  // Arranca el intento: muestra las preguntas y pone en marcha el reloj
+  beginAttempt() {
+    const intro = document.getElementById('quiz-intro');
+    if (intro) intro.classList.add('hidden');
+    document.getElementById('quiz-body').classList.remove('hidden');
+    document.getElementById('quiz-actions').classList.remove('hidden');
     this.startTimer();
+  },
+
+  // ¿Hay un intento en curso con respuestas que se perderían al salir?
+  hasUnsavedAttempt() {
+    const intro = document.getElementById('quiz-intro');
+    const introVisible = intro && !intro.classList.contains('hidden');
+    return !introVisible && !this.submitted && Object.keys(this.answers).length > 0;
   },
 
   // ---- Temporizador (quiz.timeLimit en minutos) ----

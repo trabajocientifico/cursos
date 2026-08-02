@@ -16,9 +16,9 @@
   --bg-hover: #1f2442;
   --border: rgba(255, 255, 255, 0.06);
   --border-hover: rgba(255, 255, 255, 0.15);
-  --text-primary: #e4e4e7;
-  --text-secondary: #8b8fa3;
-  --text-muted: #555a70;
+  --text-primary: #e8e9ee;
+  --text-secondary: #a8adc0;
+  --text-muted: #8b8fa3;
   --accent-cyan: #00d4ff;
   --accent-purple: #7b2ff7;
   --accent-gradient: linear-gradient(135deg, #00d4ff, #7b2ff7);
@@ -33,6 +33,10 @@ html {
   font-size: 16px;
   scroll-behavior: smooth;
 }
+
+/* Escala de tipografía (control A- / A / A+), igual que en styles.css */
+html[data-font="grande"] { font-size: 18px; }
+html[data-font="extra"] { font-size: 20px; }
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
@@ -1572,3 +1576,78 @@ body {
   font-size: 0.85rem;
   margin: 0;
 }
+
+/* ============================================
+   Tema claro del portal
+   (mismos nombres de variable que styles.css)
+   ============================================ */
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg-deep: #eef1f7;
+  --bg-surface: #ffffff;
+  --bg-surface-2: #f4f6fb;
+  --bg-hover: #e6ebf5;
+  --border: rgba(18, 23, 43, 0.14);
+  --border-hover: rgba(18, 23, 43, 0.28);
+  --text-primary: #12172b;
+  --text-secondary: #454c63;
+  --text-muted: #626a85;
+  --accent-cyan: #026d8a;
+  --accent-purple: #6d28d9;
+  --accent-gradient: linear-gradient(135deg, #026d8a, #6d28d9);
+  --accent-gradient-h: linear-gradient(90deg, #026d8a, #6d28d9);
+  --success: #15803d;
+}
+
+:root[data-theme="light"] body { background: var(--bg-deep); }
+:root[data-theme="light"] .portal-bg .orb { opacity: 0.18; }
+:root[data-theme="light"] #particles-canvas { opacity: 0.35; }
+:root[data-theme="light"] .portal-nav { background: rgba(255, 255, 255, 0.88); }
+:root[data-theme="light"] .course-card { box-shadow: 0 4px 20px rgba(18, 23, 43, 0.08); }
+
+/* --- Controles de lectura en la barra superior --- */
+.prefs-controls {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: 8px;
+}
+
+.prefs-group {
+  display: inline-flex;
+  gap: 4px;
+}
+
+.prefs-btn {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text-primary);
+  font-family: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.prefs-btn:hover {
+  border-color: var(--accent-cyan);
+  color: var(--accent-cyan);
+}
+
+.prefs-btn.is-active {
+  background: var(--accent-cyan);
+  border-color: var(--accent-cyan);
+  color: #fff;
+}
+
+.prefs-btn[data-pref-font="normal"] { font-size: 0.85rem; }
+.prefs-btn[data-pref-font="grande"] { font-size: 1.05rem; }
+.prefs-btn[data-pref-font="extra"] { font-size: 1.3rem; }
+.prefs-btn--theme { font-size: 1rem; }

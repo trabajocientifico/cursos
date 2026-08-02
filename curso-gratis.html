@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Trabajo Científico - Cargando curso...</title>
   <link rel="stylesheet" href="css/styles.css">
+  <script src="js/prefs.js"></script>
   <style>
     /* ============================================
        Free Course — UI overrides
@@ -450,7 +451,8 @@
       <p class="modal-subtitle" id="welcome-subtitle">Preparando tu experiencia de aprendizaje.</p>
       <div class="modal-input-group">
         <label for="student-name">¿Cómo te llamas?</label>
-        <input type="text" id="student-name" placeholder="Tu nombre" maxlength="40" autocomplete="off">
+        <input type="text" id="student-name" placeholder="Ej: María Fernanda Rodríguez Gómez" maxlength="60" autocomplete="name">
+        <p class="input-hint">Escríbelo tal como quieres que aparezca en tu certificado.</p>
       </div>
       <button id="start-btn" class="btn btn-primary" disabled>Comenzar el curso</button>
     </div>
@@ -463,6 +465,11 @@
       <h2 class="modal-title">¡Felicidades! 🎓</h2>
       <p class="modal-subtitle">Has completado el curso. Descarga tu certificado.</p>
       <canvas id="cert-canvas" width="1200" height="800"></canvas>
+      <div class="cert-name-check">
+        <span class="cert-name-label">Se expedirá a nombre de:</span>
+        <strong class="cert-name-value" id="cert-name-value">—</strong>
+        <button type="button" class="btn btn-outline btn-sm" id="cert-name-edit">Corregir nombre</button>
+      </div>
       <div class="cert-actions">
         <button id="cert-download" class="btn btn-primary">⬇️ Descargar PNG (alta resolución)</button>
         <button id="cert-download-pdf" class="btn btn-secondary">📄 Descargar PDF</button>
@@ -519,6 +526,24 @@
         Volver al portal
       </a>
 
+      <div class="sidebar-prefs">
+        <div class="prefs-row">
+          <span class="prefs-label" id="prefs-font-label">Tamaño del texto</span>
+          <div class="prefs-group" role="group" aria-labelledby="prefs-font-label">
+            <button type="button" class="prefs-btn" data-pref-font="normal" aria-pressed="true" title="Texto normal">A</button>
+            <button type="button" class="prefs-btn" data-pref-font="grande" aria-pressed="false" title="Texto grande">A</button>
+            <button type="button" class="prefs-btn" data-pref-font="extra" aria-pressed="false" title="Texto muy grande">A</button>
+          </div>
+        </div>
+        <div class="prefs-row">
+          <span class="prefs-label">Apariencia</span>
+          <button type="button" class="prefs-btn prefs-btn--theme" data-pref-theme>
+            <span data-pref-theme-icon>🌙</span>
+            <span data-pref-theme-text>Tema oscuro</span>
+          </button>
+        </div>
+      </div>
+
       <div class="sidebar-user">
         <div class="user-avatar" id="user-avatar">U</div>
         <div class="user-info">
@@ -569,9 +594,6 @@
         <!-- Modules rendered by JS -->
       </nav>
 
-      <div class="sidebar-footer">
-        <button class="btn btn-outline btn-sm" id="reset-progress-btn">Reiniciar progreso</button>
-      </div>
     </aside>
 
     <!-- Sidebar Overlay (mobile) -->
@@ -682,6 +704,14 @@
           </div>
         </div>
 
+        <!-- Pantalla previa: el cronómetro no arranca hasta pulsar Empezar -->
+        <div class="quiz-intro hidden" id="quiz-intro">
+          <h2 class="quiz-intro-title">Antes de empezar</h2>
+          <ul class="quiz-intro-rules" id="quiz-intro-rules"></ul>
+          <button class="btn btn-primary btn-lg" id="btn-start-quiz">Empezar el quiz</button>
+          <button class="btn btn-outline" id="btn-cancel-quiz">Ahora no, volver</button>
+        </div>
+
         <div class="quiz-body" id="quiz-body">
           <!-- Quiz questions rendered by JS -->
         </div>
@@ -707,19 +737,7 @@
   </div>
 
 
-  <!-- Memory Game Modal -->
-  <div id="memory-modal" class="modal-overlay hidden">
-    <div class="modal memory-modal-content">
-      <button class="modal-close" id="memory-close">&times;</button>
-      <h2 class="memory-title">🧠 Memory Game</h2>
-      <p class="memory-subtitle">Empareja cada término con su definición</p>
-      <div class="memory-grid" id="memory-grid"></div>
-      <p class="memory-status" id="memory-status"></p>
-    </div>
-  </div>
 
-  <!-- Matrix Effect Overlay -->
-  <canvas id="matrix-canvas" class="matrix-overlay hidden"></canvas>
 
   <!-- AI Chat -->
   <button id="ai-fab" class="fab" aria-label="Abrir chat de IA">
