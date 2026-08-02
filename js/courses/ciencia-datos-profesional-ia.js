@@ -1,3 +1,21 @@
+/* ============================================
+   CÓMO CARGAR LA GRABACIÓN DE CADA CLASE
+
+   Opción A — YouTube (recomendada para grupos grandes):
+     videoId: "dQw4w9WgXcQ"        // lo que va después de v= en la URL
+     Sube el video como "Oculto / No listado".
+
+   Opción B — Google Drive:
+     driveId: "https://drive.google.com/file/d/1AbC.../view?usp=sharing"
+     Puedes pegar el enlace completo o solo el ID; el sistema lo detecta.
+     El archivo debe estar compartido como
+     "Cualquier persona con el enlace · Lector", o el estudiante verá
+     "Necesitas acceso". Ojo: Drive limita las reproducciones diarias de
+     un mismo archivo, así que con muchos estudiantes puede bloquearse.
+
+   Si una clase tiene las dos, manda YouTube.
+   ============================================ */
+
 const COURSE_DATA = {
   title: "Ciencia de Datos Profesional con Python + IA",
   subtitle: "20 horas certificadas — formación en vivo con grabaciones disponibles en la plataforma",
@@ -19,7 +37,7 @@ const COURSE_DATA = {
           title: "Clase 1 — Sesión en vivo (2 horas)",
           type: "video",
           duration: "2 horas",
-          videoId: "VIDEO_ID_PLACEHOLDER",
+          videoId: "b9DnkYHwfpc",   // PRUEBA — reemplazar por la grabación real de la Clase 1
           description: "Primera sesión en vivo del curso. La grabación queda disponible en esta misma clase.",
           reading: "**Clase 1 — Fundamentos de programación en Python (2 horas)**\n\nSesión de apertura del curso. El curso inicia el **viernes 7 de agosto de 2026**.\n\n**Temas de la sesión:**\n- Entorno de trabajo: Anaconda, VS Code y Google Colab\n- Variables, tipos de datos y operadores\n- Estructuras de datos: listas, tuplas, diccionarios y conjuntos\n- Entrada y salida básica\n\n**Cómo funciona esta clase:**\n- La sesión se dicta en vivo en el horario acordado con el grupo\n- La grabación se carga en este mismo espacio al finalizar\n- Los materiales se publican en la pestaña Recursos\n\n**Antes de la sesión:**\n- Ten instalado Python y un entorno de trabajo\n- Verifica tu conexión y el audio de tu equipo",
           resources: [

@@ -1,3 +1,21 @@
+/* ============================================
+   CÓMO CARGAR LA GRABACIÓN DE CADA CLASE
+
+   Opción A — YouTube (recomendada para grupos grandes):
+     videoId: "dQw4w9WgXcQ"        // lo que va después de v= en la URL
+     Sube el video como "Oculto / No listado".
+
+   Opción B — Google Drive:
+     driveId: "https://drive.google.com/file/d/1AbC.../view?usp=sharing"
+     Puedes pegar el enlace completo o solo el ID; el sistema lo detecta.
+     El archivo debe estar compartido como
+     "Cualquier persona con el enlace · Lector", o el estudiante verá
+     "Necesitas acceso". Ojo: Drive limita las reproducciones diarias de
+     un mismo archivo, así que con muchos estudiantes puede bloquearse.
+
+   Si una clase tiene las dos, manda YouTube.
+   ============================================ */
+
 const COURSE_DATA = {
   title: "Inteligencia Artificial para Investigación Científica",
   subtitle: "20 horas certificadas — formación en vivo con grabaciones disponibles en la plataforma",

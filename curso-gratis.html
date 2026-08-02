@@ -901,9 +901,13 @@
           const lesson = mod.lessons[0] || {};
           const quizDone = App.isQuizCompleted(mod.quiz.id);
           const lessonDone = lesson.id ? App.isLessonCompleted(lesson.id) : false;
-          const videoHtml = lesson.videoId
+          const driveId = App.parseDriveId(lesson.driveId || lesson.driveUrl);
+          const videoHtml = (lesson.videoId && lesson.videoId !== 'VIDEO_ID_PLACEHOLDER')
             ? '<iframe src="https://www.youtube.com/embed/' + lesson.videoId +
               '" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'
+            : driveId
+            ? '<iframe src="https://drive.google.com/file/d/' + driveId +
+              '/preview" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>'
             : '<div class="class-video-placeholder">' +
               '<span class="ph-emoji">🎬</span>' +
               '<span class="ph-text">El video de esta clase estará disponible próximamente.</span>' +

@@ -704,6 +704,19 @@ const App = {
     setTimeout(() => ripple.remove(), 600);
   },
 
+  // Extrae el ID de un archivo de Google Drive.
+  // Acepta el ID suelto o el enlace completo copiado desde Drive:
+  //   https://drive.google.com/file/d/ID/view?usp=sharing
+  //   https://drive.google.com/open?id=ID
+  parseDriveId(value) {
+    if (!value) return '';
+    const v = String(value).trim();
+    if (!v || v === 'DRIVE_ID_PLACEHOLDER') return '';
+    const m = v.match(/\/d\/([a-zA-Z0-9_-]{10,})/) || v.match(/[?&]id=([a-zA-Z0-9_-]{10,})/);
+    if (m) return m[1];
+    return /^[a-zA-Z0-9_-]{10,}$/.test(v) ? v : '';
+  },
+
   // ---- Render Lesson ----
   renderLesson(moduleIndex, lessonIndex) {
     // Validate bounds
@@ -750,6 +763,14 @@ const App = {
           </div>
         `;
       }
+    } else if (this.parseDriveId(lesson.driveId || lesson.driveUrl)) {
+      // Grabación alojada en Google Drive
+      const driveId = this.parseDriveId(lesson.driveId || lesson.driveUrl);
+      videoContainer.innerHTML = `
+        <div class="video-wrapper">
+          <iframe src="https://drive.google.com/file/d/${driveId}/preview" frameborder="0" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>
+        </div>
+      `;
     } else if (COURSE_DATA.isLive) {
       // Curso en vivo: la grabación se publica después de cada sesión
       videoContainer.innerHTML = `
