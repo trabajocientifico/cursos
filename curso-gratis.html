@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Trabajo Científico - Cargando curso...</title>
   <link rel="stylesheet" href="css/styles.css">
+  <script src="js/config.js"></script>
   <script src="js/prefs.js"></script>
   <style>
     /* ============================================
@@ -454,6 +455,11 @@
         <input type="text" id="student-name" placeholder="Ej: María Fernanda Rodríguez Gómez" maxlength="60" autocomplete="name">
         <p class="input-hint">Escríbelo tal como quieres que aparezca en tu certificado.</p>
       </div>
+      <div class="modal-input-group hidden" id="student-email-group">
+        <label for="student-email">Tu correo electrónico</label>
+        <input type="email" id="student-email" placeholder="tu@correo.com" autocomplete="email">
+        <p class="input-hint">Con tu correo guardamos tu avance para que puedas continuar desde otro equipo.</p>
+      </div>
       <button id="start-btn" class="btn btn-primary" disabled>Comenzar el curso</button>
     </div>
   </div>
@@ -569,6 +575,8 @@
           </div>
         </div>
       </div>
+
+      <p class="sync-status" id="sync-status">Avance guardado solo en este equipo</p>
 
       <!-- Hidden stubs kept so app.js doesn't crash on missing IDs -->
       <div class="free-course-stubs">

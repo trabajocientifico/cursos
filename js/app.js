@@ -17,7 +17,7 @@ const App = {
   COURSE_ID: new URLSearchParams(window.location.search).get('curso') || 'excel-vida',
   IS_FREE_COURSE: /curso-gratis\.html/i.test(window.location.pathname),
   get UNIT_LABEL() { return this.IS_FREE_COURSE ? 'Clase' : 'Módulo'; },
-  APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbxyxBvuAFLo_y_i2xhGdlHgBtV2z7vLC2AqrNnu3f1N-nMXs8EHcYpwCCioOL7P5Fj1xg/exec',
+  APPS_SCRIPT_URL: (window.TC_CONFIG && window.TC_CONFIG.APPS_SCRIPT_URL) || '',
 
   // Motivational messages
   MOTIVATIONAL_MESSAGES: [
@@ -56,6 +56,138 @@ const App = {
     }
 
     this.bindEvents();
+
+    // Recupera el avance guardado en la nube (otro equipo, otro navegador)
+    this.restoreFromCloud();
+  },
+
+  // ============================================
+  //  SINCRONIZACIÓN ENTRE DISPOSITIVOS
+  //  El avance se guarda en Google Sheets con la
+  //  llave correo + curso, para que el estudiante
+  //  pueda retomar desde cualquier equipo.
+  // ============================================
+  _pushTimer: null,
+
+  getUserEmail() {
+    return (localStorage.getItem('tc_user_email') || '').trim().toLowerCase();
+  },
+
+  setSyncStatus(estado, texto) {
+    const el = document.getElementById('sync-status');
+    if (!el) return;
+    el.className = `sync-status sync-status--${estado}`;
+    el.textContent = texto;
+    el.title = texto;
+  },
+
+  // GET al Apps Script. Si el navegador bloquea la petición por CORS,
+  // se reintenta con JSONP, que no depende de esas cabeceras.
+  requestRemote(params) {
+    const url = this.APPS_SCRIPT_URL + '?' + new URLSearchParams(params).toString();
+    return fetch(url)
+      .then(r => r.json())
+      .catch(() => this.requestJsonp(url));
+  },
+
+  requestJsonp(url) {
+    return new Promise((resolve, reject) => {
+      const cb = 'tcSync' + Date.now() + Math.floor(Math.random() * 1000);
+      const script = document.createElement('script');
+      let timer = null;
+      const limpiar = () => {
+        clearTimeout(timer);
+        delete window[cb];
+        if (script.parentNode) script.parentNode.removeChild(script);
+      };
+      timer = setTimeout(() => { limpiar(); reject(new Error('timeout')); }, 10000);
+      window[cb] = (data) => { limpiar(); resolve(data); };
+      script.onerror = () => { limpiar(); reject(new Error('jsonp')); };
+      script.src = url + '&callback=' + cb;
+      document.body.appendChild(script);
+    });
+  },
+
+  // Une el avance remoto con el local. Siempre suma, nunca resta:
+  // así cambiar de dispositivo no puede borrarle nada al estudiante.
+  restoreFromCloud() {
+    const correo = this.getUserEmail();
+    if (!correo) {
+      this.setSyncStatus('local', 'Avance guardado solo en este equipo');
+      return Promise.resolve(false);
+    }
+
+    this.setSyncStatus('cargando', 'Buscando tu avance…');
+
+    return this.requestRemote({ accion: 'estado', correo: correo, curso: this.COURSE_ID })
+      .then(data => {
+        if (!data || data.status !== 'ok') throw new Error('respuesta inválida');
+
+        let sumadas = 0;
+        if (data.encontrado) {
+          const antesL = this.state.completedLessons.length;
+          const antesQ = this.state.completedQuizzes.length;
+          this.state.completedLessons = this.unir(this.state.completedLessons, data.clases);
+          this.state.completedQuizzes = this.unir(this.state.completedQuizzes, data.quizzes);
+          sumadas = (this.state.completedLessons.length - antesL) + (this.state.completedQuizzes.length - antesQ);
+
+          if (sumadas > 0) {
+            this.saveState();
+            this.renderSidebar();
+            this.renderDashboard();
+            this.showToast('module', 'Avance recuperado',
+              `Retomamos donde ibas: ${this.getViewedModulesCount()} de ${COURSE_DATA.modules.length} ${this.UNIT_LABEL.toLowerCase()}s vistos.`);
+          }
+        }
+
+        this.setSyncStatus('ok', 'Avance sincronizado');
+        // Sube el estado unido para que ambos lados queden iguales
+        this.pushState(true);
+        return true;
+      })
+      .catch(() => {
+        this.setSyncStatus('local', 'Sin conexión — guardado en este equipo');
+        return false;
+      });
+  },
+
+  unir(a, b) {
+    const lista = Array.isArray(b) ? b : [];
+    return Array.from(new Set([...(a || []), ...lista]));
+  },
+
+  // Envía el estado completo (no un evento suelto) para que la nube
+  // siempre tenga la foto actual del avance.
+  pushState(inmediato) {
+    const correo = this.getUserEmail();
+    if (!correo) return;
+
+    clearTimeout(this._pushTimer);
+    const enviar = () => {
+      const payload = {
+        tipo: 'estado',
+        correo: correo,
+        cursoId: this.COURSE_ID,
+        curso: COURSE_DATA.title || this.COURSE_ID,
+        nombre: this.state.username || '',
+        clases: this.state.completedLessons,
+        quizzes: this.state.completedQuizzes,
+        modulosVistos: `${this.getViewedModulesCount()}/${COURSE_DATA.modules.length}`,
+        clasesVistas: `${this.getTotalCompletedLessons()}/${this.getTotalLessons()}`,
+        quizzesAprobados: `${this.getCompletedQuizzesCount()}/${COURSE_DATA.modules.filter(m => m.quiz).length}`,
+        progreso: this.getGlobalProgress(),
+        fecha: new Date().toLocaleString('es-CO', { timeZone: 'America/Bogota' })
+      };
+      fetch(this.APPS_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      }).catch(() => {});
+    };
+
+    if (inmediato) enviar();
+    else this._pushTimer = setTimeout(enviar, 1200);
   },
 
   // ---- LocalStorage ----
@@ -90,6 +222,7 @@ const App = {
         tipo: 'avance',
         nombre: this.state.username || localStorage.getItem('tc_user_name') || '',
         correo: localStorage.getItem('tc_user_email') || '',
+        cursoId: this.COURSE_ID,
         curso: COURSE_DATA.title || this.COURSE_ID,
         evento: evento,
         detalle: detalle,
@@ -104,6 +237,9 @@ const App = {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
       }).catch(err => console.warn('No se pudo enviar avance:', err));
+
+      // Además del evento, se guarda el estado completo para poder retomarlo
+      this.pushState();
     } catch (e) {
       console.warn('Error enviando avance:', e);
     }
@@ -125,6 +261,13 @@ const App = {
     document.getElementById('app').classList.add('hidden');
     const input = document.getElementById('student-name');
     const btn = document.getElementById('start-btn');
+    const emailGroup = document.getElementById('student-email-group');
+    const emailInput = document.getElementById('student-email');
+
+    // Si llegó directo al curso sin pasar por el portal no tenemos su correo,
+    // y sin correo no se puede recuperar el avance desde otro equipo.
+    const faltaCorreo = !this.getUserEmail();
+    if (emailGroup && faltaCorreo) emailGroup.classList.remove('hidden');
 
     input.addEventListener('input', () => {
       btn.disabled = input.value.trim().length === 0;
@@ -135,8 +278,15 @@ const App = {
       if (!name) return;
       this.state.username = name;
       this.saveState();
+
+      if (emailGroup && faltaCorreo && emailInput) {
+        const correo = emailInput.value.trim();
+        if (correo) localStorage.setItem('tc_user_email', correo);
+      }
+
       document.getElementById('welcome-modal').classList.add('hidden');
       this.showApp();
+      this.restoreFromCloud();
     });
 
     input.addEventListener('keydown', (e) => {

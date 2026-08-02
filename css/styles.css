@@ -3077,3 +3077,22 @@ body {
 .resources-list {
   max-width: 900px;
 }
+
+/* ============================================
+   Estado de la sincronización del avance
+   ============================================ */
+.sync-status {
+  margin-top: 10px;
+  font-size: 0.78rem;
+  line-height: 1.4;
+  color: var(--text-muted);
+}
+
+.sync-status--cargando { color: var(--text-secondary); }
+.sync-status--ok { color: var(--success); }
+.sync-status--local { color: var(--warning); }
+
+.sync-status::before {
+  content: '• ';
+  font-weight: 700;
+}

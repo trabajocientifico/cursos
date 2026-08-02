@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Trabajo Científico - Plataforma de Educación</title>
   <link rel="stylesheet" href="css/portal.css">
+  <script src="js/config.js"></script>
   <script src="js/prefs.js"></script>
   <style>
     /* Estilos adicionales para el modal de acceso */
@@ -956,10 +957,11 @@
         localStorage.setItem(`tc_unlocked_${courseId}`, 'true');
 
         // --- Registro en Google Sheets ---
-        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxyxBvuAFLo_y_i2xhGdlHgBtV2z7vLC2AqrNnu3f1N-nMXs8EHcYpwCCioOL7P5Fj1xg/exec';
+        const APPS_SCRIPT_URL = (window.TC_CONFIG && window.TC_CONFIG.APPS_SCRIPT_URL) || '';
         const registroData = {
           nombre: userName,
           correo: userEmail,
+          cursoId: courseId,
           curso: courseId,
           tipo: isFree ? 'Gratuito' : 'Profesional',
           fecha: new Date().toLocaleString('es-CO', { timeZone: 'America/Bogota' })
