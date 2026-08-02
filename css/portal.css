@@ -1651,3 +1651,67 @@ body {
 .prefs-btn[data-pref-font="grande"] { font-size: 1.05rem; }
 .prefs-btn[data-pref-font="extra"] { font-size: 1.3rem; }
 .prefs-btn--theme { font-size: 1rem; }
+
+/* ============================================
+   Cursos en vivo destacados
+   Solo son dos: se les da más aire y presencia
+   que a la rejilla normal de tarjetas.
+   ============================================ */
+.courses-grid--featured {
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  max-width: 1000px;
+  margin-bottom: 8px;
+}
+
+.course-card.featured {
+  border: 1px solid rgba(244, 63, 94, 0.35);
+  box-shadow: 0 10px 40px rgba(244, 63, 94, 0.12),
+              0 0 0 1px rgba(244, 63, 94, 0.08);
+}
+
+.course-card.featured:hover {
+  border-color: rgba(244, 63, 94, 0.6);
+  box-shadow: 0 16px 50px rgba(244, 63, 94, 0.22),
+              0 0 0 1px rgba(244, 63, 94, 0.2);
+}
+
+.course-card.featured .card-thumbnail {
+  min-height: 150px;
+}
+
+.course-card.featured .card-icon {
+  font-size: 3.4rem;
+}
+
+.course-card.featured .card-title {
+  font-size: 1.32rem;
+}
+
+.course-card.featured .card-description {
+  font-size: 0.92rem;
+}
+
+.course-card.featured .card-category {
+  font-size: 0.82rem;
+}
+
+/* La llamada a la acción no debe pasar desapercibida */
+.course-card.featured .card-meta-cta {
+  width: 100%;
+  margin-top: 12px;
+  margin-left: 0;
+  padding: 11px 16px;
+  text-align: center;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #ef4444, #f43f5e);
+  color: #fff !important;
+  font-size: 0.9rem;
+}
+
+.course-card.featured:hover .card-meta-cta {
+  box-shadow: 0 6px 18px rgba(244, 63, 94, 0.35);
+}
+
+:root[data-theme="light"] .course-card.featured {
+  box-shadow: 0 10px 30px rgba(244, 63, 94, 0.1);
+}

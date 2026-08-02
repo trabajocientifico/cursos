@@ -373,20 +373,20 @@
 
     <div class="hero-stats">
       <div class="hero-stat">
-        <span class="hero-stat-number count-up" data-target="14">0</span>
-        <span class="hero-stat-label">Cursos</span>
+        <span class="hero-stat-number count-up" data-target="2">0</span>
+        <span class="hero-stat-label">Cursos en vivo</span>
       </div>
       <div class="hero-stat">
-        <span class="hero-stat-number count-up" data-target="190">0</span>
-        <span class="hero-stat-label">Horas de contenido</span>
+        <span class="hero-stat-number count-up" data-target="20">0</span>
+        <span class="hero-stat-label">Horas certificadas</span>
       </div>
       <div class="hero-stat">
-        <span class="hero-stat-number count-up" data-target="214">0</span>
-        <span class="hero-stat-label">Lecciones</span>
+        <span class="hero-stat-number count-up" data-target="7">0</span>
+        <span class="hero-stat-label">Sesiones por curso</span>
       </div>
       <div class="hero-stat">
-        <span class="hero-stat-number count-up" data-target="52">0</span>
-        <span class="hero-stat-label">Quizzes</span>
+        <span class="hero-stat-number count-up" data-target="6">0</span>
+        <span class="hero-stat-label">Cursos gratuitos</span>
       </div>
     </div>
   </section>
@@ -397,16 +397,16 @@
     <!-- CURSOS EN VIVO (acceso con clave) -->
     <div class="section-divider reveal section-divider--live">
       <div class="section-divider-text">
-        <span class="section-eyebrow">Cupos abiertos</span>
+        <span class="section-eyebrow">Inscripciones abiertas · Inician en agosto</span>
         <h2>Cursos <span class="gradient-text">En Vivo</span></h2>
-        <p class="section-subtitle">Formación certificada en sesiones en vivo con el instructor. Las grabaciones quedan cargadas en la plataforma para verlas cuando quieras.</p>
+        <p class="section-subtitle">20 horas certificadas en sesiones en vivo con el instructor. Las grabaciones quedan cargadas en la plataforma para verlas cuando quieras, con evaluación por módulo y certificado al finalizar.</p>
       </div>
-      <span class="badge-live"><span class="live-dot"></span> Inscritos con clave</span>
+      <span class="badge-live"><span class="live-dot"></span> Acceso con clave</span>
     </div>
 
-    <div class="courses-grid">
+    <div class="courses-grid courses-grid--featured">
       <!-- Curso en vivo 1: Ciencia de Datos Profesional con Python + IA -->
-      <a href="#" class="course-card reveal live" data-theme="cyan" data-lessons="7" onclick="openAccessModal(event, 'ciencia-datos-profesional-ia', 'Ciencia de Datos Profesional con Python + IA', 'ciencia07')">
+      <a href="#" class="course-card reveal live featured" data-theme="cyan" data-lessons="7" onclick="openAccessModal(event, 'ciencia-datos-profesional-ia', 'Ciencia de Datos Profesional con Python + IA', 'ciencia07')">
         <div class="card-thumbnail">
           <span class="card-icon">🐍</span>
           <span class="card-live-badge"><span class="live-dot"></span> En vivo</span>
@@ -425,7 +425,7 @@
       </a>
 
       <!-- Curso en vivo 2: Inteligencia Artificial para Investigación Científica -->
-      <a href="#" class="course-card reveal live" data-theme="purple" data-lessons="7" onclick="openAccessModal(event, 'ia-investigacion-cientifica', 'Inteligencia Artificial para Investigación Científica', 'investigacion20')">
+      <a href="#" class="course-card reveal live featured" data-theme="purple" data-lessons="7" onclick="openAccessModal(event, 'ia-investigacion-cientifica', 'Inteligencia Artificial para Investigación Científica', 'investigacion20')">
         <div class="card-thumbnail">
           <span class="card-icon">🔬</span>
           <span class="card-live-badge"><span class="live-dot"></span> En vivo</span>
@@ -540,7 +540,7 @@
         </div>
       </a>
 
-      <!-- Curso Gratis 6: Visualización Gráfica con Python + IA (Próximamente — inicia 2 junio) -->
+      <!-- Curso Gratis 6: Visualización Gráfica con Python + IA (Próximamente — inicia en septiembre) -->
       <a href="https://luma.com/o89tyagn" target="_blank" rel="noopener" class="course-card reveal upcoming" data-theme="pink">
         <div class="card-thumbnail">
           <span class="card-icon">🎨</span>
@@ -548,7 +548,7 @@
           <div class="card-gradient-bar"></div>
         </div>
         <div class="card-body">
-          <span class="card-category">🗓️ Inicia 2 de junio</span>
+          <span class="card-category">🗓️ Inicia en septiembre de 2026</span>
           <h3 class="card-title">Visualización Gráfica con Python + IA</h3>
           <p class="card-description">Crea visualizaciones científicas potentes y dashboards inteligentes con Python e IA.</p>
           <div class="card-meta">
@@ -559,7 +559,16 @@
       </a>
     </div>
 
-    <!-- CURSOS PROFESIONALES -->
+    <!-- ============================================================
+         CURSOS PROFESIONALES — OCULTOS TEMPORALMENTE
+         Se ocultan para dar todo el protagonismo a los dos cursos
+         en vivo que inician el 7 y el 20 de agosto de 2026.
+         Para volver a mostrarlos: borrar esta línea de apertura y
+         la de cierre que dice "FIN CURSOS PROFESIONALES OCULTOS".
+         Los cursos siguen funcionando si se entra por su enlace.
+         ============================================================ -->
+    <!--
+    <!== CURSOS PROFESIONALES ==>
     <div class="section-divider reveal section-divider--pro">
       <div class="section-divider-text">
         <span class="section-eyebrow">Da el siguiente paso</span>
@@ -570,7 +579,7 @@
     </div>
 
     <div class="courses-grid">
-      <!-- Curso Pro 1: Excel -->
+      <!== Curso Pro 1: Excel ==>
       <a href="#" class="course-card reveal" data-theme="green" onclick="openAccessModal(event, 'excel-vida', 'Excel para la Vida', 'excel15')">
         <div class="card-thumbnail"><span class="card-icon">📗</span><div class="card-gradient-bar"></div></div>
         <div class="card-body">
@@ -580,7 +589,7 @@
         </div>
       </a>
 
-      <!-- Curso Pro 2: Power BI -->
+      <!== Curso Pro 2: Power BI ==>
       <a href="#" class="course-card reveal" data-theme="yellow" onclick="openAccessModal(event, 'dashboard-powerbi', 'Dashboard con Power BI', 'dashboard19')">
         <div class="card-thumbnail"><span class="card-icon">📈</span><div class="card-gradient-bar"></div></div>
         <div class="card-body">
@@ -590,7 +599,7 @@
         </div>
       </a>
 
-      <!-- Curso Pro 3: ArcGIS Pro -->
+      <!== Curso Pro 3: ArcGIS Pro ==>
       <a href="#" class="course-card reveal" data-theme="green" onclick="openAccessModal(event, 'arcgis-pro', 'ArcGIS PRO', 'arcgis9')">
         <div class="card-thumbnail"><span class="card-icon">🗺️</span><div class="card-gradient-bar"></div></div>
         <div class="card-body">
@@ -600,7 +609,7 @@
         </div>
       </a>
 
-      <!-- Curso Pro 4: Viz Inteligente -->
+      <!== Curso Pro 4: Viz Inteligente ==>
       <a href="#" class="course-card reveal" data-theme="purple" onclick="openAccessModal(event, 'python-ia-viz', 'Python + IA para Visualización Inteligente', 'python36')">
         <div class="card-thumbnail"><span class="card-icon">🎨</span><div class="card-gradient-bar"></div></div>
         <div class="card-body">
@@ -610,7 +619,7 @@
         </div>
       </a>
 
-      <!-- Curso Pro 5: GeoEstadistica -->
+      <!== Curso Pro 5: GeoEstadistica ==>
       <a href="#" class="course-card reveal" data-theme="blue" onclick="openAccessModal(event, 'geoestadistica-python', 'GeoEstadística con Python', 'geoestadistica23')">
         <div class="card-thumbnail"><span class="card-icon">📊</span><div class="card-gradient-bar"></div></div>
         <div class="card-body">
@@ -620,7 +629,7 @@
         </div>
       </a>
 
-      <!-- Curso Pro 6: Automatizacion -->
+      <!== Curso Pro 6: Automatizacion ==>
       <a href="#" class="course-card reveal" data-theme="orange" onclick="openAccessModal(event, 'automatizacion-python', 'Automatización de Tareas con Python', 'automatizacion31')">
         <div class="card-thumbnail"><span class="card-icon">⚡</span><div class="card-gradient-bar"></div></div>
         <div class="card-body">
@@ -630,7 +639,7 @@
         </div>
       </a>
 
-      <!-- Curso Pro 7: IA Vida -->
+      <!== Curso Pro 7: IA Vida ==>
       <a href="#" class="course-card reveal" data-theme="cyan" onclick="openAccessModal(event, 'ia-vida', 'IA para la Vida', 'ia12')">
         <div class="card-thumbnail"><span class="card-icon">🤖</span><div class="card-gradient-bar"></div></div>
         <div class="card-body">
@@ -640,7 +649,7 @@
         </div>
       </a>
 
-      <!-- Curso Pro 8: Optimizacion -->
+      <!== Curso Pro 8: Optimizacion ==>
       <a href="#" class="course-card reveal" data-theme="pink" onclick="openAccessModal(event, 'optimizacion-ia', 'Optimización Científica con IA', 'optimizacion27')">
         <div class="card-thumbnail"><span class="card-icon">🔬</span><div class="card-gradient-bar"></div></div>
         <div class="card-body">
@@ -650,6 +659,8 @@
         </div>
       </a>
     </div>
+    FIN CURSOS PROFESIONALES OCULTOS -->
+
   </section>
 
   <!-- Access Modal -->
