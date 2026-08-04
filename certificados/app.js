@@ -282,7 +282,7 @@ class CertificateApp {
     ctx.fillRect(0, 0, w, h);
 
     // 2. Rejilla tecnológica sutil
-    ctx.strokeStyle = 'rgba(0, 212, 255, 0.03)';
+    ctx.strokeStyle = 'rgba(196, 34, 50, 0.03)';
     ctx.lineWidth = 1;
     for (let x = 60; x < w; x += 60) {
       ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
@@ -293,19 +293,19 @@ class CertificateApp {
 
     // 3. Resplandores ambientales en esquinas
     const glowCyan = ctx.createRadialGradient(0, 0, 0, 0, 0, 500);
-    glowCyan.addColorStop(0, 'rgba(0, 212, 255, 0.14)');
-    glowCyan.addColorStop(1, 'rgba(0, 212, 255, 0)');
+    glowCyan.addColorStop(0, 'rgba(196, 34, 50, 0.14)');
+    glowCyan.addColorStop(1, 'rgba(196, 34, 50, 0)');
     ctx.fillStyle = glowCyan; ctx.fillRect(0, 0, 600, 600);
 
     const glowPurple = ctx.createRadialGradient(w, h, 0, w, h, 500);
-    glowPurple.addColorStop(0, 'rgba(123, 47, 247, 0.14)');
-    glowPurple.addColorStop(1, 'rgba(123, 47, 247, 0)');
+    glowPurple.addColorStop(0, 'rgba(107, 15, 24, 0.14)');
+    glowPurple.addColorStop(1, 'rgba(107, 15, 24, 0)');
     ctx.fillStyle = glowPurple; ctx.fillRect(w - 600, h - 600, 600, 600);
 
     // 4. Marcadores y marco elegante
     const accentGrad = ctx.createLinearGradient(0, 0, w, h);
-    accentGrad.addColorStop(0, '#00d4ff');
-    accentGrad.addColorStop(1, '#7b2ff7');
+    accentGrad.addColorStop(0, '#ff6b78');
+    accentGrad.addColorStop(1, '#c42232');
 
     ctx.strokeStyle = accentGrad;
     ctx.lineWidth = 1.5;
@@ -345,7 +345,7 @@ class CertificateApp {
     const dY = 175;
     const lineGrad = ctx.createLinearGradient(w / 2 - 280, 0, w / 2 + 280, 0);
     lineGrad.addColorStop(0, 'transparent');
-    lineGrad.addColorStop(0.5, '#00d4ff');
+    lineGrad.addColorStop(0.5, '#ff6b78');
     lineGrad.addColorStop(1, 'transparent');
     ctx.strokeStyle = lineGrad;
     ctx.lineWidth = 1;
@@ -372,8 +372,8 @@ class CertificateApp {
 
     // 9. Nombre del participante (color sólido, sin degradado)
     const nameGrad = ctx.createLinearGradient(w / 2 - 260, 0, w / 2 + 260, 0);
-    nameGrad.addColorStop(0, '#00d4ff');
-    nameGrad.addColorStop(1, '#7b2ff7');
+    nameGrad.addColorStop(0, '#ff6b78');
+    nameGrad.addColorStop(1, '#e04352');
 
     let nameSize = 48;
     ctx.font = '800 ' + nameSize + 'px ' + FONT;
@@ -419,15 +419,15 @@ class CertificateApp {
     const badgeY = 515;
     const badgeX = (w - badgeW) / 2;
 
-    ctx.fillStyle = 'rgba(0, 212, 255, 0.10)';
-    ctx.strokeStyle = '#00d4ff';
+    ctx.fillStyle = 'rgba(196, 34, 50, 0.10)';
+    ctx.strokeStyle = '#ff6b78';
     ctx.lineWidth = 1;
     this.roundRect(ctx, badgeX, badgeY - badgeH / 2, badgeW, badgeH, badgeH / 2);
     ctx.fill();
     ctx.stroke();
 
     // Icono Reloj en Badge
-    ctx.strokeStyle = '#00d4ff';
+    ctx.strokeStyle = '#ff6b78';
     ctx.lineWidth = 1.6;
     ctx.beginPath();
     ctx.arc(badgeX + 22, badgeY, 7, 0, Math.PI * 2);
@@ -438,7 +438,7 @@ class CertificateApp {
     ctx.stroke();
 
     // Texto de Badge
-    ctx.fillStyle = '#00d4ff';
+    ctx.fillStyle = '#ff6b78';
     ctx.textAlign = 'left';
     ctx.textBaseline = 'middle';
     ctx.fillText(badgeText, badgeX + 38, badgeY + 1);

@@ -30,7 +30,7 @@ const Confetti = {
       particleCount: 60,
       spread: 70,
       startY: 0.5,
-      colors: ['#00d4ff', '#7b2ff7', '#22c55e', '#f59e0b', '#ef4444', '#ec4899'],
+      colors: ['#ff6b78', '#c42232', '#22c55e', '#f59e0b', '#ef4444', '#ec4899'],
       duration: 2500,
       gravity: 0.6,
       drift: 0,
@@ -176,7 +176,7 @@ const Confetti = {
   lessonComplete() {
     this.launch({
       particleCount: 35,
-      colors: ['#00d4ff', '#7b2ff7', '#4f46e5'],
+      colors: ['#ff6b78', '#c42232', '#4f46e5'],
       duration: 1800,
       gravity: 0.5,
       scalar: 0.8,
@@ -189,7 +189,7 @@ const Confetti = {
   quizPass() {
     this.launch({
       particleCount: 80,
-      colors: ['#22c55e', '#00d4ff', '#7b2ff7', '#f59e0b', '#ec4899'],
+      colors: ['#22c55e', '#ff6b78', '#c42232', '#f59e0b', '#ec4899'],
       duration: 3000,
       gravity: 0.4,
       scalar: 1.1,
@@ -204,7 +204,7 @@ const Confetti = {
     // Wave 1
     this.launch({
       particleCount: 100,
-      colors: ['#00d4ff', '#7b2ff7', '#22c55e', '#f59e0b', '#ef4444', '#ec4899'],
+      colors: ['#ff6b78', '#c42232', '#22c55e', '#f59e0b', '#ef4444', '#ec4899'],
       duration: 4000,
       gravity: 0.3,
       scalar: 1.2,
@@ -216,7 +216,7 @@ const Confetti = {
     setTimeout(() => {
       this.launch({
         particleCount: 60,
-        colors: ['#00d4ff', '#7b2ff7', '#ffd700'],
+        colors: ['#ff6b78', '#c42232', '#ffd700'],
         duration: 3000,
         gravity: 0.4,
         scalar: 1,
@@ -228,7 +228,7 @@ const Confetti = {
     setTimeout(() => {
       this.launch({
         particleCount: 40,
-        colors: ['#22c55e', '#00d4ff', '#ffd700'],
+        colors: ['#22c55e', '#ff6b78', '#ffd700'],
         duration: 2500,
         gravity: 0.5,
         spread: 60,
@@ -241,7 +241,7 @@ const Confetti = {
   moduleComplete() {
     this.launch({
       particleCount: 55,
-      colors: ['#22c55e', '#00d4ff', '#7b2ff7'],
+      colors: ['#22c55e', '#ff6b78', '#c42232'],
       duration: 2200,
       gravity: 0.45,
       scalar: 1,
@@ -255,7 +255,7 @@ const Confetti = {
   levelUp() {
     this.launch({
       particleCount: 70,
-      colors: ['#ffd700', '#ffaa00', '#00d4ff', '#7b2ff7', '#fff'],
+      colors: ['#ffd700', '#ffaa00', '#ff6b78', '#c42232', '#fff'],
       duration: 2800,
       gravity: 0.35,
       scalar: 1.1,
@@ -269,7 +269,7 @@ const Confetti = {
   achievementUnlock() {
     this.launch({
       particleCount: 30,
-      colors: ['#7b2ff7', '#ffd700', '#a855f7', '#c084fc'],
+      colors: ['#c42232', '#ffd700', '#e04352', '#ff9aa3'],
       duration: 1600,
       gravity: 0.5,
       scalar: 0.7,

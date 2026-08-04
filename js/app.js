@@ -1170,7 +1170,7 @@ const App = {
     ctx.fillRect(0, 0, w, h);
 
     // ---- Subtle tech grid ----
-    ctx.strokeStyle = 'rgba(0, 212, 255, 0.03)';
+    ctx.strokeStyle = 'rgba(196, 34, 50, 0.03)';
     ctx.lineWidth = 1;
     for (let x = 50; x < w; x += 50) {
       ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
@@ -1181,18 +1181,18 @@ const App = {
 
     // ---- Soft corner glows ----
     const glow1 = ctx.createRadialGradient(0, 0, 0, 0, 0, 480);
-    glow1.addColorStop(0, 'rgba(0, 212, 255, 0.14)');
-    glow1.addColorStop(1, 'rgba(0, 212, 255, 0)');
+    glow1.addColorStop(0, 'rgba(196, 34, 50, 0.14)');
+    glow1.addColorStop(1, 'rgba(196, 34, 50, 0)');
     ctx.fillStyle = glow1; ctx.fillRect(0, 0, 600, 600);
     const glow2 = ctx.createRadialGradient(w, h, 0, w, h, 480);
-    glow2.addColorStop(0, 'rgba(123, 47, 247, 0.14)');
-    glow2.addColorStop(1, 'rgba(123, 47, 247, 0)');
+    glow2.addColorStop(0, 'rgba(107, 15, 24, 0.14)');
+    glow2.addColorStop(1, 'rgba(107, 15, 24, 0)');
     ctx.fillStyle = glow2; ctx.fillRect(w - 600, h - 600, 600, 600);
 
     // ---- Gradient pen ----
     const accent = ctx.createLinearGradient(0, 0, w, h);
-    accent.addColorStop(0, '#00d4ff');
-    accent.addColorStop(1, '#7b2ff7');
+    accent.addColorStop(0, '#ff6b78');
+    accent.addColorStop(1, '#c42232');
 
     // ---- Outer frame ----
     ctx.strokeStyle = accent;
@@ -1233,7 +1233,7 @@ const App = {
     const dY = 220;
     const lineGrad = ctx.createLinearGradient(w / 2 - 280, 0, w / 2 + 280, 0);
     lineGrad.addColorStop(0, 'transparent');
-    lineGrad.addColorStop(0.5, '#00d4ff');
+    lineGrad.addColorStop(0.5, '#ff6b78');
     lineGrad.addColorStop(1, 'transparent');
     ctx.strokeStyle = lineGrad;
     ctx.lineWidth = 1;
@@ -1259,8 +1259,8 @@ const App = {
     // ---- Recipient name (big, gradient) ----
     const name = (this.state.username || '').trim() || 'Estudiante';
     const nameGrad = ctx.createLinearGradient(w / 2 - 260, 0, w / 2 + 260, 0);
-    nameGrad.addColorStop(0, '#00d4ff');
-    nameGrad.addColorStop(1, '#7b2ff7');
+    nameGrad.addColorStop(0, '#ff6b78');
+    nameGrad.addColorStop(1, '#e04352');
 
     let nameSize = 52;
     ctx.font = 'bold ' + nameSize + 'px ' + FONT;
@@ -1305,14 +1305,14 @@ const App = {
     const badgeH = 36;
     const badgeY = 560;
     const badgeX = (w - badgeW) / 2;
-    ctx.fillStyle = 'rgba(0, 212, 255, 0.10)';
-    ctx.strokeStyle = '#00d4ff';
+    ctx.fillStyle = 'rgba(196, 34, 50, 0.10)';
+    ctx.strokeStyle = '#ff6b78';
     ctx.lineWidth = 1;
     this._roundRect(ctx, badgeX, badgeY - badgeH / 2, badgeW, badgeH, badgeH / 2);
     ctx.fill();
     ctx.stroke();
     // Clock icon
-    ctx.strokeStyle = '#00d4ff';
+    ctx.strokeStyle = '#ff6b78';
     ctx.lineWidth = 1.6;
     ctx.beginPath();
     ctx.arc(badgeX + 22, badgeY, 8, 0, Math.PI * 2);
@@ -1322,7 +1322,7 @@ const App = {
     ctx.moveTo(badgeX + 22, badgeY); ctx.lineTo(badgeX + 26, badgeY);
     ctx.stroke();
     // Badge text
-    ctx.fillStyle = '#00d4ff';
+    ctx.fillStyle = '#ff6b78';
     ctx.textAlign = 'left';
     ctx.textBaseline = 'middle';
     ctx.fillText(badgeText, badgeX + 40, badgeY + 1);

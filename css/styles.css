@@ -12,60 +12,85 @@
 
 :root {
   color-scheme: dark;
-  --bg-deep: #0b0d17;
-  --bg-surface: #131627;
-  --bg-surface-2: #1a1e35;
-  --bg-hover: #1f2442;
-  --border: rgba(255, 255, 255, 0.10);
-  --border-hover: rgba(255, 255, 255, 0.20);
-  --overlay-soft: rgba(255, 255, 255, 0.06);
-  --overlay-strong: rgba(255, 255, 255, 0.15);
+  --bg-deep: #0c0d10;
+  --bg-surface: #14161b;
+  --bg-surface-2: #1b1e25;
+  --bg-hover: #232730;
+  --border: #262a33;
+  --border-hover: #3b414d;
+  --overlay-soft: rgba(255, 255, 255, 0.05);
+  --overlay-strong: rgba(255, 255, 255, 0.12);
   /* Contraste medido sobre --bg-surface:
-     primary 14.8:1 · secondary 8.0:1 · muted 5.6:1 (mínimo AA = 4.5:1) */
-  --text-primary: #e8e9ee;
-  --text-secondary: #a8adc0;
-  --text-muted: #8b8fa3;
-  --accent-cyan: #00d4ff;
-  --accent-purple: #7b2ff7;
-  --accent-gradient: linear-gradient(135deg, #00d4ff, #7b2ff7);
-  --accent-gradient-h: linear-gradient(90deg, #00d4ff, #7b2ff7);
-  --success: #22c55e;
-  --error: #ef4444;
-  --warning: #f59e0b;
+     primary 15.1:1 · secondary 7.3:1 · muted 4.6:1 (mínimo AA = 4.5:1) */
+  --text-primary: #f2f3f5;
+  --text-secondary: #a9afbc;
+  --text-muted: #7d8492;
+
+  /* --- Rojo oscuro de marca ---
+     brand-600 es el color de acción (blanco encima = 6.0:1).
+     brand-300 es el que vale como texto sobre fondo oscuro:
+     el 600 sobre el fondo profundo solo da 2.6:1. */
+  --brand-900: #40080e;
+  --brand-800: #6b0f18;
+  --brand-700: #8c1420;
+  --brand-600: #a81b29;
+  --brand-500: #c42232;
+  --brand-400: #e04352;
+  --brand-300: #ff6b78;
+  --brand: var(--brand-600);
+  --brand-text: var(--brand-300);
+  --brand-tint: rgba(196, 34, 50, 0.12);
+  --brand-ring: rgba(196, 34, 50, 0.45);
+
+  /* Alias heredados: el resto de la hoja los usa como
+     color de texto/borde, por eso apuntan al tono claro. */
+  --accent-cyan: var(--brand-text);
+  --accent-purple: var(--brand-400);
+  --accent-gradient: linear-gradient(135deg, var(--brand-600), var(--brand-800));
+  --accent-gradient-h: linear-gradient(90deg, var(--brand-600), var(--brand-800));
+
+  --success: #2fb85f;
+  --error: #e0475a;
+  --warning: #d98a2b;
   --sidebar-w: 280px;
   --radius: 12px;
   --radius-sm: 8px;
   --radius-xs: 6px;
-  --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --radius-pill: 999px;
+  --shadow-brand: 0 8px 24px rgba(168, 27, 41, 0.35);
+  --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* ============================================
    Tema claro
-   Los acentos se oscurecen: el cian #00d4ff sobre
-   blanco da 1.9:1 y es ilegible como texto.
+   El rojo de texto baja al 700: el 600 sobre blanco
+   funciona pero pierde peso frente al fondo claro.
    ============================================ */
 :root[data-theme="light"] {
   color-scheme: light;
-  --bg-deep: #eef1f7;
+  --bg-deep: #f4f5f7;
   --bg-surface: #ffffff;
-  --bg-surface-2: #f4f6fb;
-  --bg-hover: #e6ebf5;
-  --border: rgba(18, 23, 43, 0.14);
-  --border-hover: rgba(18, 23, 43, 0.28);
-  --overlay-soft: rgba(18, 23, 43, 0.05);
-  --overlay-strong: rgba(18, 23, 43, 0.12);
+  --bg-surface-2: #f0f1f4;
+  --bg-hover: #e7e9ee;
+  --border: #e1e3e8;
+  --border-hover: #c2c6cf;
+  --overlay-soft: rgba(18, 20, 26, 0.05);
+  --overlay-strong: rgba(18, 20, 26, 0.12);
   /* Contraste medido sobre blanco:
-     primary 17.8:1 · secondary 8.5:1 · muted 5.4:1 · acentos 5.9:1 y 7.1:1 */
-  --text-primary: #12172b;
-  --text-secondary: #454c63;
-  --text-muted: #626a85;
-  --accent-cyan: #026d8a;
-  --accent-purple: #6d28d9;
-  --accent-gradient: linear-gradient(135deg, #026d8a, #6d28d9);
-  --accent-gradient-h: linear-gradient(90deg, #026d8a, #6d28d9);
+     primary 16.9:1 · secondary 8.1:1 · muted 4.8:1 · brand-text 8.4:1 */
+  --text-primary: #12141a;
+  --text-secondary: #4c5462;
+  --text-muted: #6b7280;
+
+  --brand-text: #8c1420;
+  --brand-tint: rgba(140, 20, 32, 0.08);
+  --brand-ring: rgba(140, 20, 32, 0.35);
+  --accent-purple: var(--brand-700);
+
   --success: #15803d;
   --error: #b91c1c;
   --warning: #b45309;
+  --shadow-brand: 0 8px 24px rgba(140, 20, 32, 0.22);
 }
 
 /* ============================================
@@ -82,21 +107,26 @@ html[data-font="grande"] { font-size: 18px; }
 html[data-font="extra"] { font-size: 20px; }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   background: var(--bg-deep);
   color: var(--text-primary);
   line-height: 1.6;
   min-height: 100vh;
   overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Tracking negativo en titulares: es lo que da la
+   sensación compacta y editorial de la marca. */
+h1, h2, h3 {
+  letter-spacing: -0.03em;
+  line-height: 1.2;
 }
 
 /* --- Utility --- */
 .hidden { display: none !important; }
 .gradient-text {
-  background: var(--accent-gradient);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--brand-text);
 }
 
 /* --- Buttons --- */
@@ -118,10 +148,10 @@ body {
 .btn-primary {
   background: var(--accent-gradient);
   color: #fff;
-  box-shadow: 0 4px 15px rgba(0, 212, 255, 0.2);
+  box-shadow: 0 4px 15px rgba(196, 34, 50, 0.2);
 }
 .btn-primary:hover {
-  box-shadow: 0 6px 25px rgba(0, 212, 255, 0.35);
+  box-shadow: 0 6px 25px rgba(196, 34, 50, 0.35);
   transform: translateY(-1px);
 }
 .btn-primary:disabled {
@@ -134,11 +164,11 @@ body {
 .btn-secondary {
   background: var(--overlay-soft);
   color: var(--text-primary);
-  border: 1px solid rgba(0, 212, 255, 0.35);
+  border: 1px solid rgba(196, 34, 50, 0.35);
 }
 .btn-secondary:hover {
-  background: rgba(0, 212, 255, 0.10);
-  border-color: rgba(0, 212, 255, 0.6);
+  background: rgba(196, 34, 50, 0.10);
+  border-color: rgba(196, 34, 50, 0.6);
   transform: translateY(-1px);
 }
 .btn-secondary:disabled {
@@ -222,7 +252,7 @@ body {
   transform: translateX(-50%);
   width: 200px;
   height: 200px;
-  background: radial-gradient(circle, rgba(0, 212, 255, 0.15), transparent 70%);
+  background: radial-gradient(circle, rgba(196, 34, 50, 0.15), transparent 70%);
   pointer-events: none;
 }
 
@@ -378,10 +408,6 @@ body {
 }
 
 .logo-icon {
-  background: var(--accent-gradient);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
   font-size: 1.3rem;
 }
 
@@ -690,10 +716,7 @@ body {
 .stat-number {
   font-size: 1.8rem;
   font-weight: 700;
-  background: var(--accent-gradient);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--brand-text);
 }
 
 .stat-label {
@@ -738,7 +761,7 @@ body {
   background: var(--accent-gradient);
   border-radius: 2px;
   transition: height 1s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 0 12px rgba(0, 212, 255, 0.3);
+  box-shadow: 0 0 12px rgba(196, 34, 50, 0.3);
 }
 
 /* Each node row */
@@ -810,7 +833,7 @@ body {
 .skill-node--unlocked .skill-node-connector,
 .skill-node--completed .skill-node-connector {
   background: var(--accent-gradient-h);
-  box-shadow: 0 0 8px rgba(0, 212, 255, 0.2);
+  box-shadow: 0 0 8px rgba(196, 34, 50, 0.2);
 }
 
 .skill-node--completed .skill-node-connector {
@@ -858,21 +881,21 @@ body {
 
 /* Unlocked / active state */
 .skill-node--unlocked .skill-node-card {
-  border-color: rgba(0, 212, 255, 0.3);
-  box-shadow: 0 0 20px rgba(0, 212, 255, 0.08);
+  border-color: rgba(196, 34, 50, 0.3);
+  box-shadow: 0 0 20px rgba(196, 34, 50, 0.08);
 }
 
 .skill-node--active .skill-node-card {
-  border-color: rgba(0, 212, 255, 0.5);
+  border-color: rgba(196, 34, 50, 0.5);
   animation: nodePulse 2.5s ease-in-out infinite;
 }
 
 @keyframes nodePulse {
   0%, 100% {
-    box-shadow: 0 0 15px rgba(0, 212, 255, 0.1);
+    box-shadow: 0 0 15px rgba(196, 34, 50, 0.1);
   }
   50% {
-    box-shadow: 0 0 30px rgba(0, 212, 255, 0.25), 0 0 60px rgba(0, 212, 255, 0.08);
+    box-shadow: 0 0 30px rgba(196, 34, 50, 0.25), 0 0 60px rgba(196, 34, 50, 0.08);
   }
 }
 
@@ -899,7 +922,7 @@ body {
 
 .skill-node--unlocked .skill-node-circle {
   border-color: var(--accent-cyan);
-  box-shadow: 0 0 12px rgba(0, 212, 255, 0.15);
+  box-shadow: 0 0 12px rgba(196, 34, 50, 0.15);
 }
 
 .skill-node--completed .skill-node-circle {
@@ -941,7 +964,7 @@ body {
 .skill-node-progress-ring .ring-fill {
   stroke: var(--accent-cyan);
   transition: stroke-dashoffset 0.8s ease;
-  filter: drop-shadow(0 0 4px rgba(0, 212, 255, 0.4));
+  filter: drop-shadow(0 0 4px rgba(196, 34, 50, 0.4));
 }
 
 .skill-node--completed .skill-node-progress-ring .ring-fill {
@@ -1052,7 +1075,7 @@ body {
 .skill-tree-dot--unlocked {
   background: var(--accent-cyan);
   border-color: var(--accent-cyan);
-  box-shadow: 0 0 10px rgba(0, 212, 255, 0.4);
+  box-shadow: 0 0 10px rgba(196, 34, 50, 0.4);
 }
 
 .skill-tree-dot--completed {
@@ -1369,19 +1392,19 @@ body {
   width: 100%;
   justify-content: center;
   gap: 8px;
-  border-color: rgba(123, 47, 247, 0.3);
+  border-color: rgba(107, 15, 24, 0.3);
 }
 
 .sidebar-achievements-btn:hover {
   border-color: var(--accent-purple);
-  background: rgba(123, 47, 247, 0.08);
+  background: rgba(107, 15, 24, 0.08);
 }
 
 .achievements-count-badge {
   font-size: 0.7rem;
   padding: 2px 8px;
   border-radius: 10px;
-  background: rgba(123, 47, 247, 0.15);
+  background: rgba(107, 15, 24, 0.15);
   color: var(--accent-purple);
   font-weight: 600;
 }
@@ -1482,15 +1505,15 @@ body {
 
 /* Achievement Toast */
 .toast--achievement {
-  background: rgba(123, 47, 247, 0.12);
-  border-color: rgba(123, 47, 247, 0.3);
+  background: rgba(107, 15, 24, 0.12);
+  border-color: rgba(107, 15, 24, 0.3);
   color: #c084fc;
 }
 
 /* Level Up Toast */
 .toast--levelup {
-  background: rgba(0, 212, 255, 0.12);
-  border-color: rgba(0, 212, 255, 0.3);
+  background: rgba(196, 34, 50, 0.12);
+  border-color: rgba(196, 34, 50, 0.3);
   color: var(--accent-cyan);
 }
 
@@ -1560,18 +1583,18 @@ body {
 
 /* Unlocked state */
 .achievement-card--unlocked {
-  border-color: rgba(123, 47, 247, 0.25);
+  border-color: rgba(107, 15, 24, 0.25);
 }
 
 .achievement-card--unlocked::before {
-  background: linear-gradient(90deg, #7b2ff7, #ffd700);
+  background: linear-gradient(90deg, var(--brand-600), #ffd700);
   opacity: 1;
 }
 
 .achievement-card--unlocked:hover {
   transform: translateY(-3px);
-  box-shadow: 0 8px 30px rgba(123, 47, 247, 0.15);
-  border-color: rgba(123, 47, 247, 0.4);
+  box-shadow: 0 8px 30px rgba(107, 15, 24, 0.15);
+  border-color: rgba(107, 15, 24, 0.4);
 }
 
 .achievement-icon {
@@ -1864,8 +1887,8 @@ body {
 
 .resource-icon.notebook { background: rgba(245, 158, 11, 0.15); color: var(--warning); }
 .resource-icon.download { background: rgba(34, 197, 94, 0.15); color: var(--success); }
-.resource-icon.link { background: rgba(0, 212, 255, 0.15); color: var(--accent-cyan); }
-.resource-icon.article { background: rgba(123, 47, 247, 0.15); color: var(--accent-purple); }
+.resource-icon.link { background: rgba(196, 34, 50, 0.15); color: var(--accent-cyan); }
+.resource-icon.article { background: rgba(107, 15, 24, 0.15); color: var(--accent-purple); }
 .resource-icon.github { background: rgba(228, 228, 231, 0.1); color: var(--text-primary); }
 
 .resource-info { flex: 1; }
@@ -1983,7 +2006,7 @@ body {
 
 .option-btn.selected {
   border-color: var(--accent-cyan);
-  background: rgba(0, 212, 255, 0.08);
+  background: rgba(196, 34, 50, 0.08);
 }
 
 .option-btn.correct {
@@ -2016,8 +2039,8 @@ body {
 }
 
 .option-btn.selected .option-letter {
-  background: var(--accent-cyan);
-  border-color: var(--accent-cyan);
+  background: var(--brand-600);
+  border-color: var(--brand-600);
   color: #fff;
 }
 
@@ -2341,13 +2364,13 @@ body {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: 0 6px 20px rgba(0, 212, 255, 0.3);
+  box-shadow: 0 6px 20px rgba(196, 34, 50, 0.3);
   z-index: 990;
   transition: all var(--transition);
 }
 .fab:hover {
   transform: scale(1.1);
-  box-shadow: 0 8px 25px rgba(0, 212, 255, 0.4);
+  box-shadow: 0 8px 25px rgba(196, 34, 50, 0.4);
 }
 .fab-icon {
   animation: fab-float 3s ease-in-out infinite;
@@ -2628,7 +2651,7 @@ body {
   white-space: nowrap;
 }
 .chat-suggestion-btn:hover {
-  background: rgba(109, 40, 217, 0.25);
+  background: rgba(140, 20, 32, 0.25);
   border-color: var(--accent-purple);
   color: var(--text-primary);
 }
@@ -2702,7 +2725,7 @@ body {
 }
 .chat-light .chat-toolbar-btn:hover {
   background: rgba(0,0,0,0.06);
-  color: #6d28d9;
+  color: #8c1420;
 }
 .chat-light .chat-message.ai .chat-bubble {
   background: #f0f0f5;
@@ -2713,7 +2736,7 @@ body {
   color: #111;
 }
 .chat-light .chat-message.ai .chat-bubble em {
-  color: #6d28d9;
+  color: #8c1420;
 }
 .chat-light .chat-message.ai .chat-bubble code {
   color: #d63384;
@@ -2733,7 +2756,7 @@ body {
   color: #aaa;
 }
 .chat-light .chat-message.user .chat-bubble {
-  background: #6d28d9;
+  background: #8c1420;
   color: #fff;
 }
 .chat-light .chat-messages {
@@ -2749,7 +2772,7 @@ body {
   color: #222;
 }
 .chat-light #ai-chat-input:focus {
-  border-color: #6d28d9;
+  border-color: #8c1420;
 }
 .chat-light #ai-chat-input::placeholder {
   color: #999;
@@ -2764,9 +2787,9 @@ body {
   color: #555;
 }
 .chat-light .chat-suggestion-btn:hover {
-  background: rgba(109, 40, 217, 0.1);
-  border-color: #6d28d9;
-  color: #6d28d9;
+  background: rgba(140, 20, 32, 0.1);
+  border-color: #8c1420;
+  color: #8c1420;
 }
 .chat-light .chat-resize-handle::before {
   background: #bbb;
@@ -2849,8 +2872,8 @@ body {
   margin-top: 14px;
   padding: 8px 16px;
   border-radius: 999px;
-  background: rgba(0, 212, 255, 0.08);
-  border: 1px solid rgba(0, 212, 255, 0.25);
+  background: rgba(196, 34, 50, 0.08);
+  border: 1px solid rgba(196, 34, 50, 0.25);
   color: var(--accent-cyan);
   font-size: 0.85rem;
   font-weight: 600;

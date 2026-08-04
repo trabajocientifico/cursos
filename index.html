@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Trabajo Científico - Plataforma de Educación</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/portal.css">
   <script src="js/config.js"></script>
   <script src="js/prefs.js"></script>
@@ -28,11 +31,11 @@
     .modal-content {
       background: var(--bg-surface);
       border: 1px solid var(--border);
-      padding: 2.5rem;
-      border-radius: 20px;
+      padding: 2.25rem;
+      border-radius: var(--radius);
       width: 90%;
       max-width: 450px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+      box-shadow: 0 24px 48px rgba(0,0,0,0.45);
       position: relative;
     }
     .modal-close {
@@ -66,25 +69,34 @@
     .form-group input {
       width: 100%;
       padding: 0.8rem;
-      background: var(--bg-deep);
+      background: var(--bg-surface-2);
       border: 1px solid var(--border);
-      border-radius: 8px;
+      border-radius: var(--radius-sm);
       color: var(--text-primary);
+      font-family: inherit;
       font-size: 1rem;
+      transition: border-color 0.2s;
+    }
+    .form-group input:focus {
+      outline: none;
+      border-color: var(--brand-500);
     }
     .btn-access {
       width: 100%;
-      padding: 1rem;
-      background: linear-gradient(135deg, #00d4ff 0%, #0055ff 100%);
+      padding: 0.95rem;
+      background: var(--brand-600);
       border: none;
-      border-radius: 8px;
+      border-radius: var(--radius-sm);
       color: #fff;
-      font-weight: 600;
+      font-family: inherit;
+      font-size: 0.95rem;
+      font-weight: 700;
       cursor: pointer;
-      transition: transform 0.2s;
+      transition: background 0.2s, box-shadow 0.2s;
     }
     .btn-access:hover {
-      transform: translateY(-2px);
+      background: var(--brand-500);
+      box-shadow: var(--shadow-brand);
     }
     .field-hint {
       color: var(--text-secondary);
@@ -102,14 +114,17 @@
 
     /* Estilos Sección Instructor */
     .instructor-section {
-      padding: 6rem 5% 4rem;
+      position: relative;
+      z-index: 1;
+      max-width: var(--content-max);
+      margin: 0 auto;
+      padding: 40px clamp(16px, 4vw, 40px) 72px;
     }
     .instructor-card {
       background: var(--bg-surface);
       border: 1px solid var(--border);
-      border-radius: 30px;
-      padding: 3rem;
-      backdrop-filter: blur(10px);
+      border-radius: var(--radius);
+      padding: 2.5rem;
       max-width: 1000px;
       margin: 0 auto;
     }
@@ -126,14 +141,14 @@
     .instructor-placeholder-img {
       width: 250px;
       height: 250px;
-      background: linear-gradient(135deg, #00d4ff 0%, #0055ff 100%);
-      border-radius: 20px;
+      background: var(--bg-surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 5rem;
-      margin: 0 auto 2rem;
-      box-shadow: 0 15px 35px rgba(0, 85, 255, 0.3);
+      margin: 0 auto 1.5rem;
     }
     .instructor-socials {
       display: flex;
@@ -144,21 +159,21 @@
       width: 40px;
       height: 40px;
       background: var(--bg-surface-2);
-      border-radius: 10px;
+      border-radius: var(--radius-sm);
       display: flex;
       align-items: center;
       justify-content: center;
-      color: var(--text-primary);
+      color: var(--text-secondary);
       text-decoration: none;
       font-weight: bold;
-      transition: all 0.3s;
+      transition: all 0.2s;
       border: 1px solid var(--border);
     }
     .social-link:hover {
-      background: var(--accent-cyan);
+      background: var(--brand-600);
+      border-color: var(--brand-600);
       color: #fff;
-      transform: translateY(-3px);
-      box-shadow: 0 5px 15px rgba(0, 212, 255, 0.4);
+      transform: translateY(-2px);
     }
     .instructor-header-info h3 {
       font-size: 2.2rem;
@@ -166,7 +181,7 @@
       color: var(--text-primary);
     }
     .instructor-titles {
-      color: var(--accent-cyan);
+      color: var(--brand-text);
       font-weight: 600;
       margin-bottom: 0.5rem;
     }
@@ -176,12 +191,12 @@
       margin-bottom: 2rem;
     }
     .instructor-current-study {
-      color: var(--accent-cyan);
+      color: var(--brand-text);
       font-weight: 600;
-      background: linear-gradient(135deg, rgba(0, 212, 255, 0.12), rgba(123, 47, 247, 0.12));
+      background: var(--brand-tint);
       padding: 2px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(0, 212, 255, 0.3);
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--brand-ring);
       white-space: nowrap;
       display: inline-block;
       margin-top: 4px;
@@ -196,16 +211,16 @@
       text-decoration: none;
       font-size: 0.88rem;
       font-weight: 600;
-      border-radius: 999px;
-      background: linear-gradient(135deg, rgba(0, 212, 255, 0.12), rgba(123, 47, 247, 0.12));
-      border: 1px solid rgba(0, 212, 255, 0.35);
-      transition: all 0.25s ease;
+      border-radius: var(--radius-sm);
+      background: var(--bg-surface-2);
+      border: 1px solid var(--border);
+      transition: all 0.2s ease;
     }
     .instructor-cv-link:hover {
       transform: translateY(-2px);
-      border-color: rgba(0, 212, 255, 0.6);
-      box-shadow: 0 8px 22px rgba(0, 212, 255, 0.25);
-      color: var(--accent-cyan);
+      border-color: var(--brand-ring);
+      background: var(--brand-tint);
+      color: var(--brand-text);
     }
     .instructor-cv-link svg {
       transition: transform 0.25s ease;
@@ -232,7 +247,7 @@
       content: '✓';
       position: absolute;
       left: 0;
-      color: var(--accent-cyan);
+      color: var(--brand-text);
       font-weight: bold;
     }
     .instructor-contact {
@@ -252,30 +267,26 @@
       transition: color 0.3s;
     }
     .contact-item:hover {
-      color: var(--accent-cyan);
+      color: var(--brand-text);
     }
   </style>
 </head>
 <body>
 
-  <!-- Animated Background -->
-  <div class="portal-bg">
-    <div class="orb orb-1"></div>
-    <div class="orb orb-2"></div>
-    <div class="orb orb-3"></div>
-  </div>
-  <canvas id="particles-canvas"></canvas>
+  <!-- Fondo: lavado rojo estático detrás del hero -->
+  <div class="portal-bg"></div>
 
   <!-- Navbar -->
   <nav class="portal-nav" id="portal-nav">
     <a href="#" class="nav-brand">
-      <img src="imagenes/logo.png" alt="Trabajo Científico" class="nav-logo" style="width:40px;height:40px;object-fit:contain;border-radius:8px;">
+      <img src="imagenes/logo-nav.png" alt="Trabajo Científico" class="nav-logo" width="128" height="63">
       <div class="nav-title">Trabajo<span>Científico</span></div>
       <span class="nav-brand-tag">Cursos</span>
     </a>
     <div class="nav-links">
+      <a href="#en-vivo" class="nav-link nav-link--live"><span class="live-dot"></span> En vivo</a>
       <a href="#cursos" class="nav-link">Cursos</a>
-      <a href="certificados/" class="nav-link" style="color: var(--accent-cyan); font-weight: 600;">🎓 Certificados</a>
+      <a href="certificados/" class="nav-link" style="color: var(--brand-text);">🎓 Certificados</a>
       <a href="#features" class="nav-link">Plataforma</a>
       <a href="#instructor" class="nav-link">Instructor</a>
       <div class="nav-socials">
@@ -300,7 +311,7 @@
           <span data-pref-theme-icon>🌙</span>
         </button>
       </div>
-      <a href="#cursos" class="nav-cta">Comenzar ahora</a>
+      <a href="#en-vivo" class="nav-cta">Inscríbete ahora</a>
     </div>
     <div class="nav-socials nav-socials--mobile">
       <div class="prefs-controls">
@@ -337,10 +348,17 @@
     <p class="hero-subtitle">Domina las herramientas tecnológicas que están transformando la investigación y la industria. De lo básico a lo avanzado con Trabajo Científico.</p>
 
     <div class="hero-ctas">
-      <a href="#cursos" class="hero-cta hero-cta--primary">
+      <a href="#en-vivo" class="hero-cta hero-cta--primary">
+        <span class="hero-cta-icon"><span class="live-dot"></span></span>
+        <span class="hero-cta-text">
+          <strong>Cursos en vivo</strong>
+          <small>Inician en agosto</small>
+        </span>
+      </a>
+      <a href="#cursos" class="hero-cta hero-cta--free">
         <span class="hero-cta-icon">🚀</span>
         <span class="hero-cta-text">
-          <strong>Empieza un curso</strong>
+          <strong>Cursos gratuitos</strong>
           <small>Acceso inmediato</small>
         </span>
       </a>
@@ -391,59 +409,77 @@
     </div>
   </section>
 
-  <!-- Courses Section -->
-  <section class="courses-section" id="cursos">
-
-    <!-- CURSOS EN VIVO (acceso con clave) -->
-    <div class="section-divider reveal section-divider--live">
-      <div class="section-divider-text">
-        <span class="section-eyebrow">Inscripciones abiertas · Inician en agosto</span>
-        <h2>Cursos <span class="gradient-text">En Vivo</span></h2>
-        <p class="section-subtitle">20 horas certificadas en sesiones en vivo con el instructor. Las grabaciones quedan cargadas en la plataforma para verlas cuando quieras, con evaluación por módulo y certificado al finalizar.</p>
-      </div>
-      <span class="badge-live"><span class="live-dot"></span> Acceso con clave</span>
+  <!-- Próximos inicios: los dos cursos en vivo, arriba de todo -->
+  <section class="upcoming-section" id="en-vivo">
+    <div class="upcoming-header reveal">
+      <span class="upcoming-eyebrow"><span class="live-dot"></span> En vivo · Inscripciones abiertas</span>
+      <h2>Próximos <span class="gradient-text">inicios</span></h2>
+      <p class="section-subtitle">20 horas certificadas en sesiones en vivo con el instructor. Las grabaciones quedan cargadas en la plataforma para verlas cuando quieras, con evaluación por módulo y certificado al finalizar.</p>
     </div>
 
-    <div class="courses-grid courses-grid--featured">
+    <div class="upcoming-list">
       <!-- Curso en vivo 1: Ciencia de Datos Profesional con Python + IA -->
-      <a href="#" class="course-card reveal live featured" data-theme="cyan" data-lessons="7" onclick="openAccessModal(event, 'ciencia-datos-profesional-ia', 'Ciencia de Datos Profesional con Python + IA', 'ciencia07')">
-        <div class="card-thumbnail">
-          <span class="card-icon">🐍</span>
-          <span class="card-live-badge"><span class="live-dot"></span> En vivo</span>
-          <div class="card-gradient-bar"></div>
-        </div>
-        <div class="card-body">
-          <span class="card-category">🗓️ Inicia 7 de agosto de 2026</span>
-          <h3 class="card-title">Ciencia de Datos Profesional con Python + IA</h3>
-          <p class="card-description">7 sesiones en vivo (6 de 3 horas y 1 de 2 horas) con grabaciones en la plataforma, quiz por módulo y certificación.</p>
-          <div class="card-meta">
-            <span class="card-meta-item">⏱ 20 horas certificadas</span>
-            <span class="card-meta-item">🎓 Certificado</span>
-            <span class="card-meta-item card-meta-cta">🔑 Ingresar con clave →</span>
+      <a href="#" class="upcoming-card reveal" data-start="2026-08-07" data-lessons="7" onclick="openAccessModal(event, 'ciencia-datos-profesional-ia', 'Ciencia de Datos Profesional con Python + IA', 'ciencia07')">
+        <div class="upcoming-media">
+          <picture>
+            <source srcset="imagenes/cienciadedatos-card.webp" type="image/webp">
+            <img src="imagenes/cienciadedatos-card.jpg" alt="Escritorio con un portátil mostrando código Python y gráficos de datos" width="640" height="360" loading="lazy" decoding="async">
+          </picture>
+          <div class="upcoming-date">
+            <span class="upcoming-date-month">Ago</span>
+            <span class="upcoming-date-day">07</span>
+            <span class="upcoming-date-year">2026</span>
           </div>
+        </div>
+        <div class="upcoming-body">
+          <span class="upcoming-badge"><span class="live-dot"></span> En vivo</span>
+          <h3 class="upcoming-title">Ciencia de Datos Profesional con Python + IA</h3>
+          <p class="upcoming-desc">7 sesiones en vivo (6 de 3 horas y 1 de 2 horas) con grabaciones en la plataforma, quiz por módulo y certificación.</p>
+          <div class="upcoming-facts">
+            <span>⏱ 20 horas certificadas</span>
+            <span>🎬 7 sesiones en vivo</span>
+            <span>🎓 Certificado</span>
+          </div>
+        </div>
+        <div class="upcoming-action">
+          <span class="upcoming-countdown" data-countdown></span>
+          <span class="upcoming-cta">🔑 Ingresar con clave →</span>
         </div>
       </a>
 
       <!-- Curso en vivo 2: Inteligencia Artificial para Investigación Científica -->
-      <a href="#" class="course-card reveal live featured" data-theme="purple" data-lessons="7" onclick="openAccessModal(event, 'ia-investigacion-cientifica', 'Inteligencia Artificial para Investigación Científica', 'investigacion20')">
-        <div class="card-thumbnail">
-          <span class="card-icon">🔬</span>
-          <span class="card-live-badge"><span class="live-dot"></span> En vivo</span>
-          <div class="card-gradient-bar"></div>
-        </div>
-        <div class="card-body">
-          <span class="card-category">🗓️ Inicia 20 de agosto de 2026</span>
-          <h3 class="card-title">Inteligencia Artificial para Investigación Científica</h3>
-          <p class="card-description">7 sesiones en vivo (6 de 3 horas y 1 de 2 horas) con grabaciones en la plataforma, quiz por módulo y certificación.</p>
-          <div class="card-meta">
-            <span class="card-meta-item">⏱ 20 horas certificadas</span>
-            <span class="card-meta-item">🎓 Certificado</span>
-            <span class="card-meta-item card-meta-cta">🔑 Ingresar con clave →</span>
+      <a href="#" class="upcoming-card reveal" data-start="2026-08-20" data-lessons="7" onclick="openAccessModal(event, 'ia-investigacion-cientifica', 'Inteligencia Artificial para Investigación Científica', 'investigacion20')">
+        <div class="upcoming-media">
+          <picture>
+            <source srcset="imagenes/inteligenciaartificial-card.webp" type="image/webp">
+            <img src="imagenes/inteligenciaartificial-card.jpg" alt="Investigador en bata analizando datos sobre una interfaz holográfica de inteligencia artificial" width="640" height="360" loading="lazy" decoding="async">
+          </picture>
+          <div class="upcoming-date">
+            <span class="upcoming-date-month">Ago</span>
+            <span class="upcoming-date-day">20</span>
+            <span class="upcoming-date-year">2026</span>
           </div>
+        </div>
+        <div class="upcoming-body">
+          <span class="upcoming-badge"><span class="live-dot"></span> En vivo</span>
+          <h3 class="upcoming-title">Inteligencia Artificial para Investigación Científica</h3>
+          <p class="upcoming-desc">7 sesiones en vivo (6 de 3 horas y 1 de 2 horas) con grabaciones en la plataforma, quiz por módulo y certificación.</p>
+          <div class="upcoming-facts">
+            <span>⏱ 20 horas certificadas</span>
+            <span>🎬 7 sesiones en vivo</span>
+            <span>🎓 Certificado</span>
+          </div>
+        </div>
+        <div class="upcoming-action">
+          <span class="upcoming-countdown" data-countdown></span>
+          <span class="upcoming-cta">🔑 Ingresar con clave →</span>
         </div>
       </a>
     </div>
+  </section>
 
+  <!-- Courses Section -->
+  <section class="courses-section" id="cursos">
     <!-- CURSOS GRATUITOS -->
     <div class="section-divider reveal">
       <div class="section-divider-text">
@@ -810,51 +846,38 @@
   </footer>
 
   <script>
-    // ========== Particles Effect ==========
-    (function() {
-      const canvas = document.getElementById('particles-canvas');
-      const ctx = canvas.getContext('2d');
-      let particles = [];
-      const PARTICLE_COUNT = 60;
+    // ========== Cuenta regresiva de los cursos en vivo ==========
+    // Se calcula contra la fecha real del visitante, así que la
+    // urgencia no hay que editarla a mano cada semana.
+    (function initCountdowns() {
+      const hoy = new Date();
+      hoy.setHours(0, 0, 0, 0);
 
-      function resize() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-      }
-      resize();
-      window.addEventListener('resize', resize);
+      document.querySelectorAll('[data-start]').forEach(card => {
+        const salida = card.querySelector('[data-countdown]');
+        if (!salida) return;
 
-      class Particle {
-        constructor() { this.reset(); }
-        reset() {
-          this.x = Math.random() * canvas.width;
-          this.y = Math.random() * canvas.height;
-          this.size = Math.random() * 2 + 0.5;
-          this.speedX = (Math.random() - 0.5) * 0.4;
-          this.speedY = (Math.random() - 0.5) * 0.4;
-          this.opacity = Math.random() * 0.5 + 0.1;
+        // Se construye en horario local: usar Date('2026-08-07') lo
+        // interpreta como UTC y en Colombia adelantaría un día.
+        const [y, m, d] = card.dataset.start.split('-').map(Number);
+        const inicio = new Date(y, m - 1, d);
+        const dias = Math.round((inicio - hoy) / 86400000);
+
+        if (dias > 1) {
+          salida.textContent = `⏳ Faltan ${dias} días`;
+          if (dias <= 7) salida.classList.add('is-imminent');
+          else if (dias <= 21) salida.classList.add('is-urgent');
+        } else if (dias === 1) {
+          salida.textContent = '⏳ Empieza mañana';
+          salida.classList.add('is-imminent');
+        } else if (dias === 0) {
+          salida.textContent = '🔴 Empieza hoy';
+          salida.classList.add('is-imminent');
+        } else {
+          salida.textContent = '▶ Curso en marcha';
+          card.classList.add('is-started');
         }
-        update() {
-          this.x += this.speedX;
-          this.y += this.speedY;
-          if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) this.reset();
-        }
-        draw() {
-          ctx.beginPath();
-          ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(0, 212, 255, ${this.opacity})`;
-          ctx.fill();
-        }
-      }
-
-      for (let i = 0; i < PARTICLE_COUNT; i++) particles.push(new Particle());
-
-      function animate() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        particles.forEach(p => { p.update(); p.draw(); });
-        requestAnimationFrame(animate);
-      }
-      animate();
+      });
     })();
 
     // ========== Access Logic ==========
@@ -895,7 +918,8 @@
     }
 
     function checkExistingSessions() {
-      const courseCards = document.querySelectorAll('.course-card');
+      // Cubre las tarjetas de la rejilla y las de la banda de próximos inicios
+      const courseCards = document.querySelectorAll('.course-card, .upcoming-card');
       const userName = localStorage.getItem('tc_user_name');
       
       courseCards.forEach(card => {
@@ -920,8 +944,11 @@
           const category = card.querySelector('.card-category');
           if(category) {
             category.innerHTML = '✅ Continuar curso';
-            category.style.color = '#00d4ff';
+            category.style.color = 'var(--brand-text)';
           }
+          // En la banda el aviso va en el botón, que es lo que se lee
+          const liveCta = card.querySelector('.upcoming-cta');
+          if(liveCta) liveCta.innerHTML = '✅ Continuar curso →';
         }
 
         if (savedProgress) {
@@ -937,11 +964,11 @@
               percent = done > 0 ? Math.min(Math.round((done / totalLessons) * 100), 100) : 0;
             }
             if (percent > 0) {
-              const meta = card.querySelector('.card-meta');
+              const meta = card.querySelector('.card-meta') || card.querySelector('.upcoming-facts');
               if(meta) {
                 const progSpan = document.createElement('span');
-                progSpan.className = 'card-meta-item';
-                progSpan.style.color = '#00d4ff';
+                if (meta.classList.contains('card-meta')) progSpan.className = 'card-meta-item';
+                progSpan.style.color = 'var(--brand-text)';
                 progSpan.innerHTML = `📊 ${percent}%`;
                 meta.appendChild(progSpan);
               }

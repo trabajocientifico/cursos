@@ -1,6 +1,6 @@
 /* ============================================
    TRABAJO CIENTÍFICO — Sistema de Certificados
-   Estilos CSS - Tema Oscuro & Glassmorphism
+   Superficies planas y rojo oscuro de marca
    ============================================ */
 
 *, *::before, *::after {
@@ -10,25 +10,40 @@
 }
 
 :root {
-  --bg-deep: #0b0d17;
-  --bg-surface: #131627;
-  --bg-surface-2: #1a1e35;
-  --bg-hover: #1f2442;
-  --border: rgba(255, 255, 255, 0.08);
-  --border-hover: rgba(255, 255, 255, 0.2);
-  --text-primary: #e4e4e7;
-  --text-secondary: #8b8fa3;
-  --text-muted: #555a70;
-  --accent-cyan: #00d4ff;
-  --accent-purple: #7b2ff7;
-  --accent-gradient: linear-gradient(135deg, #00d4ff, #7b2ff7);
-  --accent-gradient-h: linear-gradient(90deg, #00d4ff, #7b2ff7);
-  --success: #22c55e;
-  --error: #ef4444;
-  --radius: 16px;
-  --radius-sm: 12px;
-  --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  --font-main: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  color-scheme: dark;
+  --bg-deep: #0c0d10;
+  --bg-surface: #14161b;
+  --bg-surface-2: #1b1e25;
+  --bg-hover: #232730;
+  --border: #262a33;
+  --border-hover: #3b414d;
+  --text-primary: #f2f3f5;
+  --text-secondary: #a9afbc;
+  --text-muted: #7d8492;
+
+  /* Rojo oscuro de marca: el 600 actua, el 300 se lee */
+  --brand-800: #6b0f18;
+  --brand-700: #8c1420;
+  --brand-600: #a81b29;
+  --brand-500: #c42232;
+  --brand-400: #e04352;
+  --brand-300: #ff6b78;
+  --brand-text: var(--brand-300);
+  --brand-tint: rgba(196, 34, 50, 0.12);
+  --brand-ring: rgba(196, 34, 50, 0.45);
+
+  /* Alias heredados: el resto de la hoja los usa como color de texto */
+  --accent-cyan: var(--brand-text);
+  --accent-purple: var(--brand-400);
+  --accent-gradient: linear-gradient(135deg, var(--brand-600), var(--brand-800));
+  --accent-gradient-h: linear-gradient(90deg, var(--brand-600), var(--brand-800));
+
+  --success: #2fb85f;
+  --error: #e0475a;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --font-main: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 html {
@@ -55,49 +70,14 @@ body {
   z-index: 0;
   overflow: hidden;
   pointer-events: none;
+  background:
+    radial-gradient(900px 520px at 15% -5%, rgba(168, 27, 41, 0.22), transparent 70%),
+    radial-gradient(700px 420px at 95% 0%, rgba(107, 15, 24, 0.16), transparent 70%);
 }
 
-.bg-animation .orb {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(120px);
-  opacity: 0.15;
-  animation: orbFloat 20s ease-in-out infinite;
-}
-
-.bg-animation .orb-1 {
-  width: 600px;
-  height: 600px;
-  background: var(--accent-cyan);
-  top: -10%;
-  left: -10%;
-}
-
-.bg-animation .orb-2 {
-  width: 500px;
-  height: 500px;
-  background: var(--accent-purple);
-  bottom: -10%;
-  right: -10%;
-  animation-delay: -7s;
-}
-
-.bg-animation .orb-3 {
-  width: 400px;
-  height: 400px;
-  background: #3b82f6;
-  top: 40%;
-  left: 45%;
-  animation-delay: -14s;
-  opacity: 0.08;
-}
-
-@keyframes orbFloat {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  25% { transform: translate(50px, -30px) scale(1.08); }
-  50% { transform: translate(-30px, 50px) scale(0.95); }
-  75% { transform: translate(30px, 20px) scale(1.04); }
-}
+/* Los orbes animados se retiran: el fondo es un lavado
+   estático, igual que en el portal. */
+.bg-animation .orb { display: none; }
 
 .bg-grid {
   position: fixed;
@@ -124,8 +104,7 @@ body {
 header {
   padding: 1.5rem 0;
   border-bottom: 1px solid var(--border);
-  backdrop-filter: blur(12px);
-  background: rgba(11, 13, 23, 0.7);
+  background: var(--bg-deep);
   position: sticky;
   top: 0;
   z-index: 100;
@@ -154,9 +133,9 @@ header {
 }
 
 .brand-badge {
-  background: rgba(0, 212, 255, 0.1);
+  background: rgba(196, 34, 50, 0.1);
   color: var(--accent-cyan);
-  border: 1px solid rgba(0, 212, 255, 0.3);
+  border: 1px solid rgba(196, 34, 50, 0.3);
   padding: 0.2rem 0.6rem;
   border-radius: 20px;
   font-size: 0.75rem;
@@ -199,9 +178,7 @@ main {
 }
 
 .gradient-text {
-  background: var(--accent-gradient-h);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: var(--brand-text);
 }
 
 .hero-subtitle {
@@ -229,14 +206,13 @@ main {
 
 /* --- Search Card --- */
 .search-card {
-  background: rgba(19, 22, 39, 0.75);
-  backdrop-filter: blur(16px);
+  background: var(--bg-surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 2rem;
   max-width: 700px;
   margin: 0 auto 3rem;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
   position: relative;
 }
 
@@ -272,7 +248,7 @@ main {
 
 .search-input:focus {
   border-color: var(--accent-cyan);
-  box-shadow: 0 0 0 4px rgba(0, 212, 255, 0.15);
+  box-shadow: 0 0 0 4px rgba(196, 34, 50, 0.15);
 }
 
 .search-icon {
@@ -340,14 +316,14 @@ main {
 }
 
 .btn-primary {
-  background: var(--accent-gradient);
+  background: var(--brand-600);
   color: #fff;
-  box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
 }
 
 .btn-primary:hover {
+  background: var(--brand-500);
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(0, 212, 255, 0.45);
+  box-shadow: 0 8px 24px rgba(168, 27, 41, 0.35);
 }
 
 .btn-secondary {
@@ -382,8 +358,8 @@ main {
 }
 
 .status-loading {
-  background: rgba(0, 212, 255, 0.08);
-  border: 1px solid rgba(0, 212, 255, 0.2);
+  background: rgba(196, 34, 50, 0.08);
+  border: 1px solid rgba(196, 34, 50, 0.2);
   color: var(--accent-cyan);
 }
 
