@@ -139,15 +139,13 @@
       .instructor-contact { justify-content: center; }
     }
     .instructor-placeholder-img {
+      display: block;
       width: 250px;
       height: 250px;
+      object-fit: cover;
       background: var(--bg-surface-2);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 5rem;
       margin: 0 auto 1.5rem;
     }
     .instructor-socials {
@@ -443,7 +441,7 @@
         </div>
         <div class="upcoming-action">
           <span class="upcoming-countdown" data-countdown></span>
-          <span class="upcoming-cta">🔑 Ingresar con clave →</span>
+          <span class="upcoming-cta">Ingresar →</span>
         </div>
       </a>
 
@@ -472,7 +470,7 @@
         </div>
         <div class="upcoming-action">
           <span class="upcoming-countdown" data-countdown></span>
-          <span class="upcoming-cta">🔑 Ingresar con clave →</span>
+          <span class="upcoming-cta">Ingresar →</span>
         </div>
       </a>
     </div>
@@ -772,7 +770,10 @@
       <div class="instructor-grid">
         <div class="instructor-image-area">
           <div class="instructor-image-wrapper">
-            <img src="imagenes/oscar-vargas.jpg" alt="Oscar Iván Vargas Pineda" class="instructor-placeholder-img" style="object-fit:cover;">
+            <picture>
+              <source srcset="imagenes/oscar-vargas-500.webp" type="image/webp">
+              <img src="imagenes/oscar-vargas-500.jpg" alt="Oscar Iván Vargas Pineda" class="instructor-placeholder-img" width="500" height="500" loading="lazy" decoding="async">
+            </picture>
           </div>
           <div class="instructor-socials">
             <a href="https://www.linkedin.com/in/oscar-ivan-vargas-pineda-2aa543240/" target="_blank" class="social-link" title="LinkedIn">
@@ -946,9 +947,8 @@
             category.innerHTML = '✅ Continuar curso';
             category.style.color = 'var(--brand-text)';
           }
-          // En la banda el aviso va en el botón, que es lo que se lee
-          const liveCta = card.querySelector('.upcoming-cta');
-          if(liveCta) liveCta.innerHTML = '✅ Continuar curso →';
+          // En la banda el botón se deja fijo en "Ingresar": el aviso
+          // de progreso ya lo da el porcentaje de la fila de datos.
         }
 
         if (savedProgress) {

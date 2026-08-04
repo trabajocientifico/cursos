@@ -980,6 +980,23 @@ h1, h2, h3 {
   pointer-events: none;
 }
 
+/* Si la tarjeta trae imagen del curso, esta manda:
+   sustituye al icono, a la trama y a la filigrana. */
+.card-thumbnail img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.course-card:hover .card-thumbnail img { transform: scale(1.05); }
+
+.card-thumbnail:has(img)::before,
+.card-thumbnail:has(img)::after,
+.card-thumbnail:has(img) .card-icon { display: none; }
+
 /* El icono va contenido en una placa, no flotando */
 .card-thumbnail .card-icon {
   position: relative;
